@@ -240,8 +240,8 @@ If there is any result, it fetches and makes $post variables and displays.
 
 ## Adding categories to the sidebar
 
-1. Copy php codes from **_navigation.php_**, paste them to **_sidabar.php_**
-You just add below codes inside of <ul></ul> tags.
+1. Copy php codes from **_navigation.php_**, paste them to **_sidabar.php_**.
+   Just add below codes inside of <ul></ul> tags.
 
 ```html
 <?php
@@ -265,12 +265,12 @@ This will display only 3 categories.
 
 2. Modify part **_widget.php_**
 
-Take the widget parts to a new php file named **_widget.php_**,
+Take the widget parts to a new php file named **_widget.php_**.
 Do not forget including the **_widget.php_** in the place.
 
 3. (Optional) Take the remained categories parts out in **_sidebar.php_**
 
-There are '<!-- /.col-lg-6 --> ~~~' parts remained right now.
+There are another 'col-lg-6' parts remained right now.
 ```html
                         <!-- /.col-lg-6 -->
                         <div class="col-lg-6">
