@@ -173,3 +173,68 @@ INSERT INTO POSTS (post_category_id, post_title, post_author, post_date, post_co
 ```
 2. Insert images
 
+## create custom search engine
+
+1. Add **_search form_** to **_sidabar.php_**
+
+```html
+   <!-- Search form -->
+   <form action="search.php" method="post">
+
+   <div class="input-group">
+
+       <input class="form-control" name="search" type="text">
+       <span class="input-group-btn">
+
+           <button class="btn btn-default" name="submit" type="submit">
+
+               <span class="glyphicon glyphicon-search"></span>
+       </button>
+       </span>
+   </div>
+   <!-- /.input-group -->
+   </form>
+```
+
+2. Copy **_index.php_** to **_search.php_** and modify posts part
+
+```html
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+<?php
+if (isset ($_POST['submit'])) {
+  $search = $_POST['search'];
+
+  $query = "SELECT * FROM posts WHERE post_tags LIKE '%$search%'";
+  $search_query = mysqli_query ($connection, $query);
+
+  if (!$search_query) {
+    die ("QUERY FAILED". mysqli_error ($connection));
+  }
+
+  $count = mysqli_num_rows ($search_query);
+
+  if ($count == 0) {
+    echo "<h1> NO RESULT </h1>";
+  } else {
+
+    while ($row = mysqli_fetch_assoc ($search_query)) {
+      $post_title   = $row['post_title'];
+      $post_author  = $row['post_author'];
+      $post_date    = $row['post_date'];
+      $post_image   = $row['post_image'];
+      $post_content = $row['post_content'];
+?>
+
+ <h1 class="page-header">
+     Page Heading
+     <small>Secondary Text</small>
+ </h1>
+
+ ....< 생략 >
+```
+If 'submit' value sends from **_sidebar.php_**, it stores as $search.
+Then $query makes a search query statement.
+If there are no results, the echo works printing 'No result'.
+If there is any result, it fetches and makes $post variables and displays.
+
