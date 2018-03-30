@@ -88,3 +88,13 @@ $connection = mysqli_connect ('localhost', '{username}', '{password}', 'cms');
 Secure way:
 $connection = mysqli_connect (DB_HOST, DB_USER, DB_PASS, DB_NAME);
 ```
+## Make files reuseable
+
+1. Divide codes into **_header.php_**, **_footer.php_** from index.php
+2. Take **_navigation_** parts out to **_navigation.php_** file.
+3. Take **_side bar_** parts out to **_sideabar.php_** file.
+4. You must include the new created files to index.php
+5. We are going to make the contents dynamically, so we only need a first post part.
+
+(※ Though the instructor said to delete it, I decided to left the **_pager_** part.)
+
