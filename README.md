@@ -27,3 +27,64 @@ $ tree -L 2
    Then Move to the root directory, again.
 5. Change the file names **_.html_** -> **_.php._**
 
+## Make a database
+
+```sql
+(connected as root)
+CREATE DATABASE IF NOT EXISTS cms;
+GRANT ALL PRIVILEGES on cms.* to **_username_**@localhost with GRANT OPTION;
+FLUSH PRIVILEGES;
+```
+
+CREATE TABLE category (
+    cat_id TINYINT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY
+   ,cat_title VARCHAR(255) NOT NULL
+);
+```
+MariaDB [cms]> explain category;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| cat_id    | tinyint(3)   | NO   | PRI | NULL    | auto_increment |
+| cat_title | varchar(255) | NO   |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+
+## Connect to the database (easy way)
+
+1. Make a directory **_includes_**
+2. Write a file **_db.php_**
+
+This is an easy way to connect to the database.
+```php
+$connection = mysqli_connect ('localhost', '{your username}', '{your password}', 'cms');
+if ($connection) {
+echo "we are connected";
+}
+```
+
+## Connect to the database (secure way)
+
+This is a very secure way to connect to the database.
+1) Put all the infomations into an array.
+
+```php
+$db['db_host'] = "localhost";
+$db['db_user'] = "{your username}";
+$db['db_pass'] = "{your password}";
+$db['db_name'] = "cms";
+```
+2) Make them constatns via strtoupper and define function.
+```php
+foreach ($db as $key => $value) {
+  define (strtoupper ($key), $value); 
+}
+```
+3) Now you can change the previous values like this.
+```php
+Easy way:
+$connection = mysqli_connect ('localhost', '{username}', '{password}', 'cms');
+```
+```php
+Secure way:
+$connection = mysqli_connect (DB_HOST, DB_USER, DB_PASS, DB_NAME);
+```
