@@ -34,13 +34,12 @@ $ tree -L 2
 CREATE DATABASE IF NOT EXISTS cms;
 GRANT ALL PRIVILEGES on cms.* to **_username_**@localhost with GRANT OPTION;
 FLUSH PRIVILEGES;
-```
 
 CREATE TABLE category (
     cat_id TINYINT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY
    ,cat_title VARCHAR(255) NOT NULL
 );
-```
+
 MariaDB [cms]> explain category;
 +-----------+--------------+------+-----+---------+----------------+
 | Field     | Type         | Null | Key | Default | Extra          |
@@ -48,6 +47,7 @@ MariaDB [cms]> explain category;
 | cat_id    | tinyint(3)   | NO   | PRI | NULL    | auto_increment |
 | cat_title | varchar(255) | NO   |     | NULL    |                |
 +-----------+--------------+------+-----+---------+----------------+
+```
 
 ## Connect to the database (easy way)
 
