@@ -238,3 +238,56 @@ Then $query makes a search query statement.
 If there are no results, the echo works printing 'No result'.
 If there is any result, it fetches and makes $post variables and displays.
 
+## Adding categories to the sidebar
+
+1. Copy php codes from **_navigation.php_**, paste them to **_sidabar.php_**
+You just add below codes inside of <ul></ul> tags.
+
+```html
+<?php
+
+$query = "SELECT * FROM categories";
+$select_all_categories_query = mysqli_query ($connection, $query);
+
+while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
+  $cat_title = $row['cat_title'];
+
+    echo "<li><a href='#'>{$cat_title}</a></li>";
+}
+
+?>
+```
+You can also display limit you want, by add 'LIMIT number' to the query.
+```html
+$query = "SELECT * FROM categories LIMIT 3";
+```
+This will display only 3 categories.
+
+2. Modify part **_widget.php_**
+
+Take the widget parts to a new php file named **_widget.php_**,
+Do not forget including the **_widget.php_** in the place.
+
+3. (Optional) Take the remained categories parts out in **_sidebar.php_**
+
+There are '<!-- /.col-lg-6 --> ~~~' parts remained right now.
+```html
+                        <!-- /.col-lg-6 -->
+                        <div class="col-lg-6">
+                            <ul class="list-unstyled">
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                                <li><a href="#">Category Name</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.col-lg-6 -->
+```
+If you cut the part out, you can modify our category part's class name, 
+'col-lg-6' to 'col-lg-12'. Since the part we cut out had been '6', 
+now you can use the whole '12'.
+
