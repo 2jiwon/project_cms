@@ -20,29 +20,7 @@ because they are another programming area, not the parts of PHP.
 ```shell
 $ tree -L 2
 ```
-├── admin
-│   ├── css
-│   ├── font-awesome
-│   ├── fonts
-│   ├── index.html
-│   └── js
-├── css
-│   ├── blog-home.css
-│   ├── blog-post.css
-│   ├── bootstrap.css
-│   └── bootstrap.min.css
-├── fonts
-│   ├── glyphicons-halflings-regular.eot
-│   ├── glyphicons-halflings-regular.svg
-│   ├── glyphicons-halflings-regular.ttf
-│   ├── glyphicons-halflings-regular.woff
-│   └── glyphicons-halflings-regular.woff2
-├── index.html
-├── js
-│   ├── bootstrap.js
-│   ├── bootstrap.min.js
-│   └── jquery.js
-└── post.html
+![Alt structure](./tree.png)
 
 3. Make **_images_** directory in the template root directory.
 4. Move to admin directory, make another **_images_** directory 
