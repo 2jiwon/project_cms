@@ -98,3 +98,31 @@ $connection = mysqli_connect (DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 (※ Though the instructor said to delete it, I decided to left the **_pager_** part.)
 
+## Insert data into table and display
+
+1. Change the table name **_category_** --> **_categories_**
+```sql
+MariaDB [cms]> RENAME TABLE category TO categories;
+```
+2. Insert values into title 'bootstrap','javascript' for test.
+```sql
+MariaDB [cms]> insert into categories (cat_title) values ('bootstrap');
+MariaDB [cms]> insert into categories (cat_title) values ('javascript');
+```
+
+3. Open **_navigation.php_**, modify the menu part.
+4. write the query parts to display the category titles.
+```php
+$query = "SELECT * FROM categories";
+$select_all_categories_query = mysqli_query ($connection, $query);
+
+while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
+  $cat_title = $row['cat_title'];
+  echo "<li><a href='#'>{$cat_title}</a></li>";
+}
+```
+Do not worry about these codes, we are gonna refactoring them later. 
+
+5. Make sure including **_db.php_** file to index.php.
+
+
