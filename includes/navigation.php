@@ -8,8 +8,9 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Start Bootstrap</a>
+                <a class="navbar-brand" href="/cms/">BLOG HOME</a>
             </div>
+
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
@@ -23,15 +24,16 @@ while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
 
     echo "<li><a href='#'>{$cat_title}</a></li>";
 }
+
 ?>
+                    <li>
+                        <a href="admin/index.php">Admin</a>
+                    </li>
                     <!-- <li>
-                        <a href="#">About</a>
+                        <a href="#">services</a>
                     </li> -->
                     <!-- <li>
-                        <a href="#">Services</a>
-                    </li> -->
-                    <!-- <li>
-                        <a href="#">Contact</a>
+                        <a href="#">contact</a>
                     </li> -->
                 </ul>
             </div>

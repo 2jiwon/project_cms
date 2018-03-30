@@ -173,10 +173,9 @@ INSERT INTO POSTS (post_category_id, post_title, post_author, post_date, post_co
 ```
 2. Insert images
 
-## create custom search engine
+## Create custom search engine
 
 1. Add **_search form_** to **_sidabar.php_**
-
 ```html
    <!-- Search form -->
    <form action="search.php" method="post">
@@ -197,7 +196,6 @@ INSERT INTO POSTS (post_category_id, post_title, post_author, post_date, post_co
 ```
 
 2. Copy **_index.php_** to **_search.php_** and modify posts part
-
 ```html
             <!-- Blog Entries Column -->
             <div class="col-md-8">
@@ -290,4 +288,32 @@ There are another 'col-lg-6' parts remained right now.
 If you cut the part out, you can modify our category part's class name, 
 'col-lg-6' to 'col-lg-12'. Since the part we cut out had been '6', 
 now you can use the whole '12'.
+
+## Create reuseable code in the admin
+
+We're going to make 'Admin page'.
+
+1. Divide **_admin/index.php_** into each **_includes_** files.
+
+Make a **_includes_** directory inside of admin.
+Make files **_header.php_**, **_footer.php_**, **_navigation.php_**.
+Take each part out from index.php and paste them.
+
+2. Add **_Admin_** category manually to **_navigation.php_**.
+```html
+ <li>
+     <a href="admin/index.php">Admin</a>
+ </li>
+```
+admin/index.php is already made with bootstrap.
+
+3. Add **_Home_** menu in **_admin/includes/navigation.php_** for going back to the first page.
+```html
+<!-- Top Menu Items -->
+<ul class="nav navbar-right top-nav">
+
+  <li><a href="../index.php">HOME</a></li>
+```
+
+4. Add **_HOME_** menu in out root's navigation, too.
 
