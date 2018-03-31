@@ -42,7 +42,7 @@ Also, rename the menu titles like below.
 </li>
 ```
 
-- Now, arrange other menus with this order. Make 'Users' also dropdown.
+Now, arrange other menus with this order. Make 'Users' also dropdown.
 > Dashboard, Posts, Categories, Comments, Users, profile
 
 
@@ -147,4 +147,52 @@ while ($row = mysqli_fetch_assoc ($select_all_categories)) {
 ?>
                           </tbody>
 ```
+
+## Adding Categories
+Keep modifing admin/categories.php file.
+
+1. Add "method=post" in the form of add category part.
+2. Add php codes right above it.
+- First, check if any values sent via POST.
+```php
+if (isset ($_POST['submit'])) {
+  echo "It's working";
+}
+```
+- If it's working, then store the sent value as a variable.
+```php
+if (isset ($_POST['submit'])) {
+//  echo "It's working";
+  $cat_title = $_POST['cat_title'];
+}
+```
+- Make sure that we will not accept any empty value.
+```php
+if (isset ($_POST['submit'])) {
+  $cat_title = $_POST['cat_title'];
+
+  if ($cat_title == "" || empty ($cat_title)) {
+    echo "This field should not be empty.";
+  }
+}
+```
+- And if it is not empty, we are going to put the value in database.
+```php
+  if ($cat_title == "" || empty ($cat_title)) {
+    echo "This field should not be empty.";
+  } else {
+    $query  = "INSERT INTO categories (cat_title) ";
+    $query .= "VALUES ('{$cat_title}') ";
+
+    $create_category_query = mysqli_query ($connection, $query);
+  }
+```
+- It will be safe that if the query fails, let it die.
+```php
+    if (!$create_category_query) {
+      die ("QUERY FAILED" . mysqli_error ($connection));
+    }
+```
+3. See if it's working well. Type any category in the form, then it shows right up. And it stored in our database, too.
+4. See what if we submit the form empty, too.
 
