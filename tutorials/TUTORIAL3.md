@@ -95,3 +95,42 @@ if (!$select_all_posts) {
 echo "<td><img class='img-responsive' src='../images/{$post_image}' alt='{$post_image}'></td>";
 ```
 
+## Including pages based on condition technique
+
+1. Make a new file named **_admin/includes/view_all_posts.php_**.
+2. Cut the whole 'table' part out from **_posts.php_**, paste it into the new file.
+3. Write some conditional statements that if any source from 'GET' method, then lead to
+posts through a 'switch statement'.
+```php
+if (isset ($_GET['source'])) {
+  $source = $_GET['source'];
+} else {
+  $source = '';
+}
+  switch ($source) {
+    case 'xx':
+    break;
+
+    default:
+      include "includes/view_all_posts.php";
+    break;
+  }
+```
+
+4. Make another file named **_admin/includes/add_post.php_**.
+Write something simple just for a test right now.
+```html
+  <h1>Hello this is add_post.php</h1>
+```
+Then modify the previous code a little for the test.
+```php
+  switch ($source) {
+    case 'add_post':
+      include "includes/add_post.php";
+    break;
+```
+Now go to the browser, type '?source=add_post' at the end of the url.
+> yourhome/cms/admin/posts.php?source=add_post
+
+You can see the add_post.php page.
+
