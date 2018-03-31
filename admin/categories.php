@@ -57,11 +57,13 @@ if (isset ($_POST['submit'])) {
                             <tr>
                               <th>ID</th>
                               <th>Categoty Title</th>
+                              <th>Delete</th>
                             </tr>
                           </thead>
                           <tbody>
 <?php
 
+// Find all categories query
 $query = "SELECT * FROM categories";
 $select_all_categories = mysqli_query ($connection, $query);
 
@@ -71,9 +73,24 @@ while ($row = mysqli_fetch_assoc ($select_all_categories)) {
     echo "<tr>";
     echo "<td>{$cat_id}</td>";
     echo "<td>{$cat_title}</td>";
+    echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";
     echo "</tr>";
 }
 ?>
+<?php
+
+// Get the cat_id for delete value, make delete query.
+if (isset ($_GET['delete'])) {
+  $cat_id_for_delete = $_GET['delete'];
+
+  $query = "DELETE FROM categories WHERE cat_id = {$cat_id_for_delete} ";
+  $delete_query = mysqli_query ($connection, $query);
+
+  header ("Location: categories.php");
+}
+
+?>
+
                           </tbody>
                         </table>
                         </div>

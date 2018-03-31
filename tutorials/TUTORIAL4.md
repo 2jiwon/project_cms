@@ -194,3 +194,48 @@ if (isset ($_POST['submit'])) {
 3. See if it's working well. Type any category in the form, then it shows right up. And it stored in our database, too.
 4. See what if we submit the form empty, too.
 
+## Adding a special function to our header file
+Add this on the top of the **_admin/includes/admin_header.php_**.
+```PHP
+<?php ob_start (); ?>
+```
+This function is in charge of buffering our request in the headers of scripts.
+So when we are done with the script it will send everything at the same time.
+Right now, PHP is sending each requests one by one.
+So later on, if we use this function 'header ()' in the body, it would give you an
+error if you do not have the 'ob_start ()' function on the top. Because it would
+try to send our requests in the body when all of the headers are already being
+sent. 
+
+## Deleting Categories
+
+1. Open the **_admin/categories.php_** file. 
+Add a 'td' inside of the while statement in the php codes to delete categories
+```php
+while ($row = mysqli_fetch_assoc ($select_all_categories)) {
+  $cat_id = $row['cat_id'];
+  $cat_title = $row['cat_title'];
+    echo "<tr>";
+    echo "<td>{$cat_id}</td>";
+    echo "<td>{$cat_title}</td>";
+    echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";
+    echo "</tr>";
+}
+```
+
+2. Add this query parts below. To avoid confusing later, you should add comments about what the queries do.
+```php
+if (isset ($_GET['delete'])) {
+  $cat_id_for_delete = $_GET['delete'];
+
+  $query = "DELETE FROM categories WHERE cat_id = {$cat_id_for_delete} ";
+  $delete_query = mysqli_query ($connection, $query);
+}
+```
+Now, if you check how this work, you will see that you have to press the delete twice or refresh the page to see if the categories deleted. So, let's fix it.
+All you have to do is, adding this function.
+```php
+  header ("Location: categories.php");
+```
+This will refresh the page right up, so you can see the categories deleted.
+
