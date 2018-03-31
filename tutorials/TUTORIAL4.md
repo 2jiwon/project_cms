@@ -325,3 +325,53 @@ if (isset ($_GET['edit'])) {  //<-- this value is from table
 ?>
 ```
 Now, we can edit categories.
+
+
+## Refactoring category page
+We are going to be condensing codes making it into modular pieces.
+
+1. Make a file named **_functions.php_** in admin directory.
+
+2. Cut the php codes of 'Add categories' part, paste it to the new file.
+Then write a function surround the codes.
+```php
+function insert_categories () {
+  // paste it here
+}
+```
+3. Call the new function we just made right the place where the codes were in **_categories.php_**.
+
+4. Do not forget that include the **_functions.php_** file in the **_admin_header.php_**.
+```php
+include "../includes/db.php";
+include "../admin/functions.php";
+```
+
+5. Finally, we have to make the 'connection' variable as global one.
+```php
+function insert_categories () {
+
+  global $connection;
+
+  ... skip ...
+```
+
+Keep refactoring category page.
+
+6. Cut the codes of 'select Categories' part, paste it to the
+**_functions.php_**.
+7. Call the new function just made right the place where the codes were.
+8. Do the same as the 'delete categories', 'update_categories' part.
+9. For the 'update_categories' part, you need to add 'global $connection' in the
+**_update_categories.php_**.
+```php
+if (isset ($_GET['edit'])) {  //<-- this is not from a form but from a table
+  $cat_id = $_GET['edit'];
+
+HERE -->  global $connection;
+
+  $query = "SELECT * FROM categories WHERE cat_id = {$cat_id} ";
+  $select_categories_id = mysqli_query ($connection, $query);
+```
+Check if everything works well.
+
