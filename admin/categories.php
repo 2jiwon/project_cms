@@ -46,9 +46,19 @@ if (isset ($_POST['submit'])) {
                                 <input class="form-control" name="cat_title" type="text">
                             </div>
                             <div class="form-group">
-                              <input class="btn btn-primary" name="submit" type="submit">
+                              <input class="btn btn-primary" name="submit" type="submit" value="Add">
                             </div>
                           </form>
+<?php
+
+if (isset ($_GET['edit'])) {  //<-- this value is from table
+  $cat_id = $_GET['edit'];
+
+  include "includes/update_categories.php";
+}
+
+?>
+                        <!-- end col-xs-6 -->
                         </div>
 
                         <div class="col-xs-6">
@@ -58,6 +68,7 @@ if (isset ($_POST['submit'])) {
                               <th>ID</th>
                               <th>Categoty Title</th>
                               <th>Delete</th>
+                              <th>Edit</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -74,6 +85,7 @@ while ($row = mysqli_fetch_assoc ($select_all_categories)) {
     echo "<td>{$cat_id}</td>";
     echo "<td>{$cat_title}</td>";
     echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";
+    echo "<td><a href='categories.php?edit={$cat_id}'>Edit</a></td>";
     echo "</tr>";
 }
 ?>
@@ -88,9 +100,7 @@ if (isset ($_GET['delete'])) {
 
   header ("Location: categories.php");
 }
-
 ?>
-
                           </tbody>
                         </table>
                         </div>

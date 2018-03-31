@@ -239,3 +239,89 @@ All you have to do is, adding this function.
 ```
 This will refresh the page right up, so you can see the categories deleted.
 
+## Updating or Editing categories
+Keep modifying admin/categories.php file.
+
+1. Make another form. Copy the form parts, paste it right below.
+Change the label and value as 'Edit'
+```html
+<form action="" method="post">
+  <div class="form-group">
+    <label for="cat-title">Edit Category</label>
+      <input class="form-control" name="cat_title" type="text">
+  </div>
+  <div class="form-group">
+    <input class="btn btn-primary" name="submit" type="submit" value="Edit">
+  </div>
+</form>
+```
+
+2. Add php code for Edit First after the delete line.
+```php
+    echo "<td><a href='categories.php?edit={$cat_id}'>Edit</a></td>";
+```
+
+3. Add php query inside of the form that we added before.
+```php
+                          <form action="" method="post">
+                            <div class="form-group">
+                              <label for="cat-title">Edit Category</label>
+<?php
+
+// Get the cat_id for edit value.
+if (isset ($_GET['edit'])) {
+  $cat_id = $_GET['edit'];
+
+  $query = "SELECT * FROM categories WHERE cat_id = {$cat_id} ";
+  $select_categories_id = mysqli_query ($connection, $query);
+
+  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
+    $cat_id = $row['cat_id'];
+    $cat_title = $row['cat_title'];
+?>
+                            <input class="form-control" name="cat_title" 
+                                   value="<?php 
+                                               if (isset ($cat_title)) {
+                                                  echo $cat_title;
+                                               }
+                                          ?>"
+                                   type="text">
+<?php 
+  }
+}
+?>
+```
+
+4. Add another query to update the category title
+```php
+<?php
+
+// Make query to update the category title
+if (isset ($_POST['edit'])) {
+  $cat_title_for_edit = $_POST['cat_title'];
+
+  $query = "UPDATE categories SET cat_title = '{$cat_title_for_edit}' WHERE cat_id = {$cat_id} ";
+  $update_query = mysqli_query ($connection, $query);
+
+  if (!$update_query) {
+    die ("QUERY FAILED" . mysqli_error ($connection));
+  }
+}
+?>
+```
+
+5. Make a new file in admin directory as **_update_categories.php_**
+6. Take the whole form parts of 'Edit' out, and paste it to the new file.
+7. Back to the **_categories.php_** file.
+Include the new file where is the place we just cut out.
+```php
+<?php
+
+if (isset ($_GET['edit'])) {  //<-- this value is from table
+  $cat_id = $_GET['edit'];
+
+  include "includes/update_categories.php";
+}
+?>
+```
+Now, we can edit categories.
