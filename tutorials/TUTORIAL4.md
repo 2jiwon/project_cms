@@ -102,3 +102,48 @@ It is from bootstrap, and it means '6 column of 12, based on mobile screen size'
 </table>
 </div>
 ```
+
+## Displaying data in category page
+
+1. First of all, in order to avoid any confusing later, change the names of include files in admin
+directory. Then modify related links of the files in admin directory.
+
+2. Copy the php parts of categories query in **_includes/navigation.php_**,
+  paste it to **_admin/Categories.php_** inside of <tbody>.
+```html
+                          <tbody>
+<?php
+
+$query = "SELECT * FROM categories";
+$select_all_categories = mysqli_query ($connection, $query);
+
+while ($row = mysqli_fetch_assoc ($select_all_categories)) {
+  $cat_title = $row['cat_title'];
+    echo "<li><a href='#'>{$cat_title}</a></li>";
+}
+?>
+                            <tr>
+                              <td>First Category</td>
+                              <td>Second Category</td>
+```
+
+3. Modify it like below.
+```html
+                          <tbody>
+<?php
+
+$query = "SELECT * FROM categories";
+$select_all_categories = mysqli_query ($connection, $query);
+
+while ($row = mysqli_fetch_assoc ($select_all_categories)) {
+  $cat_id = $row['cat_id'];
+  $cat_title = $row['cat_title'];
+    echo "<tr>";
+    echo "<td>{$cat_id}</td>";
+    echo "<td>{$cat_title}</td>";
+    echo "</tr>";
+}
+?>
+                          </tbody>
+```
+

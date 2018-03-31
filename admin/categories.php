@@ -1,11 +1,11 @@
 <?php
-include "includes/header.php";
+include "includes/admin_header.php";
 ?>
     <div id="wrapper">
 
         <!-- Navigation -->
 <?php
-include "includes/navigation.php";
+include "includes/admin_navigation.php";
 ?>
 
         <div id="page-wrapper">
@@ -40,12 +40,21 @@ include "includes/navigation.php";
                               <th>Categoty Title</th>
                             </tr>
                           </thead>
-     
                           <tbody>
-                            <tr>
-                              <td>First Category</td>
-                              <td>Second Category</td>
-                            </tr>
+<?php
+
+$query = "SELECT * FROM categories";
+$select_all_categories = mysqli_query ($connection, $query);
+
+while ($row = mysqli_fetch_assoc ($select_all_categories)) {
+  $cat_id = $row['cat_id'];
+  $cat_title = $row['cat_title'];
+    echo "<tr>";
+    echo "<td>{$cat_id}</td>";
+    echo "<td>{$cat_title}</td>";
+    echo "</tr>";
+}
+?>
                           </tbody>
                         </table>
                         </div>
@@ -59,5 +68,5 @@ include "includes/navigation.php";
 
         </div>
 <?php
-include "includes/footer.php";
+include "includes/admin_footer.php";
 ?>
