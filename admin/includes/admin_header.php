@@ -1,5 +1,9 @@
 <?php
+ob_start ();
+?>
+<?php
 include "../includes/db.php";
+include "../admin/functions.php";
 ?>
 
 <!DOCTYPE html>

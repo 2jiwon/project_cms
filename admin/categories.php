@@ -21,24 +21,7 @@ include "includes/admin_navigation.php";
                         </h1>
                         <div class="col-xs-6">
 <?php
-
-if (isset ($_POST['submit'])) {
-//  echo "It's working";
-  $cat_title = $_POST['cat_title'];
-
-  if ($cat_title == "" || empty ($cat_title)) {
-    echo "This field should not be empty.";
-  } else {
-    $query  = "INSERT INTO categories (cat_title) ";
-    $query .= "VALUES ('{$cat_title}') ";
-
-    $create_category_query = mysqli_query ($connection, $query);
-
-    if (!$create_category_query) {
-      die ("QUERY FAILED" . mysqli_error ($connection));
-    }
-  }
-}
+insert_categories ();
 ?>
                           <form action="" method="post">
                             <div class="form-group">
@@ -46,9 +29,13 @@ if (isset ($_POST['submit'])) {
                                 <input class="form-control" name="cat_title" type="text">
                             </div>
                             <div class="form-group">
-                              <input class="btn btn-primary" name="submit" type="submit">
+                              <input class="btn btn-primary" name="submit" type="submit" value="Add">
                             </div>
                           </form>
+<?php
+update_categories ();
+?>
+                        <!-- end col-xs-6 -->
                         </div>
 
                         <div class="col-xs-6">
@@ -57,22 +44,17 @@ if (isset ($_POST['submit'])) {
                             <tr>
                               <th>ID</th>
                               <th>Categoty Title</th>
+                              <th>Delete</th>
+                              <th>Edit</th>
                             </tr>
                           </thead>
                           <tbody>
 <?php
-
-$query = "SELECT * FROM categories";
-$select_all_categories = mysqli_query ($connection, $query);
-
-while ($row = mysqli_fetch_assoc ($select_all_categories)) {
-  $cat_id = $row['cat_id'];
-  $cat_title = $row['cat_title'];
-    echo "<tr>";
-    echo "<td>{$cat_id}</td>";
-    echo "<td>{$cat_title}</td>";
-    echo "</tr>";
-}
+// Find all categories query
+find_all_categories ();
+?>
+<?php
+delete_categories ();
 ?>
                           </tbody>
                         </table>
