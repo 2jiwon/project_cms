@@ -25,8 +25,7 @@
 
 - At the sidebar menu, we only need '6' menus, so delete '3' menus; Charts,Tables,Forms.
 
-- Cut the 'Dropdown' parts, move it to the next of 'Dashboard'.
-Then rename its <ul id>, 'data-target' as 'Posts_dropdown'.
+- Cut the 'Dropdown' parts, move it to the next of 'Dashboard'. Then rename its 'ul id', 'data-target' as 'Posts_dropdown'.
 Also, rename the menu titles like below.
 ```html
 <li>
@@ -41,8 +40,7 @@ Also, rename the menu titles like below.
     </ul>
 </li>
 ```
-
-Now, arrange other menus with this order. Make 'Users' also dropdown.
+- Now, arrange other menus with this order. Make 'Users' also dropdown.
 > Dashboard, Posts, Categories, Comments, Users, profile
 
 
