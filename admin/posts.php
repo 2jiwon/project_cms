@@ -1,62 +1,44 @@
-## Creating a HTML table in admin to display a list of posts
-Before everything, make the sidebar links work.
-But we do not have posts.php yet, so let's build the page.
+<?php
+include "includes/admin_header.php";
+?>
+    <div id="wrapper">
 
-1. Copy the **_admin/categories.php_** file to **_admin/posts.php_**.
-And the whole parts where is inside of the 'div col-lg-12'.
-```html
+        <!-- Navigation -->
+<?php
+include "includes/admin_navigation.php";
+?>
+
+        <div id="page-wrapper">
+
+            <div class="container-fluid">
+
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
 
-//--> cut out this part
-
-                    </div>
-                </div>
-                <!-- /.row -->
-```
-Then paste the header part.
-```html
                         <h1 class="page-header">
                             Welcome to Admin
                             <small>Author</small>
                         </h1>
-```
 
-2. Make a table in **_admin/posts.php_**
-```html
 <table class="table table-bordered table-hover">
   <thead>
     <tr>
       <th>Id</th>
-      <th>Author</th>
-      <th>Title</th>
       <th>Category</th>
-      <th>Status</th>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Date</th>
       <th>Image</th>
       <th>Tags</th>
       <th>Comments</th>
-      <th>Date</th>
+      <th>Status</th>
     </tr>
   </thead>
 <tbody>
-  <tr>
-    <td>1</td>
-    <td>Jiwon</td>
-    <td>Bootstrap</td>
-    <td>CSS</td>
-    <td>draft</td>
-    <td>some.jpg</td>
-    <td>CSS</td>
-    <td>something</td>
-    <td>2018.03.31</td>
-  </tr>
-</tbody>
-</table>
-```
 
-3. Modify the table using query.
-```php
+<?php
+
 $query = "SELECT * FROM posts";
 $select_all_posts = mysqli_query ($connection, $query);
 
@@ -81,17 +63,37 @@ if (!$select_all_posts) {
     echo "<td>{$post_title}</td>";
     echo "<td>{$post_author}</td>";
     echo "<td>{$post_date}</td>";
-    echo "<td>{$post_image}</td>";
+    echo "<td><img class='img-responsive' width='100' src='../images/{$post_image}' alt='{$post_image}'></td>";
     echo "<td>{$post_tags}</td>";
     echo "<td>{$post_comments}</td>";
     echo "<td>{$post_status}</td>";
     echo "</tr>";
   };
 }
-```
 
-4. Modify image part to show actual images.
-```php
-echo "<td><img class='img-responsive' src='../images/{$post_image}' alt='{$post_image}'></td>";
-```
+?>
+<!--
+    <td>1</td>
+    <td>Jiwon</td>
+    <td>Bootstrap</td>
+    <td>CSS</td>
+    <td>draft</td>
+    <td>some.jpg</td>
+    <td>CSS</td>
+    <td>something</td>
+    <td>2018.03.31</td>
+-->
+</tbody>
+</table>
 
+                    </div>
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+<?php
+include "includes/admin_footer.php";
+?>
