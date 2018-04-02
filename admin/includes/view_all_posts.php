@@ -10,6 +10,7 @@
       <th>Tags</th>
       <th>Comments</th>
       <th>Status</th>
+      <th>Delete</th>
     </tr>
   </thead>
 <tbody>
@@ -44,9 +45,28 @@ if (!$select_all_posts) {
     echo "<td>{$post_tags}</td>";
     echo "<td>{$post_comments}</td>";
     echo "<td>{$post_status}</td>";
+    echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
     echo "</tr>";
   };
 }
 ?>
 </tbody>
 </table>
+
+<?php
+
+if (isset ($_GET['delete'])) {
+  $post_id_for_delete = $_GET['delete'];
+
+  $query = "DELETE FROM posts WHERE post_id = {$post_id_for_delete} ";
+  $delete_query = mysqli_query ($connection, $query);
+
+  confirm_query ($delete_query);
+  header ("Location: posts.php");
+}
+
+?>
+
+
+
+
