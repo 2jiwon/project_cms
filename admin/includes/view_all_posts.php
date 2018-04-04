@@ -10,7 +10,9 @@
       <th>Tags</th>
       <th>Comments</th>
       <th>Status</th>
+      <th>Edit</th>
       <th>Delete</th>
+    </tr>
     </tr>
   </thead>
 <tbody>
@@ -45,6 +47,7 @@ if (!$select_all_posts) {
     echo "<td>{$post_tags}</td>";
     echo "<td>{$post_comments}</td>";
     echo "<td>{$post_status}</td>";
+    echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
     echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
     echo "</tr>";
   };
@@ -66,7 +69,4 @@ if (isset ($_GET['delete'])) {
 }
 
 ?>
-
-
-
 
