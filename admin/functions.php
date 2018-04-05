@@ -69,10 +69,10 @@ function delete_categories () {
 
 function update_categories () {
   
-if (isset ($_GET['edit'])) {  //<-- this value is from table
-  $cat_id = $_GET['edit'];
+  if (isset ($_GET['edit'])) {  //<-- this value is from table
+    $cat_id = $_GET['edit'];
 
-  include "includes/update_categories.php";
-}
+    include "includes/update_categories.php";
+  }
 }
 ?>
