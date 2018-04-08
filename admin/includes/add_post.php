@@ -29,9 +29,25 @@ if (isset ($_POST['create_post'])) {
 
 <form action="" method="post" enctype="multipart/form-data">
 
-  <div class="form-group">
+  <div class="form-inline form-group">
     <label for="post_category_id">Post Category Id</label>
-      <input class="form-control" name="post_category_id" type="text">
+    <div>
+      <select class="form-control" name="post_category_id" id="post_category">
+<?php
+  $query = "SELECT * FROM categories"; 
+  $select_categories_id = mysqli_query ($connection, $query);
+
+  confirm_query ($select_categories_id);
+
+  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
+    $cat_id = $row['cat_id'];
+    $cat_title = $row['cat_title'];
+
+    echo "<option value='{$cat_title}'>{$cat_title}</option>";
+  }
+?>  
+      </select>
+    </div>
   </div>
 
   <div class="form-group">
@@ -56,8 +72,7 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="post_content">Post Content</label>
-      <textarea class="form-control" name="post_content" id="" cols="30" rows="10">
-      </textarea>
+      <textarea class="form-control" name="post_content" id="" cols="30" rows="10"></textarea>
   </div>
 
   <div class="form-group">

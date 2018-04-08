@@ -39,6 +39,14 @@ if (!$select_all_posts) {
 
     echo "<tr>";
     echo "<td>{$post_id}</td>";
+
+  $query = "SELECT * FROM categories WHERE cat_id = {$post_id} ";
+  $select_categories_id = mysqli_query ($connection, $query);
+
+  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
+    $post_category_id = $row['cat_title'];
+  }
+
     echo "<td>{$post_category_id}</td>";
     echo "<td>{$post_title}</td>";
     echo "<td>{$post_author}</td>";

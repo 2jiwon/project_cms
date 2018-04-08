@@ -68,17 +68,19 @@ if (isset ($_GET['p_id'])) {
 
 <form action="" method="post" enctype="multipart/form-data">
 
-  <div class="form-group">
+  <div class="form-inline form-group">
     <label for="post_id">Post Id</label>
-      <div class="well well-sm" name="post_id">
+    <div>
+      <div class="form-control" name="post_id">
         <?php echo $post_id; ?>
       </div>
+    </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-inline form-group">
     <label for="post_category">Post Category</label>
     <div>
-      <select name="post_category_id" id="post_category">
+      <select class="form-control" name="post_category_id" id="post_category">
 <?php
 
   $query = "SELECT * FROM categories"; 
