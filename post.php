@@ -1,6 +1,7 @@
 <?php 
 include ('includes/db.php'); 
 include ('includes/header.php'); 
+include ('admin/functions.php');
 ?>
     <!-- Navigation -->
 <?php 
@@ -52,16 +53,44 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
 }
 ?>
 
+<?php
+if (isset ($_POST['create_comment'])) {
+  $post_id = $_GET['p_id'];
+  $comment_author  = $_POST['comment_author'];
+  $comment_email   = $_POST['comment_email'];
+  $comment_content = $_POST['comment_content'];
+
+  $query  = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_date, comment_status) ";
+  $query .= "VALUES ('{$post_id}', '{$comment_author}', '{$comment_email}', '{$comment_content}', NOW(), 'Approve') ";
+
+  $create_comment = mysqli_query ($connection, $query);
+  confirm_query ($create_comment);
+}
+
+?>
                 <!-- Blog Comments -->
 
                 <!-- Comments Form -->
                 <div class="well">
                     <h4>Leave a Comment:</h4>
-                    <form role="form">
+                    <form action="" method="post" role="form">
+
+                    <div class="form-group">
+                        <label for="Author">Author</label>
+                        <input class="form-control" type="text" name="comment_author">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input class="form-control" type="email" name="comment_email">
+                    </div>
+
                         <div class="form-group">
-                            <textarea class="form-control" rows="3"></textarea>
+                            <label for="Comment">Comment</label>
+                            <textarea class="form-control" name="comment_content" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button class="btn btn-primary" name="create_comment" type="submit">Submit</button>
+
                     </form>
                 </div>
 
