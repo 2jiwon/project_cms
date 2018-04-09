@@ -38,16 +38,15 @@ if (!$select_all_comments) {
     echo "<tr>";
     echo "<td>{$comment_id}</td>";
 
-/*
-  $query = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
-  $select_post_id = mysqli_query ($connection, $query);
+  $query = "SELECT * FROM posts WHERE post_id = {$comment_post_id} ";
+  $comment_post = mysqli_query ($connection, $query);
 
-  while ($row = mysqli_fetch_assoc ($select_post_id)) {
-    $comment_post_id = $row['comment_post_id'];
+  while ($row = mysqli_fetch_assoc ($comment_post)) {
+    $post_id     = $row['post_id'];
+    $response_to = $row['post_title'];
   }
- */
 
-    echo "<td>{$comment_post_id}</td>";
+    echo "<td><a href='../post.php?p_id={$post_id}'>{$response_to}</a></td>";
     echo "<td>{$comment_author}</td>";
     echo "<td>{$comment_email}</td>";
     echo "<td>{$comment_content}</td>";
