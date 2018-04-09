@@ -35,12 +35,13 @@ if (isset ($_GET['p_id'])) {
   move_uploaded_file ($post_image_temp, "../images/{$post_image}");
 
   $post_content = $_POST['post_content'];
+  $post_content = mysqli_real_escape_string ($connection, $post_content);
   $post_tags = $_POST['post_tags'];
   $post_status = $_POST['post_status'];
   $post_comment_count = 4;
 
   if (empty ($post_image)) {
-    $query = "SELECT post_image FROM posts WHERE post_id = {$post_id} ";
+    $query = "SELECT post_image FROM posts WHERE post_id ={$post_id} ";
     $select_image = mysqli_query ($connection, $query);
 
     while ($row = mysqli_fetch_assoc ($select_image)) {
@@ -68,17 +69,19 @@ if (isset ($_GET['p_id'])) {
 
 <form action="" method="post" enctype="multipart/form-data">
 
-  <div class="form-group">
+  <div class="form-inline form-group">
     <label for="post_id">Post Id</label>
-      <div class="well well-sm" name="post_id">
+    <div>
+      <div class="form-control" name="post_id">
         <?php echo $post_id; ?>
       </div>
+    </div>
   </div>
 
-  <div class="form-group">
+  <div class="form-inline form-group">
     <label for="post_category">Post Category</label>
     <div>
-      <select name="post_category_id" id="post_category">
+      <select class="form-control" name="post_category_id" id="post_category">
 <?php
 
   $query = "SELECT * FROM categories"; 
@@ -87,10 +90,10 @@ if (isset ($_GET['p_id'])) {
   confirm_query ($select_categories_id);
 
   while ($row = mysqli_fetch_assoc ($select_categories_id)) {
-    $cat_id = $row['cat_id'];
+    $post_category_id = $row['cat_id'];
     $cat_title = $row['cat_title'];
 
-    echo "<option value='{$cat_title}'>{$cat_title}</option>";
+    echo "<option value='{$post_category_id}'>{$cat_title}</option>";
   }
 ?>  
       </select>
