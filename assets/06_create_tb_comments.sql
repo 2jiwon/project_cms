@@ -4,7 +4,7 @@ CREATE TABLE comments (
   ,comment_author VARCHAR(255) NOT NULL
   ,comment_email VARCHAR(255) NOT NULL
   ,comment_content TEXT
-  ,comment_status VARCHAR(255) NOT NULL default 'draft'
+  ,comment_status VARCHAR(255) NOT NULL default 'Unapproved'
   ,comment_date DATETIME NOT NULL
 );
 
