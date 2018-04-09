@@ -55,8 +55,8 @@ if (!$select_all_comments) {
 
     echo "<td><a href='posts.php?source=edit_post&p_id={$comment_post_id}'>Approve</a></td>";
     echo "<td><a href='posts.php?delete={$comment_post_id}'>Unapprove</a></td>";
-    echo "<td><a href='posts.php?source=edit_post&p_id={$comment_post_id}'>Edit</a></td>";
-    echo "<td><a href='posts.php?delete={$comment_post_id}'>Delete</a></td>";
+    echo "<td><a href='comments.php?source=edit_comment&p_id={$comment_id}'>Edit</a></td>";
+    echo "<td><a href='comments.php?delete={$comment_id}'>Delete</a></td>";
     echo "</tr>";
   };
 }
@@ -73,8 +73,7 @@ if (isset ($_GET['delete'])) {
   $delete_query = mysqli_query ($connection, $query);
 
   confirm_query ($delete_query);
-  header ("Location: posts.php");
+  header ("Location: comments.php");
 }
 
 ?>
-
