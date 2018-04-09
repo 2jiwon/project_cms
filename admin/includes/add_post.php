@@ -7,22 +7,25 @@ if (isset ($_POST['create_post'])) {
   $post_author = $_POST['post_author'];
   $post_date = date ('Y-m-d H:i:s');
 
-  $post_image = $_FILES['post_image']['name'];
-  $post_image_temp = $_FILES['post_image']['tmp_name'];
+  if (empty ($post_image)) {
+    $post_image = '';
+  } else {
+    $post_image = $_FILES['post_image']['name'];
+    $post_image_temp = $_FILES['post_image']['tmp_name'];
+    move_uploaded_file ($post_image_temp, "../images/{$post_image}");
+  }
 
   $post_content = $_POST['post_content'];
+  $post_content = mysqli_real_escape_string ($connection, $post_content);
   $post_tags = $_POST['post_tags'];
   $post_status = $_POST['post_status'];
   $post_comment_count = 4;
 
-  move_uploaded_file ($post_image_temp, "../images/{$post_image}");
-
   $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_comment_count, post_status) ";
   $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', NOW(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_comment_count}', '{$post_status}') ";
 
+  confirm_query ($query); 
   $create_post_query = mysqli_query ($connection, $query);
-
-  confirm_query ($create_post_query); 
 }
   
 ?>
@@ -40,10 +43,11 @@ if (isset ($_POST['create_post'])) {
   confirm_query ($select_categories_id);
 
   while ($row = mysqli_fetch_assoc ($select_categories_id)) {
-    $cat_id = $row['cat_id'];
+    $post_category_id = $row['cat_id'];
     $cat_title = $row['cat_title'];
 
-    echo "<option value='{$cat_title}'>{$cat_title}</option>";
+    //echo "<option value='{$cat_title}'>{$cat_title}</option>";
+    echo "<option value='{$post_category_id}'>{$cat_title}</option>";
   }
 ?>  
       </select>
