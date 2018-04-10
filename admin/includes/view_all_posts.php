@@ -10,6 +10,8 @@
       <th>Tags</th>
       <th>Comments</th>
       <th>Status</th>
+      <th>Publish</th>
+      <th>Draft</th>
       <th>Edit</th>
       <th>Delete</th>
     </tr>
@@ -55,6 +57,8 @@ if (!$select_all_posts) {
     echo "<td>{$post_tags}</td>";
     echo "<td>{$post_comments}</td>";
     echo "<td>{$post_status}</td>";
+    echo "<td><a href='posts.php?publish={$post_id}'>Publish</a></td>";
+    echo "<td><a href='posts.php?draft={$post_id}'>Draft</a></td>";
     echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
     echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
     echo "</tr>";
@@ -65,6 +69,26 @@ if (!$select_all_posts) {
 </table>
 
 <?php
+
+if (isset ($_GET['publish'])) {
+  $post_id_for_publish = $_GET['publish'];
+
+  $query = "UPDATE posts SET post_status = 'Published' WHERE post_id = {$post_id_for_publish} ";
+  $publish_query = mysqli_query ($connection, $query);
+
+  confirm_query ($publish_query);
+  header ("Location: posts.php");
+}
+
+if (isset ($_GET['draft'])) {
+  $post_id_for_draft = $_GET['draft'];
+
+  $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = {$post_id_for_draft} ";
+  $draft_query = mysqli_query ($connection, $query);
+
+  confirm_query ($draft_query);
+  header ("Location: posts.php");
+}
 
 if (isset ($_GET['delete'])) {
   $post_id_for_delete = $_GET['delete'];

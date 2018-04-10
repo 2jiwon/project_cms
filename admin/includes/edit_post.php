@@ -22,50 +22,8 @@ if (isset ($_GET['p_id'])) {
     $post_comments = $row['post_comment_count'];
     $post_status = $row['post_status'];
   }
-
-  if (isset ($_POST['update_post'])) {
-  
-  $post_category_id = $_POST['post_category_id'];
-  $post_title = $_POST['post_title'];
-  $post_author = $_POST['post_author'];
-  //$post_date = date ('Y-m-d H:i:s');
-
-  $post_image = $_FILES['post_image']['name'];
-  $post_image_temp = $_FILES['post_image']['tmp_name'];
-  move_uploaded_file ($post_image_temp, "../images/{$post_image}");
-
-  $post_content = $_POST['post_content'];
-  $post_content = mysqli_real_escape_string ($connection, $post_content);
-  $post_tags = $_POST['post_tags'];
-  $post_status = $_POST['post_status'];
-  $post_comment_count = 4;
-
-  if (empty ($post_image)) {
-    $query = "SELECT post_image FROM posts WHERE post_id ={$post_id} ";
-    $select_image = mysqli_query ($connection, $query);
-
-    while ($row = mysqli_fetch_assoc ($select_image)) {
-      $post_image = $row['post_image'];
-    }
-  }
-
-  $query  = "UPDATE posts SET "; 
-  $query .= "post_category_id = '{$post_category_id}', ";
-  $query .= "post_title = '{$post_title}', ";
-  $query .= "post_author = '{$post_author}', ";
-  $query .= "post_date = NOW(), ";
-  $query .= "post_image = '{$post_image}', ";
-  $query .= "post_content = '{$post_content}', ";
-  $query .= "post_tags = '{$post_tags}', ";
-  $query .= "post_status = '{$post_status}' ";
-  $query .= "WHERE post_id={$post_id}";
-
-  $update_post = mysqli_query ($connection, $query);
-
-  confirm_query ($update_post);
-  }
-
 ?>
+
 
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -138,7 +96,7 @@ if (isset ($_GET['p_id'])) {
 
   <div class="form-group">
     <label for="post_status">Post Status</label>
-      <input class="form-control" name="post_status" type="text" value="<?php echo $post_status; ?>">
+      <input class="form-control" name="post_status" type="text" value="<?php echo $post_status; ?>" readonly>
   </div>
 
   <div class="form-group">
@@ -146,3 +104,48 @@ if (isset ($_GET['p_id'])) {
   </div>
 
 </form>
+
+<?php
+  if (isset ($_POST['update_post'])) {
+  
+  $post_category_id = $_POST['post_category_id'];
+  $post_title = $_POST['post_title'];
+  $post_author = $_POST['post_author'];
+  //$post_date = date ('Y-m-d H:i:s');
+
+  $post_image = $_FILES['post_image']['name'];
+  $post_image_temp = $_FILES['post_image']['tmp_name'];
+  move_uploaded_file ($post_image_temp, "../images/{$post_image}");
+
+  $post_content = $_POST['post_content'];
+  $post_content = mysqli_real_escape_string ($connection, $post_content);
+  $post_tags = $_POST['post_tags'];
+  $post_status = $_POST['post_status'];
+  $post_comment_count = 4;
+
+  if (empty ($post_image)) {
+    $query = "SELECT post_image FROM posts WHERE post_id ={$post_id} ";
+    $select_image = mysqli_query ($connection, $query);
+
+    while ($row = mysqli_fetch_assoc ($select_image)) {
+      $post_image = $row['post_image'];
+    }
+  }
+
+  $query  = "UPDATE posts SET "; 
+  $query .= "post_category_id = '{$post_category_id}', ";
+  $query .= "post_title = '{$post_title}', ";
+  $query .= "post_author = '{$post_author}', ";
+  $query .= "post_date = NOW(), ";
+  $query .= "post_image = '{$post_image}', ";
+  $query .= "post_content = '{$post_content}', ";
+  $query .= "post_tags = '{$post_tags}', ";
+  $query .= "post_status = '{$post_status}' ";
+  $query .= "WHERE post_id={$post_id}";
+
+  $update_post = mysqli_query ($connection, $query);
+
+  confirm_query ($update_post);
+  }
+
+?>

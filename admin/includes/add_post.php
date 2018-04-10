@@ -7,25 +7,23 @@ if (isset ($_POST['create_post'])) {
   $post_author = $_POST['post_author'];
   $post_date = date ('Y-m-d H:i:s');
 
+  $post_image = $_FILES['post_image']['name'];
+  $post_image_temp = $_FILES['post_image']['tmp_name'];
+  move_uploaded_file ($post_image_temp, "../images/{$post_image}");
+
   if (empty ($post_image)) {
     $post_image = '';
-  } else {
-    $post_image = $_FILES['post_image']['name'];
-    $post_image_temp = $_FILES['post_image']['tmp_name'];
-    move_uploaded_file ($post_image_temp, "../images/{$post_image}");
   }
 
   $post_content = $_POST['post_content'];
   $post_content = mysqli_real_escape_string ($connection, $post_content);
   $post_tags = $_POST['post_tags'];
-  $post_status = $_POST['post_status'];
-  $post_comment_count = 4;
 
-  $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_comment_count, post_status) ";
-  $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', NOW(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_comment_count}', '{$post_status}') ";
+  $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags) ";
+  $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', NOW(), '{$post_image}', '{$post_content}', '{$post_tags}') ";
 
-  confirm_query ($query); 
   $create_post_query = mysqli_query ($connection, $query);
+  confirm_query ($create_post_query); 
 }
   
 ?>
@@ -46,7 +44,6 @@ if (isset ($_POST['create_post'])) {
     $post_category_id = $row['cat_id'];
     $cat_title = $row['cat_title'];
 
-    //echo "<option value='{$cat_title}'>{$cat_title}</option>";
     echo "<option value='{$post_category_id}'>{$cat_title}</option>";
   }
 ?>  
@@ -56,12 +53,12 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="title">Post Title</label>
-      <input class="form-control" name="post_title" type="text">
+      <input class="form-control" name="post_title" type="text" required>
   </div>
 
   <div class="form-group">
     <label for="post_author">Post author</label>
-      <input class="form-control" name="post_author" type="text">
+      <input class="form-control" name="post_author" type="text" required>
   </div>
 
   <div class="form-group">
@@ -86,7 +83,7 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="post_status">Post Status</label>
-      <input class="form-control" name="post_status" type="text">
+      <input class="form-control" name="post_status" type="text" value="Draft" readonly>
   </div>
 
   <div class="form-group">
