@@ -18,10 +18,9 @@ if (isset ($_POST['create_post'])) {
   $post_content = $_POST['post_content'];
   $post_content = mysqli_real_escape_string ($connection, $post_content);
   $post_tags = $_POST['post_tags'];
-  $post_status = $_POST['post_status'];
 
-  $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
-  $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', NOW(), '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}') ";
+  $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags) ";
+  $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', NOW(), '{$post_image}', '{$post_content}', '{$post_tags}') ";
 
   $create_post_query = mysqli_query ($connection, $query);
   confirm_query ($create_post_query); 
@@ -54,12 +53,12 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="title">Post Title</label>
-      <input class="form-control" name="post_title" type="text">
+      <input class="form-control" name="post_title" type="text" required>
   </div>
 
   <div class="form-group">
     <label for="post_author">Post author</label>
-      <input class="form-control" name="post_author" type="text">
+      <input class="form-control" name="post_author" type="text" required>
   </div>
 
   <div class="form-group">
@@ -84,7 +83,7 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="post_status">Post Status</label>
-      <input class="form-control" name="post_status" type="text">
+      <input class="form-control" name="post_status" type="text" value="Draft" readonly>
   </div>
 
   <div class="form-group">

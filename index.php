@@ -15,7 +15,7 @@ include ('includes/navigation.php');
             <div class="col-md-8">
 <?php
 
-$query  = "SELECT * FROM posts ";
+$query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 $query .= "ORDER BY post_id DESC ";
 $select_all_posts_query = mysqli_query ($connection, $query);
 
