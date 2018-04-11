@@ -7,6 +7,7 @@ if (isset ($_POST['create_user'])) {
   $user_password = $_POST['user_password'];
   $user_firstname = $_POST['user_firstname'];
   $user_lastname = $_POST['user_lastname'];
+  $user_email = $_POST['user_email'];
 
   $user_image = $_FILES['user_image']['name'];
   $user_image_temp = $_FILES['user_image']['tmp_name'];
@@ -23,6 +24,7 @@ if (isset ($_POST['create_user'])) {
 
   $create_user_query = mysqli_query ($connection, $query);
   confirm_query ($create_user_query); 
+  header ("Location: users.php");
 }
   
 ?>
