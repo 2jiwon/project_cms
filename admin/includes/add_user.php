@@ -17,7 +17,7 @@ if (isset ($_POST['create_user'])) {
 
   $user_image      = $_FILES['user_image']['name'];
   $user_image_temp = $_FILES['user_image']['tmp_name'];
-  move_uploaded_file ($user_image_temp, "./images/{$user_image}");
+  move_uploaded_file ($user_image_temp, "../images/{$user_image}");
 
   if (empty ($user_image)) {
     $user_image = '';
@@ -30,7 +30,7 @@ if (isset ($_POST['create_user'])) {
 
   $create_user_query = mysqli_query ($connection, $query);
   confirm_query ($create_user_query);
-  #header ("Location: includes/view_all_users.php");
+  header ("Location: users.php");
 }
 ?>
 
@@ -78,6 +78,11 @@ if (isset ($_POST['create_user'])) {
         <option value="admin">Admin</option>
       </select>
     </div>
+  </div>
+
+  <div class="form-group">
+    <label for="user_status">User Status</label>
+      <input class="form-control" name="user_status" type="text" value="unapproved" readonly>
   </div>
 
   <div class="form-group">
