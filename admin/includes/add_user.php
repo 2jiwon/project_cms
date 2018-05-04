@@ -23,7 +23,6 @@ if (isset ($_POST['create_user'])) {
     $user_image = '';
   }
 
-#  $post_content = mysqli_real_escape_string ($connection, $post_content);
 
   $query  = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role) ";
   $query .= "VALUES ('{$user_name}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}', '{$user_image}', '{$user_role}') ";

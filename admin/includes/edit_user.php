@@ -118,6 +118,7 @@ if (isset ($_GET['u_id'])) {
 
   $query  = "UPDATE users SET ";
   $query .= "user_name = '{$user_name}', ";
+  $query .= "user_password = '{$user_password}', ";
   $query .= "user_firstname = '{$user_firstname}', ";
   $query .= "user_lastname = '{$user_lastname}', ";
   $query .= "user_email = '{$user_email}', ";

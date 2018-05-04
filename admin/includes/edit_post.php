@@ -28,11 +28,7 @@ if (isset ($_GET['p_id'])) {
 
   <div class="form-inline form-group">
     <label for="post_id">Post Id</label>
-    <div>
-      <div class="form-control" name="post_id">
-        <?php echo $post_id; ?>
-      </div>
-    </div>
+      <input class="form-control" name="post_id" type="text" value="<?php echo $post_id; ?>" readonly>
   </div>
 
   <div class="form-inline form-group">
