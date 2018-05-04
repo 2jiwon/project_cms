@@ -9,6 +9,7 @@
       <th>Email</th>
       <th>User Image</th>
       <th>User Role</th>
+      <th>User Status</th>
       <th>Approve</th>
       <th>Disapprove</th>
       <th>Edit</th>
@@ -36,6 +37,7 @@ if (!$select_all_users) {
     $user_image     = $row['user_image'];
     $user_role      = $row['user_role'];
     $user_email     = $row['user_email'];
+    $user_status    = $row['user_status'];
 
     echo "<tr>";
     echo "<td>{$user_id}</td>";
@@ -46,6 +48,7 @@ if (!$select_all_users) {
     echo "<td>{$user_email}</td>";
     echo "<td><img class='img-responsive' width='100' src='../images/{$user_image}' alt='{$user_image}'></td>";
     echo "<td>{$user_role}</td>";
+    echo "<td>{$user_status}</td>";
     echo "<td><a href='users.php?approve={$user_id}'>Approve</a></td>";
     echo "<td><a href='users.php?disapprove={$user_id}'>Disapproved</a></td>";
     echo "<td><a href='users.php?source=edit_user&u_id={$user_id}'>Edit</a></td>";
@@ -59,27 +62,25 @@ if (!$select_all_users) {
 
 <?php
 
-/*
 if (isset ($_GET['approve'])) {
   $user_id_for_approve = $_GET['approve'];
 
-  $query = "UPDATE users SET user_status = 'approved' WHERE user_id = {$user_id_for_approve} ";
+  $query = "UPDATE users SET user_status = 'Approved' WHERE user_id = {$user_id_for_approve} ";
   $approve_query = mysqli_query ($connection, $query);
 
   confirm_query ($approve_query);
   header ("Location: users.php");
 }
 
-if (isset ($_GET['draft'])) {
-  $post_id_for_draft = $_GET['draft'];
+if (isset ($_GET['disapprove'])) {
+  $user_id_for_disapprove = $_GET['disapprove'];
 
-  $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = {$post_id_for_draft} ";
-  $draft_query = mysqli_query ($connection, $query);
+  $query = "UPDATE users SET user_status = 'Unapproved' WHERE user_id = {$user_id_for_disapprove} ";
+  $disapprove_query = mysqli_query ($connection, $query);
 
-  confirm_query ($draft_query);
-  header ("Location: posts.php");
+  confirm_query ($disapprove_query);
+  header ("Location: users.php");
 }
- */
 
 if (isset ($_GET['delete'])) {
   $user_id_for_delete = $_GET['delete'];
