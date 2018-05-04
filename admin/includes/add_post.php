@@ -24,6 +24,7 @@ if (isset ($_POST['create_post'])) {
 
   $create_post_query = mysqli_query ($connection, $query);
   confirm_query ($create_post_query); 
+  header ("Location: posts.php");
 }
   
 ?>
