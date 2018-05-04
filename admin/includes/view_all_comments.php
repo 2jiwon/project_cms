@@ -9,7 +9,7 @@
       <th>Status</th>
       <th>Date</th>
       <th>Approve</th>
-      <th>Unapprove</th>
+      <th>Disapprove</th>
       <th>Edit</th>
       <th>Delete</th>
     </tr>
@@ -54,7 +54,7 @@ if (!$select_all_comments) {
     echo "<td>{$comment_date}</td>";
 
     echo "<td><a href='comments.php?approve={$comment_id}'>Approve</a></td>";
-    echo "<td><a href='comments.php?unapprove={$comment_id}'>Unapprove</a></td>";
+    echo "<td><a href='comments.php?disapprove={$comment_id}'>Disapprove</a></td>";
     echo "<td><a href='comments.php?source=edit_comment&p_id={$comment_id}'>Edit</a></td>";
     echo "<td><a href='comments.php?delete={$comment_id}'>Delete</a></td>";
     echo "</tr>";
@@ -76,13 +76,13 @@ if (isset ($_GET['approve'])) {
   header ("Location: comments.php");
 }
 
-if (isset ($_GET['unapprove'])) {
-  $comment_id_for_unapprove = $_GET['unapprove'];
+if (isset ($_GET['disapprove'])) {
+  $comment_id_for_disapprove = $_GET['disapprove'];
 
-  $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_id = {$comment_id_for_unapprove} ";
-  $unapprove_query = mysqli_query ($connection, $query);
+  $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_id = {$comment_id_for_disapprove} ";
+  $disapprove_query = mysqli_query ($connection, $query);
 
-  confirm_query ($unapprove_query);
+  confirm_query ($disapprove_query);
   header ("Location: comments.php");
 }
 

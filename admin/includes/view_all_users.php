@@ -10,7 +10,7 @@
       <th>User Image</th>
       <th>User Role</th>
       <th>Approve</th>
-      <th>Unapprove</th>
+      <th>Disapprove</th>
       <th>Edit</th>
       <th>Delete</th>
     </tr>
@@ -43,11 +43,11 @@ if (!$select_all_users) {
     echo "<td>{$user_password}</td>";
     echo "<td>{$user_firstname}</td>";
     echo "<td>{$user_lastname}</td>";
+    echo "<td>{$user_email}</td>";
     echo "<td><img class='img-responsive' width='100' src='../images/{$user_image}' alt='{$user_image}'></td>";
     echo "<td>{$user_role}</td>";
-    echo "<td>{$user_email}</td>";
     echo "<td><a href='users.php?approve={$user_id}'>Approve</a></td>";
-    echo "<td><a href='users.php?unapprove={$user_id}'>Unapprove</a></td>";
+    echo "<td><a href='users.php?disapprove={$user_id}'>Disapproved</a></td>";
     echo "<td><a href='users.php?source=edit_user&u_id={$user_id}'>Edit</a></td>";
     echo "<td><a href='users.php?delete={$user_id}'>Delete</a></td>";
     echo "</tr>";
