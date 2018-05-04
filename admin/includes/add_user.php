@@ -74,15 +74,15 @@ if (isset ($_POST['create_user'])) {
     <label for="user_role">User role</label>
     <div>
       <select class="form-control" name="user_role" id="user_role">
-        <option value="subscriber">Subscriber</option>
-        <option value="admin">Admin</option>
+        <option value="Subscriber">Subscriber</option>
+        <option value="Admin">Admin</option>
       </select>
     </div>
   </div>
 
   <div class="form-group">
     <label for="user_status">User Status</label>
-      <input class="form-control" name="user_status" type="text" value="unapproved" readonly>
+      <input class="form-control" name="user_status" type="text" value="Unapproved" readonly>
   </div>
 
   <div class="form-group">

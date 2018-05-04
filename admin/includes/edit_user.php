@@ -70,8 +70,14 @@ if (isset ($_GET['u_id'])) {
     <label for="user_role">User Role</label>
     <div>
       <select class="form-control" name="user_role" id="user_role">
-        <option value="subscriber">Subscriber</option>
-        <option value="admin">Admin</option>
+      <option value="<?php echo $user_role; ?>"><?php echo $user_role; ?></option>
+<?php
+      if ($user_role === 'Admin') {
+        echo "<option value='Subscriber'>Subscriber</option>";
+      } else {
+        echo "<option value='Admin'>Admin</option>";
+      }
+?>
       </select>
     </div>
   </div>
@@ -122,6 +128,7 @@ if (isset ($_GET['u_id'])) {
   $update_user = mysqli_query ($connection, $query);
 
   confirm_query ($update_user);
+  header ("Location: users.php");
   }
 
 ?>
