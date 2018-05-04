@@ -10,7 +10,7 @@ if (isset ($_GET['p_id'])) {
   confirm_query ($select_all_posts); 
 
   while ($row = mysqli_fetch_assoc ($select_all_posts)) {
-    $post_category_id = $row['post_category_id'];
+    $the_post_category_id = $row['post_category_id'];
     $post_title = $row['post_title'];
     $post_author = $row['post_author'];
     $post_date = $row['post_date'];
@@ -23,7 +23,6 @@ if (isset ($_GET['p_id'])) {
     $post_status = $row['post_status'];
   }
 ?>
-
 
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -43,16 +42,20 @@ if (isset ($_GET['p_id'])) {
 <?php
 
   $query = "SELECT * FROM categories"; 
-  $select_categories_id = mysqli_query ($connection, $query);
+  $select_categories_query = mysqli_query ($connection, $query);
 
-  confirm_query ($select_categories_id);
+  confirm_query ($select_categories_query);
 
-  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
-    $post_category_id = $row['cat_id'];
-    $cat_title = $row['cat_title'];
+  while ($row = mysqli_fetch_assoc ($select_categories_query)) {
+      $post_category_id = $row['cat_id'];
+      $post_category    = $row['cat_title'];  
 
-    echo "<option value='{$post_category_id}'>{$cat_title}</option>";
-  }
+    if ($the_post_category_id === $post_category_id) {
+      echo "<option value='{$post_category_id}' selected>{$post_category}</option>";
+    } else {
+      echo "<option value='{$post_category_id}'>{$post_category}</option>";
+    }
+   }
 ?>  
       </select>
     </div>
@@ -100,7 +103,7 @@ if (isset ($_GET['p_id'])) {
   </div>
 
   <div class="form-group">
-      <input class="btn btn-primary" name="update_post" value="Publish Post" type="submit">
+      <input class="btn btn-primary" name="update_post" value="Edit Post" type="submit">
   </div>
 
 </form>
@@ -146,6 +149,7 @@ if (isset ($_GET['p_id'])) {
   $update_post = mysqli_query ($connection, $query);
 
   confirm_query ($update_post);
+  header ("Location: posts.php");
   }
-
+  
 ?>
