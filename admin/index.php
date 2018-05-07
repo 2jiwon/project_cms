@@ -174,7 +174,53 @@ echo "<div class='huge'>{$categories_counts}</div>";
 
                 <!-- Chart -->
                 <div class="row">
+<?php
 
+// Posts 
+$query = "SELECT * FROM posts "; 
+$select_posts_query = mysqli_query ($connection, $query);
+confirm_query ($select_posts_query);
+$published_posts = 0;
+$draft_posts = 0;
+
+While ($row = mysqli_fetch_assoc ($select_posts_query)) {
+  if ($row['post_status'] == 'Published') {
+    $published_posts++;
+  } else {
+    $draft_posts++;
+  }
+}
+
+// Comments 
+$query = "SELECT * FROM comments ";
+$select_comments_query = mysqli_query ($connection, $query);
+confirm_query ($select_comments_query);
+$approved_comments = 0;
+$unapproved_comments = 0;
+
+while ($row = mysqli_fetch_assoc ($select_comments_query)) {
+  if ($row['comment_status'] === 'Approved') {
+    $approved_comments++;
+  } else {
+    $unapproved_comments++;
+  }
+}
+
+// Users 
+$query = "SELECT * FROM users";
+$select_users_query = mysqli_query ($connection, $query);
+confirm_query ($select_users_query);
+$approved_users = 0;
+$unapproved_users = 0;
+
+while ($row = mysqli_fetch_assoc ($select_users_query)) {
+  if ($row['user_status'] === 'Approved') {
+    $approved_users++;
+  } else {
+    $unapproved_users++;
+  }
+}
+?>
                 <script type="text/javascript">
                       google.charts.load('current', {'packages':['bar']});
                       google.charts.setOnLoadCallback(drawChart);
@@ -182,22 +228,22 @@ echo "<div class='huge'>{$categories_counts}</div>";
                       function drawChart() {
                         var data = google.visualization.arrayToDataTable([
                           ['Data', 'Count'],
-                  //      ['Posts', 10],
 <?php
 
-$element_text  = [ 'Active Posts', 'Comments', 'Users', 'Categories'];
-$element_count = [ $posts_counts, $comments_counts, $users_counts, $categories_counts ];
+$element_text  = [ 'Active Posts', 'Draft Posts', 'Approved Comments', 'Unapproved Comments', 'Approved Users', 'Unapproved Users' ];
+$element_count = [ $published_posts, $draft_posts, $approved_comments, $unapproved_comments, $approved_users, $unapproved_users ];
 
-for ($i = 0; $i < 4; $i++) {
-  echo "['{$element_text[$i]}'". "," . "{$element_count[$i]}],";
+for ($i = 0; $i < 6; $i++) {
+  echo "['{$element_text[$i]}', {$element_count[$i]}],";
 } 
+
 ?>
                         ]);
                 
                         var options = {
                           chart: {
-                            title: 'Company Performance',
-                            subtitle: 'Sales, Expenses, and Profit: 2014-2017',
+                            title: 'Blog Status',
+                            subtitle: 'Posts, Comments, Users Status',
                           }
                         };
                 
