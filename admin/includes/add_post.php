@@ -74,7 +74,14 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="post_content">Post Content</label>
-      <textarea class="form-control" name="post_content" id="" cols="30" rows="10"></textarea>
+      <textarea class="form-control" name="post_content" id="editor" cols="30" rows="10"></textarea>
+       <!-- <script>
+          ClassicEditor
+              .create( document.querySelector( '#editor' ) )
+              .catch( error => {
+                  console.error( error );
+               } );
+        </script> -->
   </div>
 
   <div class="form-group">
