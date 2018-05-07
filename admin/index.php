@@ -181,11 +181,17 @@ echo "<div class='huge'>{$categories_counts}</div>";
                 
                       function drawChart() {
                         var data = google.visualization.arrayToDataTable([
-                          ['Year', 'Sales', 'Expenses', 'Profit'],
-                          ['2014', 1000, 400, 200],
-                          ['2015', 1170, 460, 250],
-                          ['2016', 660, 1120, 300],
-                          ['2017', 1030, 540, 350]
+                          ['Data', 'Count'],
+                  //      ['Posts', 10],
+<?php
+
+$element_text  = [ 'Active Posts', 'Comments', 'Users', 'Categories'];
+$element_count = [ $posts_counts, $comments_counts, $users_counts, $categories_counts ];
+
+for ($i = 0; $i < 4; $i++) {
+  echo "['{$element_text[$i]}'". "," . "{$element_count[$i]}],";
+} 
+?>
                         ]);
                 
                         var options = {
