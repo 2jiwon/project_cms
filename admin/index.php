@@ -41,6 +41,8 @@ include "includes/admin_navigation.php";
                 <!-- Admin widget -->
                                 
                 <div class="row">
+
+                    <!-- posts -->
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-primary">
                             <div class="panel-heading">
@@ -49,7 +51,15 @@ include "includes/admin_navigation.php";
                                         <i class="fa fa-file-text fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                  <div class='huge'>12</div>
+<?php
+$query = "SELECT * FROM posts";
+$select_all_posts_query = mysqli_query ($connection, $query);
+confirm_query ($select_all_posts_query);
+
+$posts_counts = mysqli_num_rows ($select_all_posts_query);
+
+echo "<div class='huge'>{$posts_counts}</div>";
+?>
                                         <div>Posts</div>
                                     </div>
                                 </div>
@@ -63,6 +73,8 @@ include "includes/admin_navigation.php";
                             </a>
                         </div>
                     </div>
+
+                    <!-- comments -->
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-green">
                             <div class="panel-heading">
@@ -71,7 +83,15 @@ include "includes/admin_navigation.php";
                                         <i class="fa fa-comments fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                     <div class='huge'>23</div>
+<?php
+$query = "SELECT * FROM comments";
+$select_all_comments_query = mysqli_query ($connection, $query);
+confirm_query ($select_all_comments_query);
+
+$comments_counts = mysqli_num_rows ($select_all_comments_query);
+
+echo "<div class='huge'>{$comments_counts}</div>";
+?>
                                       <div>Comments</div>
                                     </div>
                                 </div>
@@ -85,6 +105,8 @@ include "includes/admin_navigation.php";
                             </a>
                         </div>
                     </div>
+
+                    <!-- Users -->
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-yellow">
                             <div class="panel-heading">
@@ -93,7 +115,15 @@ include "includes/admin_navigation.php";
                                         <i class="fa fa-user fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                    <div class='huge'>23</div>
+<?php
+$query = "SELECT * FROM users";
+$select_all_users_query = mysqli_query ($connection, $query);
+confirm_query ($select_all_users_query);
+$users_counts = mysqli_num_rows ($select_all_users_query);
+
+echo "<div class='huge'>{$users_counts}</div>";
+
+?>
                                         <div> Users</div>
                                     </div>
                                 </div>
@@ -107,6 +137,8 @@ include "includes/admin_navigation.php";
                             </a>
                         </div>
                     </div>
+
+                    <!-- Categories -->
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-red">
                             <div class="panel-heading">
@@ -115,7 +147,15 @@ include "includes/admin_navigation.php";
                                         <i class="fa fa-list fa-5x"></i>
                                     </div>
                                     <div class="col-xs-9 text-right">
-                                        <div class='huge'>13</div>
+<?php
+$query = "SELECT * FROM categories";
+$select_all_categories_query = mysqli_query ($connection, $query);
+confirm_query ($select_all_categories_query);
+$categories_counts = mysqli_num_rows ($select_all_categories_query);
+
+echo "<div class='huge'>{$categories_counts}</div>";
+
+?>
                                          <div>Categories</div>
                                     </div>
                                 </div>
