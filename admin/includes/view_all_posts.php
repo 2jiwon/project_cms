@@ -1,6 +1,53 @@
+<?php
+
+if (isset ($_POST['checkBoxArray'])) {
+  
+  foreach ($_POST['checkBoxArray'] as $checkboxValue) {
+    $bulk_options = $_POST['bulk_options']; 
+
+    switch ($bulk_options) {
+      case 'publish':
+        $query = "UPDATE posts SET post_status = 'Published' WHERE post_id = {$checkboxValue} ";
+        break;
+      case 'draft'  :
+        $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = {$checkboxValue} ";
+        break;
+      case 'delete' :
+        $query = "DELETE FROM posts WHERE post_id = {$checkboxValue} ";
+        break;
+      }
+
+     $update_query = mysqli_query ($connection, $query);
+      confirm_query ($update_query);
+  }
+}
+
+
+?>
+<form action="" method="post">  
+
 <table class="table table-bordered table-hover">
+
+      <div class="row">
+        <div id="bulkOptionsContainer" class="col-xs-4">
+          <select class="form-control" id="" name="bulk_options">
+            <option value="">Select Options</option>
+            <option value="publish">Published</option>
+            <option value="draft">Draft</option>
+            <option value="delete">Delete</option>
+          </select>
+        </div>
+
+        <div class="col-xs-4">
+          <input type="submit" name="submit" class="btn btn-success" value="Apply">
+        </div>
+
+      </div>
+  
+  <p></p>
   <thead>
     <tr>
+      <th><input type="checkbox" name="" id="selectAllBoxes"></th>
       <th>Id</th>
       <th>Category</th>
       <th>Title</th>
@@ -40,6 +87,11 @@ if (!$select_all_posts) {
     $post_status = $row['post_status'];
 
     echo "<tr>";
+?>
+  <td><input class="checkboxes" type="checkbox" name="checkBoxArray[]" value="<?php echo $post_id; ?>"></td>
+
+
+<?php
     echo "<td>{$post_id}</td>";
 
   $query = "SELECT * FROM categories WHERE cat_id = {$post_category_id} ";
@@ -67,7 +119,7 @@ if (!$select_all_posts) {
 ?>
 </tbody>
 </table>
-
+</form>
 <?php
 
 if (isset ($_GET['publish'])) {
