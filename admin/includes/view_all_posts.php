@@ -22,7 +22,6 @@ if (isset ($_POST['checkBoxArray'])) {
   }
 }
 
-
 ?>
 <form action="" method="post">  
 
@@ -32,7 +31,7 @@ if (isset ($_POST['checkBoxArray'])) {
         <div id="bulkOptionsContainer" class="col-xs-4">
           <select class="form-control" id="" name="bulk_options">
             <option value="">Select Options</option>
-            <option value="publish">Published</option>
+            <option value="publish">Publish</option>
             <option value="draft">Draft</option>
             <option value="delete">Delete</option>
           </select>
@@ -89,7 +88,6 @@ if (!$select_all_posts) {
     echo "<tr>";
 ?>
   <td><input class="checkboxes" type="checkbox" name="checkBoxArray[]" value="<?php echo $post_id; ?>"></td>
-
 
 <?php
     echo "<td>{$post_id}</td>";
@@ -153,4 +151,3 @@ if (isset ($_GET['delete'])) {
 }
 
 ?>
-
