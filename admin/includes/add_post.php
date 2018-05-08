@@ -24,9 +24,15 @@ if (isset ($_POST['create_post'])) {
 
   $create_post_query = mysqli_query ($connection, $query);
   confirm_query ($create_post_query); 
-  header ("Location: posts.php");
-}
-  
+
+  echo "<div class='alert alert-success'>
+          Post successfully created.
+            <a href='posts.php' class='alert-link'>
+               View Post Table
+            </a>
+        </div>";
+
+} else {
 ?>
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -95,7 +101,10 @@ if (isset ($_POST['create_post'])) {
   </div>
 
   <div class="form-group">
-      <input class="btn btn-primary" name="create_post" value="Publish Post" type="submit">
+      <input class="btn btn-primary" name="create_post" value="Create Post" type="submit">
   </div>
 
 </form>
+<?php
+}
+?>

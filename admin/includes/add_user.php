@@ -23,12 +23,19 @@ if (isset ($_POST['create_user'])) {
     $user_image = '';
   }
 
-
   $query  = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role) ";
   $query .= "VALUES ('{$user_name}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}', '{$user_image}', '{$user_role}') ";
 
   $create_user_query = mysqli_query ($connection, $query);
   confirm_query ($create_user_query);
+
+  echo "<div class='alert alert-success'>
+          User successfully added.
+            <a href='users.php' class='alert-link'>
+               View Users Table
+            </a>
+        </div>";
+  
   header ("Location: users.php");
 }
 ?>
