@@ -50,6 +50,9 @@ if (isset ($_SESSION['user_role'])) {
     <!-- For Google Charts -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+    <!-- For CKEditor -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/10.0.0/classic/ckeditor.js"></script>
+
 </head>
 
 <body>

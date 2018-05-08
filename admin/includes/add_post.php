@@ -24,9 +24,15 @@ if (isset ($_POST['create_post'])) {
 
   $create_post_query = mysqli_query ($connection, $query);
   confirm_query ($create_post_query); 
-  header ("Location: posts.php");
-}
-  
+
+  echo "<div class='alert alert-success'>
+          Post successfully created.
+            <a href='posts.php' class='alert-link'>
+               View Post Table
+            </a>
+        </div>";
+
+} else {
 ?>
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -74,7 +80,14 @@ if (isset ($_POST['create_post'])) {
 
   <div class="form-group">
     <label for="post_content">Post Content</label>
-      <textarea class="form-control" name="post_content" id="" cols="30" rows="10"></textarea>
+      <textarea class="form-control" name="post_content" id="editor" cols="30" rows="10"></textarea>
+       <!-- <script>
+          ClassicEditor
+              .create( document.querySelector( '#editor' ) )
+              .catch( error => {
+                  console.error( error );
+               } );
+        </script> -->
   </div>
 
   <div class="form-group">
@@ -88,7 +101,10 @@ if (isset ($_POST['create_post'])) {
   </div>
 
   <div class="form-group">
-      <input class="btn btn-primary" name="create_post" value="Publish Post" type="submit">
+      <input class="btn btn-primary" name="create_post" value="Create Post" type="submit">
   </div>
 
 </form>
+<?php
+}
+?>
