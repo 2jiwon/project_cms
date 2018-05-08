@@ -37,7 +37,7 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
 
                 <!-- First Blog Post -->
                 <h2>
-                <a href="#"><?php echo $post_title ?></a>
+                <a href=""><?php echo $post_title ?></a>
                 </h2>
                 <p class="lead">
                 by <a href="index.php"><?php echo $post_author ?></a>
@@ -47,6 +47,24 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
                 <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
                 <hr>
                 <p><?php echo $post_content ?></p>
+
+<!-- Edit post button -->
+<?php
+
+  if (isset ($_SESSION['user_role'])) {
+    if (isset ($_GET['p_id'])) {
+      echo "    <div class='row'>
+                   <div class='col-md-offset-10 col-xs-2'>
+                      <a href='admin/posts.php?source=edit_post&p_id={$post_id}'>
+                        <button class='btn btn-default' name='edit_post' type='submit'>
+                          Edit Post
+                        </button>
+                      </a>
+                  </div>
+                </div>";
+    }
+  }
+?>
                 <hr>
 <?php
 }
@@ -97,7 +115,6 @@ if (isset ($_POST['create_comment'])) {
 
                     </form>
                 </div>
-
                 <hr>
 
                 <!-- Posted Comments -->
