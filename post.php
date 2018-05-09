@@ -99,17 +99,17 @@ if (isset ($_POST['create_comment'])) {
 
                     <div class="form-group">
                         <label for="Author">Author</label>
-                        <input class="form-control" type="text" name="comment_author">
+                        <input class="form-control" type="text" name="comment_author" required>
                     </div>
 
                     <div class="form-group">
                         <label for="Email">Email</label>
-                        <input class="form-control" type="email" name="comment_email">
+                        <input class="form-control" type="email" name="comment_email" required>
                     </div>
 
                         <div class="form-group">
                             <label for="Comment">Comment</label>
-                            <textarea class="form-control" name="comment_content" rows="3"></textarea>
+                            <textarea class="form-control" name="comment_content" rows="3" required></textarea>
                         </div>
                         <button class="btn btn-primary" name="create_comment" type="submit">Submit</button>
 
