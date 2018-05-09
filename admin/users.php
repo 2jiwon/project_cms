@@ -9,16 +9,16 @@ include "includes/admin_navigation.php";
 ?>
 
         <div id="page-wrapper">
-            <div class="container-fluid">
+          <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
+            <!-- Page Heading -->
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 table-responsive">
 
-                        <h1 class="page-header">
-                            Welcome to Admin
-                            <small>Author</small>
-                        </h1>
+                <h1 class="page-header">
+                  Welcome to Admin
+                  <small>Author</small>
+                </h1>
 <?php
 
 if (isset ($_GET['source'])) {
@@ -40,14 +40,15 @@ if (isset ($_GET['source'])) {
     break;
   }
 ?>
-                    </div>
-                </div>
-                <!-- /.row -->
-
+              </div> 
             </div>
-            <!-- /.container-fluid -->
+            <!-- /.row -->
+
+          </div>
+          <!-- /.container-fluid -->
 
         </div>
+        <!-- /#page-wrapper -->
 <?php
 include "includes/admin_footer.php";
 ?>
