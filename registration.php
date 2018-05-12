@@ -28,7 +28,7 @@ if (isset ($_POST['submit'])) {
   while ($row = mysqli_fetch_array ($select_randsalt_query)) {
     $salt = $row['randSalt'];
   }
- $password = crypt ($password, $salt);
+  $password = crypt ($password, $salt);
   
   $query  = "INSERT INTO users (user_name, user_email, user_password, user_role) ";
   $query .= "VALUES ('{$username}', '{$email}', '{$password}', 'Subscriber') ";
