@@ -1,53 +1,70 @@
 <?php
 
+// For Update User's Information
   if (isset ($_POST['update_user'])) {
   
-  $user_id         = $_POST['user_id'];
-  $user_name       = $_POST['user_name'];
-  $user_password   = $_POST['user_password'];
-  $user_firstname  = $_POST['user_firstname'];
-  $user_lastname   = $_POST['user_lastname'];
-  $user_email      = $_POST['user_email'];
-  $user_role       = $_POST['user_role'];
-
-  $user_image      = $_FILES['user_image']['name'];
-  $user_image_temp = $_FILES['user_image']['tmp_name'];
-  move_uploaded_file ($user_image_temp, "../images/{$user_image}");
-
-  if (empty ($user_image)) {
-    $query = "SELECT user_image FROM users WHERE user_id={$user_id} ";
-    $select_u_image = mysqli_query ($connection, $query);
-
-    while ($row = mysqli_fetch_assoc ($select_u_image)) {
-      $user_image = $row['user_image'];
+    $user_id         = $_POST['user_id'];
+    $user_name       = $_POST['user_name'];
+    $user_password   = $_POST['user_password'];
+    $user_firstname  = $_POST['user_firstname'];
+    $user_lastname   = $_POST['user_lastname'];
+    $user_email      = $_POST['user_email'];
+    $user_role       = $_POST['user_role'];
+  
+    $user_image      = $_FILES['user_image']['name'];
+    $user_image_temp = $_FILES['user_image']['tmp_name'];
+    move_uploaded_file ($user_image_temp, "../images/{$user_image}");
+  
+    if (empty ($user_image)) {
+      $query = "SELECT user_image FROM users WHERE user_id={$user_id} ";
+      $select_u_image = mysqli_query ($connection, $query);
+  
+      while ($row = mysqli_fetch_assoc ($select_u_image)) {
+        $user_image = $row['user_image'];
+      }
     }
-  }
+  
+    $query = "SELECT * FROM users WHERE user_id = {$user_id} ";
+    $select_randsalt_query = mysqli_query ($connection, $query);
+    confirm_query ($select_randsalt_query);
 
-  $query  = "UPDATE users SET ";
-  $query .= "user_name = '{$user_name}', ";
-  $query .= "user_password = '{$user_password}', ";
-  $query .= "user_firstname = '{$user_firstname}', ";
-  $query .= "user_lastname = '{$user_lastname}', ";
-  $query .= "user_email = '{$user_email}', ";
-  $query .= "user_image = '{$user_image}', ";
-  $query .= "user_role = '{$user_role}' ";
-  $query .= "WHERE user_id={$user_id}";
+    while ($row = mysqli_fetch_array ($select_randsalt_query)) {
+      $salt = $row['randSalt'];
+      $db_password = $row['user_password'];
+    }
 
-  $update_user = mysqli_query ($connection, $query);
+    $query  = "UPDATE users SET ";
+    $query .= "user_name = '{$user_name}', ";
 
-  confirm_query ($update_user);
-  echo "<div class='alert alert-success'>
-          User's profile successfully updated. 
-            <a href='users.php' class='alert-link'>
-              View Users table
-            </a>
-        </div>";
+    if ($db_password !== $user_password) {
+      echo 'db'.$db_password;
+      echo 'user'.$user_password;
+      $hashed_password = crypt ($user_password, $salt);
+      echo 'hashed'.$hashed_password;
+      $query .= "user_password = '{$hashed_password}', ";
+    }
 
+    $query .= "user_firstname = '{$user_firstname}', ";
+    $query .= "user_lastname = '{$user_lastname}', ";
+    $query .= "user_email = '{$user_email}', ";
+    $query .= "user_image = '{$user_image}', ";
+    $query .= "user_role = '{$user_role}' ";
+    $query .= "WHERE user_id={$user_id}";
+  
+    $update_user = mysqli_query ($connection, $query);
+  
+    confirm_query ($update_user);
+    echo "<div class='alert alert-success'>
+            User's profile successfully updated. 
+              <a href='users.php' class='alert-link'>
+                View Users table
+              </a>
+          </div>";
   } else {
-
+  
+    // For Display User's Information for edit
     if (isset ($_GET['u_id'])) {
       $user_id = $_GET['u_id'];
-    }
     
       $query = "SELECT * FROM users WHERE user_id ={$user_id}";
       $select_all_users = mysqli_query ($connection, $query);
@@ -57,7 +74,7 @@
       while ($row = mysqli_fetch_assoc ($select_all_users)) {
         $user_id        = $row['user_id'];
         $user_name      = $row['user_name'];
-        $user_password  = $row['user_password'];
+        $db_password  = $row['user_password'];
         $user_firstname = $row['user_firstname'];
         $user_lastname  = $row['user_lastname'];
         $user_email     = $row['user_email'];
@@ -65,7 +82,7 @@
         $user_role      = $row['user_role'];
         $user_status    = $row['user_status'];
       }
-    ?>
+?>
 
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -83,7 +100,7 @@
 
   <div class="form-group">
     <label for="user_password">Password</label>
-      <input class="form-control" name="user_password" type="text" value="<?php echo $user_password; ?>">
+      <input class="form-control" name="user_password" type="text" value="<?php echo $db_password; ?>">
   </div>
 
   <div class="form-group">
@@ -136,5 +153,6 @@
 
 </form>
 <?php
-}
+    }
+} // End of first 'else'
 ?>

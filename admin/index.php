@@ -20,11 +20,6 @@ include "includes/admin_navigation.php";
   echo "Welcome to Admin page <small>".$_SESSION['username']."</small>";
 ?>
                         </h1>
-<?php 
-#  if ($connection) {
-#    echo "We're connected";
-#  }
-?>
                         <ol class="breadcrumb">
                             <li>
                                 <i class="fa fa-dashboard"></i>

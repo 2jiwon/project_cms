@@ -38,7 +38,7 @@ if (isset ($_POST['create_post'])) {
 <form action="" method="post" enctype="multipart/form-data">
 
   <div class="form-inline form-group">
-    <label for="post_category_id">Post Category Id</label>
+    <label for="post_category_id">Post Category</label>
     <div>
       <select class="form-control" name="post_category_id" id="post_category">
 <?php
@@ -81,13 +81,6 @@ if (isset ($_POST['create_post'])) {
   <div class="form-group">
     <label for="post_content">Post Content</label>
       <textarea class="form-control" name="post_content" id="editor" cols="30" rows="10"></textarea>
-       <!-- <script>
-          ClassicEditor
-              .create( document.querySelector( '#editor' ) )
-              .catch( error => {
-                  console.error( error );
-               } );
-        </script> -->
   </div>
 
   <div class="form-group">
@@ -95,10 +88,18 @@ if (isset ($_POST['create_post'])) {
       <input class="form-control" name="post_tags" type="text">
   </div>
 
-  <div class="form-group">
+  <div class="form-inline form-group">
     <label for="post_status">Post Status</label>
-      <input class="form-control" name="post_status" type="text" value="Draft" readonly>
+      <div>
+        <select class="form-control" name="post_status" id="">
+          <option value="">Select Option</option>
+          <option value="Published">Publish</option>
+          <option value="Draft">Draft</option>
+        </select>
+      </div>
   </div>
+
+  <hr>
 
   <div class="form-group">
       <input class="btn btn-primary" name="create_post" value="Create Post" type="submit">

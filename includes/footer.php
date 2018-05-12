@@ -12,6 +12,8 @@
     </div>
     <!-- /.container -->
 
+    <script src="js/myscript.js"></script>
+
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 

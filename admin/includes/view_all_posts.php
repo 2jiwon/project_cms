@@ -27,23 +27,25 @@ if (isset ($_POST['checkBoxArray'])) {
 
 <table class="table table-bordered table-hover">
 
-      <div class="row">
-        <div id="bulkOptionsContainer" class="col-xs-4">
-          <select class="form-control" id="" name="bulk_options">
-            <option value="">Select Options</option>
-            <option value="publish">Publish</option>
-            <option value="draft">Draft</option>
-            <option value="delete">Delete</option>
-          </select>
-        </div>
+      <div class="row form-inline">
+        <div id="bulkOptionsContainer" class="col-md-6">
+          <div class="input-group">
+            <select class="form-control" id="" name="bulk_options">
+              <option value="">Select Options</option>
+              <option value="publish">Publish</option>
+              <option value="draft">Draft</option>
+              <option value="delete">Delete</option>
+            </select>
+            <div class="input-group-btn">
+              <input type="submit" name="submit" class="btn btn-success" value="Apply">
+            </div>
+          </div>
 
-        <div class="col-xs-4">
-          <input type="submit" name="submit" class="btn btn-success" value="Apply">
+          <a class="btn btn-primary" href="posts.php?source=add_post">Add New Post</a>
         </div>
-
       </div>
-  
-  <p></p>
+      <p></p>
+
   <thead>
     <tr>
       <th><input type="checkbox" name="" id="selectAllBoxes"></th>
@@ -100,7 +102,7 @@ if (!$select_all_posts) {
   }
 
     echo "<td>{$post_category_id}</td>";
-    echo "<td>{$post_title}</td>";
+    echo "<td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>";
     echo "<td>{$post_author}</td>";
     echo "<td>{$post_date}</td>";
     echo "<td><img class='img-responsive' width='100' src='../images/{$post_image}' alt='{$post_image}'></td>";
