@@ -16,17 +16,15 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
 <?php
-
-$query = "SELECT * FROM categories";
-$select_all_categories_query = mysqli_query ($connection, $query);
-
-while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
-  $cat_title = $row['cat_title'];
-  $cat_id    = $row['cat_id'];
-
-    echo "<li><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
-}
-
+            $query = "SELECT * FROM categories";
+            $select_all_categories_query = mysqli_query ($connection, $query);
+            
+            while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
+              $cat_title = $row['cat_title'];
+              $cat_id    = $row['cat_id'];
+            
+                echo "<li><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
+            }
 ?>
                     <li>
                         <a href="admin/index.php">Admin</a>
@@ -38,9 +36,18 @@ while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
                         <a href="#">contact</a>
                     </li> -->
                 </ul>
+
+                <!-- Button for Log In & Register -->
+                <div class="nav navbar-nav navbar-right center-block">
+                  <a id="loginBtn" class="btn btn-primary navbar-btn" role="button" data-toggle="collapse" 
+                     href="#collapseLogin" aria-expanded="false" aria-controls="collapseLogin">Log In</a>
+                  <a class="btn btn-default navbar-btn" role="button" href="./registration.php">Register</a>
+                </div>
+                <!-- /. navbar-btn -->              
+
             </div>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
-
+/

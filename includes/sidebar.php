@@ -1,9 +1,9 @@
             <div class="col-md-4">
 
                 <!-- Login panel -->
-                <div class="panel panel-primary">
+                <div class="collapse panel panel-primary" id="collapseLogin">
                     <div class="panel-heading">
-                      Login
+                      Log In
                     </div> 
 
                     <!-- Login form -->
