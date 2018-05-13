@@ -94,12 +94,12 @@ if (!$select_all_posts) {
 <?php
     echo "<td>{$post_id}</td>";
 
-  $query = "SELECT * FROM categories WHERE cat_id = {$post_category_id} ";
-  $select_categories_id = mysqli_query ($connection, $query);
+    $query = "SELECT * FROM categories WHERE cat_id = {$post_category_id} ";
+    $select_categories_id = mysqli_query ($connection, $query);
 
-  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
-    $post_category_id = $row['cat_title'];
-  }
+    while ($row = mysqli_fetch_assoc ($select_categories_id)) {
+      $post_category_id = $row['cat_title'];
+    }
 
     echo "<td>{$post_category_id}</td>";
     echo "<td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>";
@@ -112,11 +112,32 @@ if (!$select_all_posts) {
     echo "<td><a href='posts.php?publish={$post_id}'>Publish</a></td>";
     echo "<td><a href='posts.php?draft={$post_id}'>Draft</a></td>";
     echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
-    echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete?');\" href='posts.php?delete={$post_id}'>Delete</a></td>";
+    echo "<td><a data-toggle='modal' data-target='#delete{$post_id}'>Delete</a></td>";
     echo "</tr>";
-  };
+    
+    echo "  <!-- Modal for delete -->";
+    echo "  <div id='delete{$post_id}' class='modal fade' tabindex='-1' role='dialog'>";
+    echo "    <div class='modal-dialog' role='document'>";
+    echo "      <div class='modal-content'>";
+    echo "        <div class='modal-header'>";
+    echo "          <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
+    echo "          <h4 class='modal-title'>Delete Post</h4>";
+    echo "        </div>";
+    echo "        <div class='modal-body'>";
+    echo "          <h2>{$post_id}</h2>";
+    echo "          <p>Are you sure to delete this post?</p>";
+    echo "        </div>";
+    echo "        <div class='modal-footer'>";
+    echo "          <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
+    echo "          <a type='button' class='btn btn-primary' href='posts.php?delete={$post_id}'>Delete</a>";
+    echo "        </div>";
+    echo "      </div><!-- /.modal-content -->";
+    echo "    </div><!-- /.modal-dialog -->";
+    echo "  </div><!-- /.modal -->";
+  }
 }
 ?>
+
 </tbody>
 </table>
 </form>
@@ -151,5 +172,4 @@ if (isset ($_GET['delete'])) {
   confirm_query ($delete_query);
   header ("Location: posts.php");
 }
-
 ?>
