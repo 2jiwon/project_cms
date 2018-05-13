@@ -12,6 +12,27 @@ if (isset ($_POST['checkBoxArray'])) {
       case 'draft'  :
         $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = {$checkboxValue} ";
         break;
+      case 'clone'  :
+        $select_query = "SELECT * FROM posts WHERE post_id = {$checkboxValue} ";
+        $select_post_query = mysqli_query ($connection, $select_query);
+
+        while ($row = mysqli_fetch_assoc ($select_post_query)) {
+          $post_category_id = $row['post_category_id'];
+          $post_title = $row['post_title'];
+          $post_author = $row['post_author'];
+          $post_date = $row['post_date'];
+          $post_image = $row['post_image'];
+          $post_tags = $row['post_tags'];
+          $post_comments = $row['post_comment_count'];
+          $post_status = $row['post_status'];
+        }
+
+        $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, ";
+        $query .= "post_tags, post_comment_count, post_status) ";
+        $query .= "VALUES ({$post_category_id}, '{$post_title}', '{$post_author}', NOW(), '{$post_image}', ";
+        $query .= "'{$post_tags}', '{$post_comments}', '{$post_status}') ";
+        break;
+
       case 'delete' :
         $query = "DELETE FROM posts WHERE post_id = {$checkboxValue} ";
         break;
@@ -32,8 +53,10 @@ if (isset ($_POST['checkBoxArray'])) {
           <div class="input-group">
             <select class="form-control" id="" name="bulk_options">
               <option value="">Select Options</option>
-              <option value="publish">Publish</option>
               <option value="draft">Draft</option>
+              <option value="publish">Publish</option>
+              <option disabled>--------------</option>
+              <option value="clone">Clone</option>
               <option value="delete">Delete</option>
             </select>
             <div class="input-group-btn">
