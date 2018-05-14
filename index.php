@@ -15,15 +15,25 @@ include ('includes/navigation.php');
             <div class="col-md-8">
 <?php
 
+if (isset ($_GET['page'])) {
+  $page = $_GET['page'];
+} else {
+  $page = "";
+}
+
+if ($page == "" || $page == 1) {
+  $page_start = 0;
+} else {
+  $page_start = ($page * 5) - 5;
+}
+
 $query = "SELECT * FROM posts ";
 $posts_count_query = mysqli_query ($connection, $query);
 $posts_count = mysqli_num_rows ($posts_count_query);
-
 $posts_count = ceil ($posts_count / 5);
 
-
 $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
-$query .= "ORDER BY post_id DESC ";
+$query .= "ORDER BY post_id DESC LIMIT {$page_start}, 5 ";
 $select_all_posts_query = mysqli_query ($connection, $query);
 
 while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
@@ -41,7 +51,7 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
 
                 <!-- First Blog Post -->
                 <h2>
-                  <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title ?></a>
+                  <?php echo $post_id; ?><a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title ?></a>
                 </h2>
                 <p class="lead">
                 by <a href="author_posts.php?author=<?php echo $post_author; ?>&p_id=<?php echo $post_id; ?>">
@@ -67,7 +77,7 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
 
 for ($i = 1; $i <= $posts_count; $i++) {
   echo "<li>";
-  echo "    <a href=''>{$i}</a>";
+  echo "    <a href='index.php?page={$i}'>{$i}</a>";
   echo "</li>";
 }
 
