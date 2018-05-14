@@ -49,9 +49,29 @@ if (!$select_all_users) {
     echo "<td><a href='users.php?approve={$user_id}'>Approve</a></td>";
     echo "<td><a href='users.php?disapprove={$user_id}'>Disapproved</a></td>";
     echo "<td><a href='users.php?source=edit_user&u_id={$user_id}'>Edit</a></td>";
-    echo "<td><a href='users.php?delete={$user_id}'>Delete</a></td>";
+    echo "<td><a data-toggle='modal' data-target='#delete{$user_id}'>Delete</a></td>";
+
+    echo "   <!-- Modal for delete -->";
+    echo "  <div id='delete{$user_id}' class='modal fade' tabindex='-1' role='dialog'>";
+    echo "    <div class='modal-dialog' role='document'>";
+    echo "      <div class='modal-content'>";
+    echo "        <div class='modal-header'>";
+    echo "          <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
+    echo "          <h4 class='modal-title'>Delete User</h4>";
+    echo "        </div>";
+    echo "        <div class='modal-body'>";
+    echo "          <h2>{$user_id}</h2>";
+    echo "          <p>Are you sure to delete this user?</p>";
+    echo "        </div>";
+    echo "        <div class='modal-footer'>";
+    echo "          <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
+    echo "          <a type='button' class='btn btn-primary' href='users.php?delete={$user_id}'>Delete</a>";
+    echo "        </div>";
+    echo "      </div><!-- /.modal-content -->";
+    echo "    </div><!-- /.modal-dialog -->";
+    echo "  </div><!-- /.modal -->";
     echo "</tr>";
-  };
+  }
 }
 ?>
 </tbody>
@@ -88,6 +108,5 @@ if (isset ($_GET['delete'])) {
   confirm_query ($delete_query);
   header ("Location: users.php");
 }
-
 ?>
 
