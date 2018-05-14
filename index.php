@@ -15,6 +15,13 @@ include ('includes/navigation.php');
             <div class="col-md-8">
 <?php
 
+$query = "SELECT * FROM posts ";
+$posts_count_query = mysqli_query ($connection, $query);
+$posts_count = mysqli_num_rows ($posts_count_query);
+
+$posts_count = ceil ($posts_count / 5);
+
+
 $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 $query .= "ORDER BY post_id DESC ";
 $select_all_posts_query = mysqli_query ($connection, $query);
@@ -56,6 +63,16 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
                     <li class="previous">
                         <a href="#">&larr; Older</a>
                     </li>
+<?php
+
+for ($i = 1; $i <= $posts_count; $i++) {
+  echo "<li>";
+  echo "    <a href=''>{$i}</a>";
+  echo "</li>";
+}
+
+?>
+
                     <li class="next">
                         <a href="#">Newer &rarr;</a>
                     </li>
