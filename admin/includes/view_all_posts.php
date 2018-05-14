@@ -34,6 +34,10 @@ if (isset ($_POST['checkBoxArray'])) {
         $query .= "'{$post_tags}', '{$post_comments}', '{$post_view_count}', '{$post_status}') ";
         break;
 
+      case 'reset' :
+        $query = "UPDATE posts SET post_view_count = 0 WHERE post_id = {$checkboxValue} ";
+        break;
+
       case 'delete' :
         $query = "DELETE FROM posts WHERE post_id = {$checkboxValue} ";
         break;
@@ -41,6 +45,7 @@ if (isset ($_POST['checkBoxArray'])) {
 
      $update_query = mysqli_query ($connection, $query);
       confirm_query ($update_query);
+      header ("Location: posts.php");
   }
 }
 
@@ -59,6 +64,7 @@ if (isset ($_POST['checkBoxArray'])) {
               <option disabled>--------------</option>
               <option value="clone">Clone</option>
               <option value="delete">Delete</option>
+              <option value="reset">Reset</option>
             </select>
             <div class="input-group-btn">
               <input type="submit" name="submit" class="btn btn-success" value="Apply">
@@ -151,7 +157,6 @@ if (!$select_all_posts) {
     echo "          <h4 class='modal-title'>Delete Post</h4>";
     echo "        </div>";
     echo "        <div class='modal-body'>";
-    echo "          <h2>{$post_id}</h2>";
     echo "          <p>Are you sure to delete this post?</p>";
     echo "        </div>";
     echo "        <div class='modal-footer'>";
