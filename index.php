@@ -21,10 +21,12 @@ if (isset ($_GET['page'])) {
   $page = "";
 }
 
+$per_page = 5;
+
 if ($page == "" || $page == 1) {
   $page_start = 0;
 } else {
-  $page_start = ($page * 5) - 5;
+  $page_start = ($page * $per_page) - $per_page;
 }
 
 $query = "SELECT * FROM posts ";
@@ -33,7 +35,7 @@ $posts_count = mysqli_num_rows ($posts_count_query);
 $posts_count = ceil ($posts_count / 5);
 
 $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
-$query .= "ORDER BY post_id DESC LIMIT {$page_start}, 5 ";
+$query .= "ORDER BY post_id DESC LIMIT {$page_start}, {$per_page} ";
 $select_all_posts_query = mysqli_query ($connection, $query);
 
 while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
