@@ -18,19 +18,24 @@ if (isset ($_POST['checkBoxArray'])) {
 
         while ($row = mysqli_fetch_assoc ($select_post_query)) {
           $post_category_id = $row['post_category_id'];
-          $post_title = $row['post_title'];
-          $post_author = $row['post_author'];
-          $post_date = $row['post_date'];
-          $post_image = $row['post_image'];
-          $post_tags = $row['post_tags'];
-          $post_comments = $row['post_comment_count'];
-          $post_status = $row['post_status'];
+          $post_title       = $row['post_title'];
+          $post_author      = $row['post_author'];
+          $post_date        = $row['post_date'];
+          $post_image       = $row['post_image'];
+          $post_tags        = $row['post_tags'];
+          $post_comments    = $row['post_comment_count'];
+          $post_view_count  = $row['post_view_count'];
+          $post_status      = $row['post_status'];
         }
 
         $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, ";
-        $query .= "post_tags, post_comment_count, post_status) ";
+        $query .= "post_tags, post_comment_count, post_view_count, post_status) ";
         $query .= "VALUES ({$post_category_id}, '{$post_title}', '{$post_author}', NOW(), '{$post_image}', ";
-        $query .= "'{$post_tags}', '{$post_comments}', '{$post_status}') ";
+        $query .= "'{$post_tags}', '{$post_comments}', '{$post_view_count}', '{$post_status}') ";
+        break;
+
+      case 'reset' :
+        $query = "UPDATE posts SET post_view_count = 0 WHERE post_id = {$checkboxValue} ";
         break;
 
       case 'delete' :
@@ -40,6 +45,7 @@ if (isset ($_POST['checkBoxArray'])) {
 
      $update_query = mysqli_query ($connection, $query);
       confirm_query ($update_query);
+      header ("Location: posts.php");
   }
 }
 
@@ -58,6 +64,7 @@ if (isset ($_POST['checkBoxArray'])) {
               <option disabled>--------------</option>
               <option value="clone">Clone</option>
               <option value="delete">Delete</option>
+              <option value="reset">Reset</option>
             </select>
             <div class="input-group-btn">
               <input type="submit" name="submit" class="btn btn-success" value="Apply">
@@ -80,6 +87,7 @@ if (isset ($_POST['checkBoxArray'])) {
       <th>Image</th>
       <th>Tags</th>
       <th>Comments</th>
+      <th>Views</th>
       <th>Status</th>
       <th>Publish</th>
       <th>Draft</th>
@@ -100,15 +108,16 @@ if (!$select_all_posts) {
 } else {
 
   while ($row = mysqli_fetch_assoc ($select_all_posts)) {
-    $post_id = $row['post_id'];
+    $post_id          = $row['post_id'];
     $post_category_id = $row['post_category_id'];
-    $post_title = $row['post_title'];
-    $post_author = $row['post_author'];
-    $post_date = $row['post_date'];
-    $post_image = $row['post_image'];
-    $post_tags = $row['post_tags'];
-    $post_comments = $row['post_comment_count'];
-    $post_status = $row['post_status'];
+    $post_title       = $row['post_title'];
+    $post_author      = $row['post_author'];
+    $post_date        = $row['post_date'];
+    $post_image       = $row['post_image'];
+    $post_tags        = $row['post_tags'];
+    $post_comments    = $row['post_comment_count'];
+    $post_view_count  = $row['post_view_count'];
+    $post_status      = $row['post_status'];
 
     echo "<tr>";
 ?>
@@ -131,6 +140,7 @@ if (!$select_all_posts) {
     echo "<td><img class='img-responsive' width='100' src='../images/{$post_image}' alt='{$post_image}'></td>";
     echo "<td>{$post_tags}</td>";
     echo "<td>{$post_comments}</td>";
+    echo "<td>{$post_view_count}</td>";
     echo "<td>{$post_status}</td>";
     echo "<td><a href='posts.php?publish={$post_id}'>Publish</a></td>";
     echo "<td><a href='posts.php?draft={$post_id}'>Draft</a></td>";
@@ -147,7 +157,6 @@ if (!$select_all_posts) {
     echo "          <h4 class='modal-title'>Delete Post</h4>";
     echo "        </div>";
     echo "        <div class='modal-body'>";
-    echo "          <h2>{$post_id}</h2>";
     echo "          <p>Are you sure to delete this post?</p>";
     echo "        </div>";
     echo "        <div class='modal-footer'>";
