@@ -35,3 +35,12 @@ $('#load-screen').delay (100).fadeOut (500, function (){
   $(this).remove ();
 });
 
+// For Instant Users online count
+function loadUsersOnline () {
+  $.get ("functions.php?usersonline=result", function (data) {
+    $(".usersonline").text (data);
+  });
+}
+setInterval (function () {
+  loadUsersOnline ();
+}, 500);
