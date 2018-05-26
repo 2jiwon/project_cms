@@ -37,10 +37,7 @@
     $query .= "user_name = '{$user_name}', ";
 
     if ($db_password !== $user_password) {
-      echo 'db'.$db_password;
-      echo 'user'.$user_password;
       $hashed_password = crypt ($user_password, $salt);
-      echo 'hashed'.$hashed_password;
       $query .= "user_password = '{$hashed_password}', ";
     }
 
@@ -74,14 +71,13 @@
       while ($row = mysqli_fetch_assoc ($select_all_users)) {
         $user_id        = $row['user_id'];
         $user_name      = $row['user_name'];
-        $db_password  = $row['user_password'];
+        $db_password    = $row['user_password'];
         $user_firstname = $row['user_firstname'];
         $user_lastname  = $row['user_lastname'];
         $user_email     = $row['user_email'];
         $user_image     = $row['user_image'];
         $user_role      = $row['user_role'];
         $user_status    = $row['user_status'];
-      }
 ?>
 
 <form action="" method="post" enctype="multipart/form-data">
@@ -153,6 +149,7 @@
 
 </form>
 <?php
+      }
     }
 } // End of first 'else'
 ?>
