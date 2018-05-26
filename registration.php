@@ -21,21 +21,24 @@ if (isset ($_POST['submit'])) {
   $email    = mysqli_real_escape_string ($connection, $email);
   $password = mysqli_real_escape_string ($connection, $password);
 
-  $query = "SELECT randSalt FROM users ";
-  $select_randsalt_query = mysqli_query ($connection, $query);
-  confirm_query ($select_randsalt_query);
+  // Using BCRYPT
+  $password = password_hash ($password, PASSWORD_DEFAULT, array ('cost' => 12));
 
-  while ($row = mysqli_fetch_array ($select_randsalt_query)) {
-    $salt = $row['randSalt'];
-  }
-  $password = crypt ($password, $salt);
+  //$query = "SELECT randSalt FROM users ";
+  //$select_randsalt_query = mysqli_query ($connection, $query);
+  //confirm_query ($select_randsalt_query);
+
+  //while ($row = mysqli_fetch_array ($select_randsalt_query)) {
+  //  $salt = $row['randSalt'];
+  //}
+  //$password = crypt ($password, $salt);
   
   $query  = "INSERT INTO users (user_name, user_email, user_password, user_role) ";
   $query .= "VALUES ('{$username}', '{$email}', '{$password}', 'Subscriber') ";
   $register_query = mysqli_query ($connection, $query);
   confirm_query ($register_query);
   
-  echo "registration success.";
+  echo "<div class='alert alert-info' role='alert'>You are registered successfully.</div>";
 }
 
 ?>
