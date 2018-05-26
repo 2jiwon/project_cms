@@ -2,12 +2,38 @@
 include "includes/admin_header.php";
 ?>
     <div id="wrapper">
+<?php
+$session_id = session_id ();
+$time = time ();
+$timeout_in_seconds = 60;
+$timeout = $time - $timeout_in_seconds;
 
+// If this user's in the DB. 
+$query = "SELECT * FROM users_online WHERE session_id = '$session_id'";
+$user_session_query = mysqli_query ($connection, $query);
+confirm_query ($user_session_query);
+$user_count = mysqli_num_rows ($user_session_query);
+
+// If this user's not in the DB, insert current users id and time.
+// and if this user's in the DB, just update the infomations.
+if ($user_count === 0) {
+  $query = "INSERT INTO users_online (session_id, time) VALUES ('$session_id', '$time')";
+} else {
+  $query = "UPDATE users_online SET time = '$time' WHERE session_id = '$session_id'";
+}
+$insert_query = mysqli_query ($connection, $query);
+confirm_query ($insert_query);
+
+// Now show all users online.
+$query = "SELECT * FROM users_online WHERE time > '$timeout'";
+$users_online_query = mysqli_query ($connection, $query);
+$howmany_users = mysqli_num_rows ($users_online_query);
+
+?>
         <!-- Navigation -->
 <?php
 include "includes/admin_navigation.php";
 ?>
-
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -18,6 +44,7 @@ include "includes/admin_navigation.php";
                         <h1 class="page-header">
 <?php
   echo "Welcome to Admin page <small>".$_SESSION['username']."</small>";
+  echo "<h2>".$howmany_users."</h2>";
 ?>
                         </h1>
                         <ol class="breadcrumb">
