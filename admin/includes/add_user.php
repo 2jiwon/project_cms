@@ -4,11 +4,6 @@ if (isset ($_POST['create_user'])) {
   
   $user_name       = $_POST['user_name'];
   $user_password   = $_POST['user_password'];
-  $confirm_user_password   = $_POST['confirm_user_password'];
-  
-  if ($user_password !== $confirm_user_password) {
-    die ("Please recheck your password.");
-  }
 
   $user_firstname  = $_POST['user_firstname'];
   $user_lastname   = $_POST['user_lastname'];
@@ -22,6 +17,9 @@ if (isset ($_POST['create_user'])) {
   if (empty ($user_image)) {
     $user_image = '';
   }
+
+  // Using BCRYPT
+  $user_password = password_hash ($user_password, PASSWORD_DEFAULT, array ('cost' => 10));
 
   $query  = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role) ";
   $query .= "VALUES ('{$user_name}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}', '{$user_image}', '{$user_role}') ";
@@ -50,10 +48,6 @@ if (isset ($_POST['create_user'])) {
   <div class="form-group">
     <label for="user_password">Password</label>
       <input class="form-control" name="user_password" type="text" required>
-  </div>
-  <div class="form-group">
-    <label for="user_password">Confirm Password</label>
-      <input class="form-control" name="confirm_user_password" type="text" required>
   </div>
 
   <div class="form-group">
