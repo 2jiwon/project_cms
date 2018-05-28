@@ -94,7 +94,6 @@ if (isset ($_POST['checkBoxArray'])) {
       <th>Edit</th>
       <th>Delete</th>
     </tr>
-    </tr>
   </thead>
 <tbody>
 

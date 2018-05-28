@@ -5,6 +5,7 @@
 
 *.orig
 
-*/images/*
+*images/*
 
+*/images/*
 
