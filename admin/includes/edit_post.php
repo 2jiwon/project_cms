@@ -8,15 +8,10 @@
   //$post_author        = $_POST['post_author'];
   $post_date          = date ('Y-m-d H:i:s', strtotime ($_POST['post_date']));
 
+  $post_image         = $_POST['post_image'];
   $post_image         = $_FILES['post_image']['name'];
   $post_image_temp    = $_FILES['post_image']['tmp_name'];
   move_uploaded_file ($post_image_temp, "../images/{$post_image}");
-
-  $post_content       = $_POST['post_content'];
-  $post_content       = mysqli_real_escape_string ($connection, $post_content);
-  $post_tags          = $_POST['post_tags'];
-  $post_status        = $_POST['post_status'];
-  $post_comment_count = 4;
 
   if (empty ($post_image)) {
     $query = "SELECT post_image FROM posts WHERE post_id ={$post_id} ";
@@ -31,6 +26,12 @@
       } 
     }
   }
+
+  $post_content       = $_POST['post_content'];
+  $post_content       = mysqli_real_escape_string ($connection, $post_content);
+  $post_tags          = $_POST['post_tags'];
+  $post_status        = $_POST['post_status'];
+  $post_comment_count = 4;
 
   $query  = "UPDATE posts SET "; 
   $query .= "post_category_id = '{$post_category_id}', ";
@@ -72,7 +73,6 @@
         $post_date            = date ("Y-m-d H:i:s", $post_date);
 
         $post_image           = $row['post_image'];
-    
         $post_content         = $row['post_content'];
         $post_tags            = $row['post_tags'];
         $post_comments        = $row['post_comment_count'];
@@ -149,7 +149,11 @@
   <div class="form-group">
     <label for="post_image">Post Image</label>
       <div>
-        <img src="../images/<?php echo $post_image; ?>" width="100" alt="image">
+<?php
+  if (!empty ($post_image)) {
+    echo "<img src='../images/$post_image' width='100' alt='image'>";
+  }
+?>
       </div>
       <input class="form-control" name="post_image" type="file">
   </div>
