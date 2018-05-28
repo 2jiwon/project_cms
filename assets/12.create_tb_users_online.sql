@@ -1,0 +1,5 @@
+CREATE TABLE users_online (
+  user_id TINYINT(3) NOT NULL AUTO_INCREMENT PRIMARY KEY
+ ,session_id VARCHAR(255) NOT NULL
+ ,time INT(11) NOT NULL
+);

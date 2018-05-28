@@ -75,4 +75,47 @@ function update_categories () {
     include "includes/update_categories.php";
   }
 }
+
+function users_online () {
+
+  if (isset ($_GET['usersonline'])) {
+
+    global $connection;
+
+    if (!$connection) {
+      session_start ();
+      include ('../includes/db.php');
+
+    $session_id = session_id ();
+    $time = time ();
+    $timeout_in_seconds = 300;
+    $timeout = $time - $timeout_in_seconds;
+
+    // If this user's in the DB. 
+    $query = "SELECT * FROM users_online WHERE session_id = '$session_id'";
+    $user_session_query = mysqli_query ($connection, $query);
+    confirm_query ($user_session_query);
+    $user_count = mysqli_num_rows ($user_session_query);
+
+    // If this user's not in the DB, insert current users id and time.
+    // and if this user's in the DB, just update the infomations.
+    if ($user_count === 0) {
+      $query = "INSERT INTO users_online (session_id, time) VALUES ('$session_id', '$time')";
+    } else {
+      $query = "UPDATE users_online SET time = '$time' WHERE session_id = '$session_id'";
+    }
+    $insert_query = mysqli_query ($connection, $query);
+    confirm_query ($insert_query);
+
+    // Now show all users online.
+    $query = "SELECT * FROM users_online WHERE time > '$timeout'";
+    $users_online_query = mysqli_query ($connection, $query);
+    $howmany_users = mysqli_num_rows ($users_online_query);
+
+    echo $howmany_users;
+    }
+  }
+}
+users_online ();
+
 ?>

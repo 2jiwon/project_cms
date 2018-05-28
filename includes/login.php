@@ -30,10 +30,11 @@ if (isset ($_POST['login'])) {
     $db_user_role       = $row['user_role'];
   }
 
-  $password = crypt ($password, $db_password); 
-  
-  if ($username === $db_username && $password === $db_password) {
+  //$password = crypt ($password, $db_password); 
 
+  //if ($username === $db_username && $password === $db_password) {
+
+  if (password_verify ($password, $db_password)) {
     $_SESSION['username']  = $db_username;
     $_SESSION['firstname'] = $db_user_firstname;
     $_SESSION['lastname']  = $db_user_lastname;

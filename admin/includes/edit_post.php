@@ -5,18 +5,13 @@
   $post_id            = $_POST['post_id'];
   $post_category_id   = $_POST['post_category_id'];
   $post_title         = $_POST['post_title'];
-  $post_author        = $_POST['post_author'];
-  //$post_date        = date ('Y-m-d H:i:s');
+  //$post_author        = $_POST['post_author'];
+  $post_date          = date ('Y-m-d H:i:s', strtotime ($_POST['post_date']));
 
+  $post_image         = $_POST['post_image'];
   $post_image         = $_FILES['post_image']['name'];
   $post_image_temp    = $_FILES['post_image']['tmp_name'];
   move_uploaded_file ($post_image_temp, "../images/{$post_image}");
-
-  $post_content       = $_POST['post_content'];
-  $post_content       = mysqli_real_escape_string ($connection, $post_content);
-  $post_tags          = $_POST['post_tags'];
-  $post_status        = $_POST['post_status'];
-  $post_comment_count = 4;
 
   if (empty ($post_image)) {
     $query = "SELECT post_image FROM posts WHERE post_id ={$post_id} ";
@@ -32,11 +27,17 @@
     }
   }
 
+  $post_content       = $_POST['post_content'];
+  $post_content       = mysqli_real_escape_string ($connection, $post_content);
+  $post_tags          = $_POST['post_tags'];
+  $post_status        = $_POST['post_status'];
+  $post_comment_count = 4;
+
   $query  = "UPDATE posts SET "; 
   $query .= "post_category_id = '{$post_category_id}', ";
   $query .= "post_title = '{$post_title}', ";
-  $query .= "post_author = '{$post_author}', ";
-  $query .= "post_date = NOW(), ";
+  //$query .= "post_author = '{$post_author}', ";
+  $query .= "post_date = '{$post_date}', ";
   $query .= "post_image = '{$post_image}', ";
   $query .= "post_content = '{$post_content}', ";
   $query .= "post_tags = '{$post_tags}', ";
@@ -68,10 +69,10 @@
         $the_post_category_id = $row['post_category_id'];
         $post_title           = $row['post_title'];
         $post_author          = $row['post_author'];
-        $post_date            = $row['post_date'];
-    
+        $post_date            = strtotime ($row['post_date']);
+        $post_date            = date ("Y-m-d H:i:s", $post_date);
+
         $post_image           = $row['post_image'];
-    
         $post_content         = $row['post_content'];
         $post_tags            = $row['post_tags'];
         $post_comments        = $row['post_comment_count'];
@@ -121,19 +122,38 @@
 
   <div class="form-group">
     <label for="post_author">Post author</label>
-      <input class="form-control" name="post_author" type="text" value="<?php echo $post_author; ?>">
+      <input class="form-control" name="post_author" type="text" value="<?php echo $post_author; ?>" readonly>
   </div>
 
-  <div class="form-group">
-    <label for="post_date">Post Date</label>
-      <div><?php echo $post_date; ?></div>
-      <input class="form-control" name="post_date" type="datetime-local">
+  <div class="form-inline form-group">
+      <label for="post_date">Post Date</label>
+      <div>
+        <div class="input-group date" id="datetimepicker">
+          <input type="text" class="form-control" name="post_date" id="post_date" value="" />
+            <span class="input-group-addon">
+              <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+      </div>
   </div>
+  <script src="js/jquery.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      $('#datetimepicker').datetimepicker({
+        showClear: true,
+        defaultDate: "<?php echo $post_date; ?>"
+      });
+    });
+  </script>
 
   <div class="form-group">
     <label for="post_image">Post Image</label>
       <div>
-        <img src="../images/<?php echo $post_image; ?>" width="100" alt="image">
+<?php
+  if (!empty ($post_image)) {
+    echo "<img src='../images/$post_image' width='100' alt='image'>";
+  }
+?>
       </div>
       <input class="form-control" name="post_image" type="file">
   </div>

@@ -18,11 +18,11 @@ include ('includes/navigation.php');
 if (isset ($_GET['page'])) {
   $page = $_GET['page'];
 } else {
-  $page = "";
+  $page = 1;
 }
 
 $per_page = 5;
-$per_limit = 5;
+$page_limit = 5;
 
 if ($page == "" || $page == 1) {
   $page_start = 0;
@@ -34,6 +34,7 @@ $query = "SELECT * FROM posts ";
 $posts_count_query = mysqli_query ($connection, $query);
 $posts_count = mysqli_num_rows ($posts_count_query);
 $posts_count = ceil ($posts_count / 5);
+#$total_pages = ceil ($posts_count / $per_page);
 
 $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 $query .= "ORDER BY post_id DESC LIMIT {$page_start}, {$per_page} ";
@@ -74,13 +75,22 @@ while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
                 <!-- Pager -->
                 <nav aria-label="Page navigation" class="col-md-6 col-md-offset-3">
                   <ul class="pagination">
-    <li class='disabled'>
-    <a aria-label='Previous' href='#'><span aria-hidden='true'>&laquo;</span></a>
-    </li>
 
 <?php
-for ($i = 1; $i <= $posts_count; $i++) {
 
+  if ($page > 1) {
+    $prev_page = $page - 1;
+    echo "<li class='page-item'>";
+  } else {
+    echo "<li class='page-item disabled'>";
+  }
+    echo "<a class='page-link' href='index.php?page={$prev_page}' aria-label='Previous'>";
+    echo "  <span aria-hidden='true'>&laquo;</span>";
+    echo "  <span class='sr-only'>Previous</span>";
+    echo "</a>";
+    echo "</li>";
+
+for ($i = 1; $i <= $posts_count; $i++) {
   if ($i == $page) {
     echo "<li class='active'>";
     echo "    <a href='index.php?page={$i}'>{$i}<span class='sr-only'>(current)</span></a>";
@@ -91,10 +101,18 @@ for ($i = 1; $i <= $posts_count; $i++) {
     echo "</li>";
   }
 }
+  if ($page > 1 && $page < $posts_count) {
+    $next_page = $page + 1;
+    echo "<li class='page-item'>";
+  } else {
+    echo "<li class='page-item disabled'>";
+  }
+    echo "<a class='page-link' href='index.php?page={$next_page}' aria-label='Next'>";
+    echo "  <span aria-hidden='true'>&raquo;</span>";
+    echo "  <span class='sr-only'>Next</span>";
+    echo "</a>";
+    echo "</li>";
 ?>
-    <li class='disabled'>
-     <a aria-label='Next' href='#'><span aria-hidden='true'>&raquo;</a>
-    </li>
                   </ul>
                 </nav>
 

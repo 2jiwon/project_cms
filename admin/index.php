@@ -7,7 +7,6 @@ include "includes/admin_header.php";
 <?php
 include "includes/admin_navigation.php";
 ?>
-
         <div id="page-wrapper">
 
             <div class="container-fluid">
@@ -18,6 +17,7 @@ include "includes/admin_navigation.php";
                         <h1 class="page-header">
 <?php
   echo "Welcome to Admin page <small>".$_SESSION['username']."</small>";
+  echo "<h2>".$howmany_users."</h2>";
 ?>
                         </h1>
                         <ol class="breadcrumb">
