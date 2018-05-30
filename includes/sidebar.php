@@ -1,10 +1,14 @@
             <div class="col-md-4">
 
                 <!-- Login panel -->
+<?php if (isset ($_SESSION['user_role'])) : ?>
+                <div class="well">
+                   <h4>Logged in as <?php echo $_SESSION['username']; ?></h4>
+                   <a class="btn btn-primary " href="includes/logout.php">Log Out</a> 
+                </div>
+<?php else: ?>
                 <div class="collapse panel panel-primary" id="collapseLogin">
-                    <div class="panel-heading">
-                      Log In
-                    </div> 
+                    <div class="panel-heading"> Log In </div> 
 
                     <!-- Login form -->
                     <div class="panel-body">
@@ -22,6 +26,7 @@
                       </form>
                     </div>
                 </div>
+<?php endif; ?>
 
                 <!-- Blog Search Well -->
                 <div class="well">
@@ -71,3 +76,4 @@ while ($row = mysqli_fetch_assoc ($select_categories_sidebar)) {
 <?php
 include "includes/widget.php";
 ?>
+          </div>
