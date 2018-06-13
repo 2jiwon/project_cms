@@ -80,7 +80,7 @@ if (!$select_all_users) {
 <?php
 
 if (isset ($_GET['approve'])) {
-  $user_id_for_approve = $_GET['approve'];
+  $user_id_for_approve = mysqli_real_escape_string ($connection, $_GET['approve']);
 
   $query = "UPDATE users SET user_status = 'Approved' WHERE user_id = {$user_id_for_approve} ";
   $approve_query = mysqli_query ($connection, $query);
@@ -90,7 +90,7 @@ if (isset ($_GET['approve'])) {
 }
 
 if (isset ($_GET['disapprove'])) {
-  $user_id_for_disapprove = $_GET['disapprove'];
+  $user_id_for_disapprove = mysqli_real_escape_string ($connection, $_GET['disapprove']);
 
   $query = "UPDATE users SET user_status = 'Unapproved' WHERE user_id = {$user_id_for_disapprove} ";
   $disapprove_query = mysqli_query ($connection, $query);
@@ -100,8 +100,7 @@ if (isset ($_GET['disapprove'])) {
 }
 
 if (isset ($_GET['delete'])) {
-  $user_id_for_delete = $_GET['delete'];
-
+  $user_id_for_delete = mysqli_real_escape_string ($connection, $_GET['delete']);
   $query = "DELETE FROM users WHERE user_id = {$user_id_for_delete} ";
   $delete_query = mysqli_query ($connection, $query);
 

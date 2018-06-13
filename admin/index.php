@@ -11,6 +11,9 @@ include "includes/admin_navigation.php";
 
             <div class="container-fluid">
 
+<?php
+permission_warning ();
+?>
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">

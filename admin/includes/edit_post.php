@@ -57,7 +57,7 @@
   } else {
 
     if (isset ($_GET['p_id'])) {
-      $post_id = $_GET['p_id'];
+      $post_id = mysqli_real_escape_string ($connection, $_GET['p_id']);
     }
     
       $query = "SELECT * FROM posts WHERE post_id={$post_id}";
@@ -94,7 +94,6 @@
     <div>
       <select class="form-control" name="post_category_id" id="post_category">
 <?php
-      
         $query = "SELECT * FROM categories"; 
         $select_categories_query = mysqli_query ($connection, $query);
       
