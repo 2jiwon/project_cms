@@ -76,6 +76,15 @@ function update_categories () {
   }
 }
 
+function permission_warning () {
+  if (!isset ($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
+    die ("<div class='alert alert-danger'>
+          I'm sorry but you may not have a right permission to see this page.
+          <a class='alert-link' href='/cms/'> Back to Home.</a></div>");
+  }
+}
+
+
 function users_online () {
 
   if (isset ($_GET['usersonline'])) {

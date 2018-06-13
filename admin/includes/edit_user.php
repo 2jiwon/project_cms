@@ -7,15 +7,15 @@
     $user_name       = $_POST['user_name'];
     $user_password   = $_POST['user_password'];
 
-    $query = "SELECT * FROM users WHERE user_id = {$user_id} ";
+    $query = "SELECT user_password FROM users WHERE user_id = {$user_id} ";
     $select_password_query = mysqli_query ($connection, $query);
     confirm_query ($select_password_query);
 
-    while ($row = mysqli_fetch_array ($select_password_query)) {
-      $db_password = $row['user_password'];
-    }
+    $row = mysqli_fetch_array ($select_password_query);
+    $db_password = $row['user_password'];
+    
     if ($db_password !== $user_password) {
-      $user_password = password_hash ($user_password, PASSWORD_DEFAULT, array ('cost' => 10));
+      $user_password = password_hash ($user_password, PASSWORD_BCRYPT, array ('cost' => 10));
     }
 
     $user_firstname  = $_POST['user_firstname'];
@@ -94,7 +94,7 @@
 
   <div class="form-group">
     <label for="user_password">Password</label>
-      <input class="form-control" name="user_password" type="text" value="<?php echo $db_password; ?>">
+      <input autocomplete="off" class="form-control" name="user_password" type="password" value="<?php echo $db_password; ?>">
   </div>
 
   <div class="form-group">

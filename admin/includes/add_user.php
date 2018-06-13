@@ -19,7 +19,7 @@ if (isset ($_POST['create_user'])) {
   }
 
   // Using BCRYPT
-  $user_password = password_hash ($user_password, PASSWORD_DEFAULT, array ('cost' => 10));
+  $user_password = password_hash ($user_password, PASSWORD_BCRYPT, array ('cost' => 10));
 
   $query  = "INSERT INTO users (user_name, user_password, user_firstname, user_lastname, user_email, user_image, user_role) ";
   $query .= "VALUES ('{$user_name}', '{$user_password}', '{$user_firstname}', '{$user_lastname}', '{$user_email}', '{$user_image}', '{$user_role}') ";

@@ -22,27 +22,32 @@
             while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
               $cat_title = $row['cat_title'];
               $cat_id    = $row['cat_id'];
-            
-                echo "<li><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
+
+              $category_class       = '';
+              $pageName = basename ($_SERVER['PHP_SELF']);
+
+              if (isset ($_GET['category']) && $_GET['category'] == $cat_id) {
+                $category_class = 'active';
+              }
+
+                echo "<li class='$category_class'><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
             }
 ?>
+<?php if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') : ?>
                     <li>
                         <a href="admin/index.php">Admin</a>
                     </li>
-                    <!-- <li>
-                        <a href="#">services</a>
-                    </li> -->
-                    <!-- <li>
-                        <a href="#">contact</a>
-                    </li> -->
+<?php endif; ?>
                 </ul>
 
                 <!-- Button for Log In & Register -->
+<?php if (!isset ($_SESSION['user_role'])) : ?>
                 <div class="nav navbar-nav navbar-right center-block">
                   <a id="loginBtn" class="btn btn-primary navbar-btn" role="button" data-toggle="collapse" 
                      href="#collapseLogin" aria-expanded="false" aria-controls="collapseLogin">Log In</a>
                   <a class="btn btn-default navbar-btn" role="button" href="./registration.php">Register</a>
                 </div>
+<?php endif; ?>
                 <!-- /. navbar-btn -->              
 
             </div>
