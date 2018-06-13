@@ -89,10 +89,10 @@ if (isset ($_POST['create_comment'])) {
   $create_comment = mysqli_query ($connection, $query);
   confirm_query ($create_comment);
 
-  $query  = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
-  $query .= "WHERE post_id = $post_id ";
-  $update_comment_count = mysqli_query ($connection, $query);
-  confirm_query ($update_comment_count);
+//  $query  = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
+//  $query .= "WHERE post_id = $post_id ";
+//  $update_comment_count = mysqli_query ($connection, $query);
+//  confirm_query ($update_comment_count);
 }
 
 ?>
