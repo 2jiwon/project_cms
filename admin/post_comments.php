@@ -83,14 +83,14 @@ $select_all_comments = mysqli_query ($connection, $query);
     echo "<td>{$comment_status}</td>";
     echo "<td>{$comment_date}</td>";
 
-    echo "<td><a href='comments.php?approve={$comment_id}'>Approve</a></td>";
-    echo "<td><a href='comments.php?disapprove={$comment_id}'>Disapprove</a></td>";
+    echo "<td><a href='post_comments.php?approve={$comment_id}&c_id={$c_id}'>Approve</a></td>";
+    echo "<td><a href='comments.php?disapprove={$comment_id}&c_id={$c_id}'>Disapprove</a></td>";
     echo "<td><a href='comments.php?source=edit_comment&p_id={$comment_id}'>Edit</a></td>";
     echo "<td><a data-toggle='modal' data-target='#delete{$comment_id}'>Delete</a></td>";
     echo "</tr>";
 
     echo "  <!-- Modal for delete -->";
-    echo "  <div id='delete{$comment_id}' class='modal fade' tabindex='-1' role='dialog'>";
+    ECHo "  <div id='delete{$comment_id}' class='modal fade' tabindex='-1' role='dialog'>";
     echo "    <div class='modal-dialog' role='document'>";
     echo "      <div class='modal-content'>";
     echo "        <div class='modal-header'>";
@@ -102,7 +102,7 @@ $select_all_comments = mysqli_query ($connection, $query);
     echo "        </div>";
     echo "        <div class='modal-footer'>";
     echo "          <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
-    echo "          <a type='button' class='btn btn-primary' href='comments.php?delete={$comment_id}'>Delete</a>";
+    echo "          <a type='button' class='btn btn-primary' href='post_comments.php?delete={$comment_id}&c_id={$c_id}'>Delete</a>";
     echo "        </div>";
     echo "      </div><!-- /.modal-content -->";
     echo "    </div><!-- /.modal-dialog -->";
@@ -121,7 +121,7 @@ if (isset ($_GET['approve'])) {
   $approve_query = mysqli_query ($connection, $query);
 
   confirm_query ($approve_query);
-  header ("Location: comments.php");
+  header ("Location: post_comments.php?c_id={$_GET['c_id']}");
 }
 
 if (isset ($_GET['disapprove'])) {
@@ -131,7 +131,7 @@ if (isset ($_GET['disapprove'])) {
   $disapprove_query = mysqli_query ($connection, $query);
 
   confirm_query ($disapprove_query);
-  header ("Location: comments.php");
+  header ("Location: post_comments.php?c_id={$_GET['c_id']}");
 }
 
 if (isset ($_GET['delete'])) {
@@ -140,12 +140,12 @@ if (isset ($_GET['delete'])) {
   $query = "DELETE FROM comments WHERE comment_id = {$comment_id_for_delete} ";
   $delete_query = mysqli_query ($connection, $query);
   confirm_query ($delete_query);
-  header ("Location: comments.php");
+  header ("Location: post_comments.php?c_id={$_GET['c_id']}");
 
-  $query  = "UPDATE posts SET post_comment_count = post_comment_count - 1 ";
-  $query .= "WHERE post_id = {$post_id} ";
-  $minus_comment_count = mysqli_query ($connection, $query);
-  confirm_query ($minus_comment_count);
+  //$query  = "UPDATE posts SET post_comment_count = post_comment_count - 1 ";
+  //$query .= "WHERE post_id = {$post_id} ";
+  //$minus_comment_count = mysqli_query ($connection, $query);
+  //confirm_query ($minus_comment_count);
 }
 ?>
 
