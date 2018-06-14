@@ -30,13 +30,22 @@ if ($page == "" || $page == 1) {
   $page_start = ($page * $per_page) - $per_page;
 }
 
-$query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
+if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+  $query  = "SELECT * FROM posts ";
+} else {
+  $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
+} 
+
 $posts_count_query = mysqli_query ($connection, $query);
 $posts_count = mysqli_num_rows ($posts_count_query);
 $posts_count = ceil ($posts_count / 5);
 #$total_pages = ceil ($posts_count / $per_page);
 
-$query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
+if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+  $query  = "SELECT * FROM posts ";
+} else {
+  $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
+} 
 $query .= "ORDER BY post_id DESC LIMIT {$page_start}, {$per_page} ";
 $select_all_posts_query = mysqli_query ($connection, $query);
 
@@ -73,7 +82,9 @@ if (mysqli_num_rows ($select_all_posts_query) > 0) {
                 <p><?php echo $post_content; ?></p>
                 <a class="btn btn-primary" href="post.php?p_id=<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
-
+<?php
+  } // End of while
+?>
                 <!-- Pager -->
                 <nav aria-label="Page navigation" class="col-md-6 col-md-offset-3">
                   <ul class="pagination">
@@ -117,7 +128,6 @@ for ($i = 1; $i <= $posts_count; $i++) {
                   </ul>
                 </nav>
 <?php
-  }
 } else {
     echo "  <h1 class='page-header'>
                   No Posts Available 
