@@ -140,10 +140,13 @@ if (!$select_all_posts) {
 
     // Get the numbers of comments 
     $query = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
-    $count_comments_query = mysqli_query ($connection, $query);
-    $count_comments = mysqli_num_rows ($count_comments_query); 
+    $comments_query = mysqli_query ($connection, $query);
 
-    echo "<td>{$count_comments}</td>";
+    //$row = mysqli_fetch_array ($comments_query);
+    //$comment_id = $rwo['comment_id'];
+    $count_comments = mysqli_num_rows ($comments_query); 
+
+    echo "<td><a href='./post_comments.php?c_id={$post_id}'>{$count_comments}</a></td>";
     echo "<td>{$post_view_count}</td>";
     echo "<td>{$post_status}</td>";
     echo "<td><a href='posts.php?publish={$post_id}'>Publish</a></td>";
