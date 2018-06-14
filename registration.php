@@ -4,7 +4,6 @@ include "includes/header.php";
 include "admin/functions.php";
 ?>
     <!-- Navigation -->
-    
     <?php  include "includes/navigation.php"; ?>
  
     <!-- Page Content -->
@@ -26,7 +25,7 @@ if (isset ($_POST['submit'])) {
   $password  = mysqli_real_escape_string ($connection, $password);
 
   // Using BCRYPT
-  $password = password_hash ($password, PASSWORD_DEFAULT, array ('cost' => 10));
+  $password = password_hash ($password, PASSWORD_BCRYPT, array ('cost' => 10));
   
   $query  = "INSERT INTO users (user_name, user_firstname, user_lastname, user_email, user_password, user_role) ";
   $query .= "VALUES ('{$username}', '{$firstname}', '{$lastname}', '{$email}', '{$password}', 'Subscriber') ";
@@ -43,7 +42,7 @@ if (isset ($_POST['submit'])) {
         <div class="row">
             <div class="col-xs-12 col-md-6 col-md-offset-3">
                 <div class="form-wrap">
-                <h1>Sign Up</h1>
+                <h1 class="page-header text-center">Registration</h1>
                     <form role="form" action="registration.php" method="post" id="login-form" autocomplete="off">
                         <div class="form-group">
                             <label for="username" class="sr-only">Username</label>
@@ -66,7 +65,7 @@ if (isset ($_POST['submit'])) {
                             <input type="password" name="password" id="key" class="form-control" placeholder="Enter Password">
                         </div>
                 
-                        <input type="submit" name="submit" id="btn-login" class="btn btn-custom btn-lg btn-block" value="Sign Up" required>
+                        <input type="submit" name="submit" id="btn-login" class="btn btn-info btn-lg btn-block" value="Sign Up" required>
                     </form>
                  
                 </div>
