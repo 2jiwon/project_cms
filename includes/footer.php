@@ -6,7 +6,7 @@
                   <div class="text-center">
                     <ul class="list-inline">
                       <li><p>Copyright &copy; FANCYTANK 2018</p></li>
-                      <li><p><a href="">Contact me</a></p></li>
+                      <li><p><a href="contact.php">Contact me</a></p></li>
                     </ul>
                   </div>
 
