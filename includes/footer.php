@@ -2,7 +2,14 @@
         <footer>
             <div class="row">
                 <div class="col-lg-12">
-                    <p>Copyright &copy; Your Website 2014</p>
+        
+                  <div class="text-center">
+                    <ul class="list-inline">
+                      <li><p>Copyright &copy; FANCYTANK 2018</p></li>
+                      <li><p><a href="contact.php">Contact me</a></p></li>
+                    </ul>
+                  </div>
+
                 </div>
                 <!-- /.col-lg-12 -->
             </div>

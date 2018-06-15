@@ -33,17 +33,19 @@ function insert_categories () {
   }
 }
 
-function find_all_categories () {
+function display_categories () {
 
   global $connection;
 
   $query = "SELECT * FROM categories";
   $select_all_categories = mysqli_query ($connection, $query);
+  confirm_query ($select_all_categories);
 
   while ($row = mysqli_fetch_assoc ($select_all_categories)) {
     $cat_id = $row['cat_id'];
     $cat_title = $row['cat_title'];
       echo "<tr>";
+      echo "<td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$cat_id}'></td>";
       echo "<td>{$cat_id}</td>";
       echo "<td>{$cat_title}</td>";
       echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";

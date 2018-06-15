@@ -17,87 +17,96 @@ include ('includes/navigation.php');
 <?php
 
 if (isset ($_GET['p_id'])) {
-  $post_id = $_GET['p_id'];
+  $post_id = mysqli_real_escape_string ($connection, $_GET['p_id']);
 
-  $query = "UPDATE posts SET post_view_count = post_view_count + 1 WHERE post_id = $post_id ";
+  $query = "UPDATE posts SET post_view_count = post_view_count + 1 WHERE post_id = {$post_id} ";
   $update_view_count_query = mysqli_query ($connection, $query);
   confirm_query ($update_view_count_query);
 
-  $query  = "SELECT * FROM posts WHERE post_id = {$post_id} ";
-  $select_all_posts_query = mysqli_query ($connection, $query);
+  // Check the User's access authority
+  if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+    $query  = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+  } else {
+    $query  = "SELECT * FROM posts WHERE post_id = {$post_id} AND post_status = 'Published' ";
+  } 
 
-  while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
-    $post_title   = $row['post_title'];
-    $post_author  = $row['post_author'];
-    $post_date    = $row['post_date'];
-    $post_image   = $row['post_image'];
-    $post_content = $row['post_content'];
+  $select_all_posts_query = mysqli_query ($connection, $query);
+  
+  if (mysqli_num_rows ($select_all_posts_query) > 0) {
+
+    while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
+      $post_title   = $row['post_title'];
+      $post_author  = $row['post_author'];
+      $post_date    = $row['post_date'];
+      $post_image   = $row['post_image'];
+      $post_content = $row['post_content'];
 ?>
-                <h1 class="page-header">
+                <!-- <h1 class="page-header">
                     Page Heading
                     <small>Secondary Text</small>
-                </h1>
+                </h1> -->
 
                 <!-- First Blog Post -->
                 <h2>
-                <a href=""><?php echo $post_title ?></a>
+                  <a href=""><?php echo $post_title ?></a>
                 </h2>
                 <p class="lead">
-                by <a href="index.php"><?php echo $post_author ?></a>
+                  by <a href="index.php"><?php echo $post_author ?></a>
                 </p>
-                <p><span class="glyphicon glyphicon-time"></span><?php echo $post_date ?></p>
+                <p>
+                  <span class="glyphicon glyphicon-time"></span><?php echo $post_date ?>
+                </p>
                 <hr>
-                <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
+
+                  <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
                 <hr>
-                <p><?php echo $post_content ?></p>
+
+                <p>
+                  <?php echo $post_content ?>
+                </p>
 
 <!-- Edit post button -->
 <?php
-
-  if (isset ($_SESSION['user_role'])) {
-    if (isset ($_GET['p_id'])) {
-      echo "    <div class='row'>
-                   <div class='col-md-offset-10 col-xs-2'>
-                      <a href='admin/posts.php?source=edit_post&p_id={$post_id}'>
-                        <button class='btn btn-default' name='edit_post' type='submit'>
-                          Edit Post
-                        </button>
-                      </a>
-                  </div>
-                </div>";
-    }
-  }
+      //if (isset ($_SESSION['user_role']) && $_SESSION['username'] === $post_author) {
+      if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] === 'Admin') {
+        if (isset ($_GET['p_id'])) {
+          echo "    <div class='row'>
+                       <div class='col-md-offset-10 col-xs-2'>
+                          <a href='admin/posts.php?source=edit_post&p_id={$post_id}'>
+                            <button class='btn btn-default' name='edit_post' type='submit'>
+                              Edit Post
+                            </button>
+                          </a>
+                      </div>
+                    </div>";
+        }
+      }
 ?>
                 <hr>
 <?php
-  }
-} else {
-  header ("Location: ../index.php");
-}
+    } // End of first while
 ?>
 
-<?php
-if (isset ($_POST['create_comment'])) {
-  $post_id = $_GET['p_id'];
-  $comment_author  = $_POST['comment_author'];
-  $comment_email   = $_POST['comment_email'];
-  $comment_content = $_POST['comment_content'];
-
-  $query  = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_date) ";
-  $query .= "VALUES ('{$post_id}', '{$comment_author}', '{$comment_email}', '{$comment_content}', NOW()) ";
-
-  $create_comment = mysqli_query ($connection, $query);
-  confirm_query ($create_comment);
-
-  $query  = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
-  $query .= "WHERE post_id = $post_id ";
-  $update_comment_count = mysqli_query ($connection, $query);
-  confirm_query ($update_comment_count);
-}
-
-?>
                 <!-- Blog Comments -->
+<?php
+    if (isset ($_POST['create_comment'])) {
+      $post_id = $_GET['p_id'];
+      $comment_author  = $_POST['comment_author'];
+      $comment_email   = $_POST['comment_email'];
+      $comment_content = $_POST['comment_content'];
 
+      $query  = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_date) ";
+      $query .= "VALUES ('{$post_id}', '{$comment_author}', '{$comment_email}', '{$comment_content}', NOW()) ";
+
+      $create_comment = mysqli_query ($connection, $query);
+      confirm_query ($create_comment);
+
+    //  $query  = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
+    //  $query .= "WHERE post_id = $post_id ";
+    //  $update_comment_count = mysqli_query ($connection, $query);
+    //  confirm_query ($update_comment_count);
+    }
+?>
                 <!-- Comments Form -->
                 <div class="well">
                     <h4>Leave a Comment:</h4>
@@ -125,20 +134,19 @@ if (isset ($_POST['create_comment'])) {
 
                 <!-- Posted Comments -->
 <?php
-
-$query  = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
-$query .= "AND comment_status = 'Approved' ";
-$query .= "ORDER BY comment_id DESC ";
-
-$show_comments = mysqli_query ($connection, $query);
-confirm_query ($show_comments);
-
-while ($row = mysqli_fetch_assoc ($show_comments)) {
-  $comment_author = $row['comment_author'];
-  $comment_email = $row['comment_email'];
-  $comment_content = $row['comment_content'];
-  $comment_status = $row['comment_status'];
-  $comment_date = $row['comment_date'];
+      $query  = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
+      $query .= "AND comment_status = 'Approved' ";
+      $query .= "ORDER BY comment_id DESC ";
+      
+      $show_comments = mysqli_query ($connection, $query);
+      confirm_query ($show_comments);
+      
+      while ($row = mysqli_fetch_assoc ($show_comments)) {
+        $comment_author = $row['comment_author'];
+        $comment_email = $row['comment_email'];
+        $comment_content = $row['comment_content'];
+        $comment_status = $row['comment_status'];
+        $comment_date = $row['comment_date'];
 ?>
                 <!-- Comment -->
                 <div class="media">
@@ -153,7 +161,7 @@ while ($row = mysqli_fetch_assoc ($show_comments)) {
                     </div>
                 </div>
 <?php
-}
+      }
 ?>
               <hr>
 
@@ -166,7 +174,17 @@ while ($row = mysqli_fetch_assoc ($show_comments)) {
                         <a href="#">Newer &rarr;</a>
                     </li>
                 </ul>
-
+<?php
+  } else {
+    echo "  <h1 class='page-header'>
+                  No Posts Available 
+                  <small></small>
+            </h1>";
+  }
+} else { // End of the first if
+  header ("Location: ../index.php");
+}
+?>
             </div>
 
             <!-- Blog Sidebar Widgets Column -->

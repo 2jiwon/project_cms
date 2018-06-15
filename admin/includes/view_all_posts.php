@@ -23,15 +23,15 @@ if (isset ($_POST['checkBoxArray'])) {
           $post_date        = $row['post_date'];
           $post_image       = $row['post_image'];
           $post_tags        = $row['post_tags'];
-          $post_comments    = $row['post_comment_count'];
+         // $post_comments    = $row['post_comment_count'];
           $post_view_count  = $row['post_view_count'];
           $post_status      = $row['post_status'];
         }
 
         $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, ";
-        $query .= "post_tags, post_comment_count, post_view_count, post_status) ";
+        $query .= "post_tags, post_view_count, post_status) ";
         $query .= "VALUES ({$post_category_id}, '{$post_title}', '{$post_author}', NOW(), '{$post_image}', ";
-        $query .= "'{$post_tags}', '{$post_comments}', '{$post_view_count}', '{$post_status}') ";
+        $query .= "'{$post_tags}', '{$post_view_count}', '{$post_status}') ";
         break;
 
       case 'reset' :
@@ -114,7 +114,7 @@ if (!$select_all_posts) {
     $post_date        = $row['post_date'];
     $post_image       = $row['post_image'];
     $post_tags        = $row['post_tags'];
-    $post_comments    = $row['post_comment_count'];
+ // $post_comments    = $row['post_comment_count'];
     $post_view_count  = $row['post_view_count'];
     $post_status      = $row['post_status'];
 
@@ -125,12 +125,11 @@ if (!$select_all_posts) {
 <?php
     echo "<td>{$post_id}</td>";
 
-    $query = "SELECT * FROM categories WHERE cat_id = {$post_category_id} ";
+    // Get category_id
+    $query = "SELECT cat_title FROM categories WHERE cat_id = {$post_category_id} ";
     $select_categories_id = mysqli_query ($connection, $query);
-
-    while ($row = mysqli_fetch_assoc ($select_categories_id)) {
-      $post_category_id = $row['cat_title'];
-    }
+    $row = mysqli_fetch_assoc ($select_categories_id);
+    $post_category_id = $row['cat_title'];
 
     echo "<td>{$post_category_id}</td>";
     echo "<td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>";
@@ -138,7 +137,16 @@ if (!$select_all_posts) {
     echo "<td>{$post_date}</td>";
     echo "<td><img class='img-responsive' width='100' src='../images/{$post_image}' alt='{$post_image}'></td>";
     echo "<td>{$post_tags}</td>";
-    echo "<td>{$post_comments}</td>";
+
+    // Get the numbers of comments 
+    $query = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
+    $comments_query = mysqli_query ($connection, $query);
+
+    //$row = mysqli_fetch_array ($comments_query);
+    //$comment_id = $row['comment_id'];
+    $count_comments = mysqli_num_rows ($comments_query); 
+
+    echo "<td><a href='./post_comments.php?c_id={$post_id}'>{$count_comments}</a></td>";
     echo "<td>{$post_view_count}</td>";
     echo "<td>{$post_status}</td>";
     echo "<td><a href='posts.php?publish={$post_id}'>Publish</a></td>";
