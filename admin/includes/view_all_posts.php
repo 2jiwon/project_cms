@@ -155,24 +155,7 @@ if (!$select_all_posts) {
     echo "<td><a data-toggle='modal' data-target='#delete{$post_id}'>Delete</a></td>";
     echo "</tr>";
     
-    echo "  <!-- Modal for delete -->";
-    echo "  <div id='delete{$post_id}' class='modal fade' tabindex='-1' role='dialog'>";
-    echo "    <div class='modal-dialog' role='document'>";
-    echo "      <div class='modal-content'>";
-    echo "        <div class='modal-header'>";
-    echo "          <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>";
-    echo "          <h4 class='modal-title'>Delete Post</h4>";
-    echo "        </div>";
-    echo "        <div class='modal-body'>";
-    echo "          <p>Are you sure to delete this post?</p>";
-    echo "        </div>";
-    echo "        <div class='modal-footer'>";
-    echo "          <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>";
-    echo "          <a type='button' class='btn btn-primary' href='posts.php?delete={$post_id}'>Delete</a>";
-    echo "        </div>";
-    echo "      </div><!-- /.modal-content -->";
-    echo "    </div><!-- /.modal-dialog -->";
-    echo "  </div><!-- /.modal -->";
+    delete_modal ($post_id, 'post', 'posts.php');
   }
 }
 ?>

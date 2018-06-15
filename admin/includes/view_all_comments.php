@@ -90,13 +90,13 @@ $select_all_comments = mysqli_query ($connection, $query);
 confirm_query ($select_all_comments);
 
   while ($row = mysqli_fetch_assoc ($select_all_comments)) {
-    $comment_id = $row['comment_id'];
+    $comment_id      = $row['comment_id'];
     $comment_post_id = $row['comment_post_id'];
-    $comment_author = $row['comment_author'];
-    $comment_email = $row['comment_email'];
+    $comment_author  = $row['comment_author'];
+    $comment_email   = $row['comment_email'];
     $comment_content = $row['comment_content'];
-    $comment_status = $row['comment_status'];
-    $comment_date = $row['comment_date'];
+    $comment_status  = $row['comment_status'];
+    $comment_date    = $row['comment_date'];
 
     echo "<tr>
           <td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$comment_id}'></td>
@@ -122,24 +122,7 @@ confirm_query ($select_all_comments);
           <td><a data-toggle='modal' data-target='#delete{$comment_id}'>Delete</a></td>
           </tr>";
 
-    echo "  <!-- Modal for delete -->
-            <div id='delete{$comment_id}' class='modal fade' tabindex='-1' role='dialog'>
-              <div class='modal-dialog' role='document'>
-                <div class='modal-content'>
-                  <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <h4 class='modal-title'>Delete Comment</h4>
-                  </div>
-                  <div class='modal-body'>
-                    <p>Are you sure to delete this comment?</p>
-                  </div>
-                  <div class='modal-footer'>
-                    <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
-                    <a type='button' class='btn btn-primary' href='comments.php?delete={$comment_id}'>Delete</a>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->";
+    delete_modal ($comment_id, 'comment', 'comments.php');
   }
 ?>
   </tbody>

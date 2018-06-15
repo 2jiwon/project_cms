@@ -44,13 +44,17 @@ function display_categories () {
   while ($row = mysqli_fetch_assoc ($select_all_categories)) {
     $cat_id = $row['cat_id'];
     $cat_title = $row['cat_title'];
+
       echo "<tr>";
       echo "<td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$cat_id}'></td>";
       echo "<td>{$cat_id}</td>";
       echo "<td>{$cat_title}</td>";
-      echo "<td><a href='categories.php?delete={$cat_id}'>Delete</a></td>";
       echo "<td><a href='categories.php?edit={$cat_id}'>Edit</a></td>";
+      echo "<td><a data-toggle='modal' data-target='#delete{$cat_id}'>Delete</a></td>";
       echo "</tr>";
+
+      delete_modal ($cat_id, 'category', 'categories.php');
+
   }
 }
 
@@ -128,5 +132,26 @@ function users_online () {
   }
 }
 users_online ();
+
+function delete_modal ($deleteId, $element, $address) {
+    echo "  <!-- Modal for delete -->
+            <div id='delete{$deleteId}' class='modal fade' tabindex='-1' role='dialog'>
+              <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                  <div class='modal-header'>
+                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                    <h4 class='modal-title'>Delete {$element}</h4>
+                  </div>
+                  <div class='modal-body'>
+                    <p>Are you sure to delete this {$element}?</p>
+                  </div>
+                  <div class='modal-footer'>
+                    <a type='button' class='btn btn-primary' href='{$address}?delete={$deleteId}'>Delete</a>
+                    <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
+                  </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->";
+}
 
 ?>

@@ -129,26 +129,7 @@ if (!$select_all_users) {
     <td><a href='users.php?source=edit_user&u_id={$user_id}'>Edit</a></td>
     <td><a data-toggle='modal' data-target='#delete{$user_id}'>Delete</a></td>";
 
-    echo "   <!-- Modal for delete -->
-            <div id='delete{$user_id}' class='modal fade' tabindex='-1' role='dialog'>
-              <div class='modal-dialog' role='document'>
-                <div class='modal-content'>
-                  <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <h4 class='modal-title'>Delete User</h4>
-                  </div>
-                  <div class='modal-body'>
-                    <h2>{$user_id}</h2>
-                    <p>Are you sure to delete this user?</p>
-                  </div>
-                  <div class='modal-footer'>
-                    <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
-                    <a type='button' class='btn btn-primary' href='users.php?delete={$user_id}'>Delete</a>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
-          </tr>";
+    delete_modal ($user_id, 'user', 'users.php');
   }
 }
 ?>

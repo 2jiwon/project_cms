@@ -98,12 +98,10 @@ if (isset ($_POST['checkBoxArray'])) {
                   </thead>
                   <tbody>
 <?php
-// display categories query
-display_categories ();
 
-?>
-<?php
+display_categories ();
 delete_categories ();
+
 ?>
                   </tbody>
                 </table>
