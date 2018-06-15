@@ -39,9 +39,57 @@ update_categories ();
                 </div>
 
                 <div class="col-md-6">
-                <table class="table table-bordered table-hover">
+<?php
+// for bulkoptions
+if (isset ($_POST['checkBoxArray'])) {
+  
+  foreach ($_POST['checkBoxArray'] as $checkboxValue) {
+    $bulk_options = $_POST['bulk_options']; 
+
+    switch ($bulk_options) {
+      case 'clone'  :
+        $select_query = "SELECT * FROM categories WHERE cat_id = {$checkboxValue} ";
+        $select_category = mysqli_query ($connection, $select_query);
+
+        while ($row = mysqli_fetch_assoc ($select_category)) {
+          $cat_title = $row['cat_title'];
+        }
+        $query  = "INSERT INTO categories (cat_title) ";
+        $query .= "VALUES ('{$cat_title}') ";
+        break;
+
+      case 'delete' :
+        $query = "DELETE FROM categories WHERE cat_id = {$checkboxValue} ";
+        break;
+    }
+    
+    $bulk_query = mysqli_query ($connection, $query);
+    confirm_query ($bulk_query);
+    header ("Location: categories.php");
+  }
+}
+?>        
+                <form action="" method="post">
+                 <table class="table table-bordered table-hover">
+                  <div class="row form-inline">
+                    <div id="bulkOptionsContainer" class="col-md-6">
+                      <div class="input-group">
+                        <select class="form-control" id="" name="bulk_options">
+                          <option value="">Select Options</option>
+                          <option value="clone">Clone</option>
+                          <option value="delete">Delete</option>
+                        </select>
+                        <div class="input-group-btn">
+                          <input type="submit" name="submit" class="btn btn-success" value="Apply">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <p></p>
+
                   <thead>
                     <tr>
+                      <th><input type="checkbox" name="" id="selectAllBoxes"></th>
                       <th>ID</th>
                       <th>Categoty Title</th>
                       <th>Delete</th>
@@ -50,15 +98,17 @@ update_categories ();
                   </thead>
                   <tbody>
 <?php
-// Find all categories query
-find_all_categories ();
+// display categories query
+display_categories ();
+
 ?>
 <?php
 delete_categories ();
 ?>
                   </tbody>
                 </table>
-                </div>
+               </form> 
+               </div>
 
               </div> 
             </div>

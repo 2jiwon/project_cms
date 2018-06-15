@@ -143,7 +143,7 @@ if (!$select_all_posts) {
     $comments_query = mysqli_query ($connection, $query);
 
     //$row = mysqli_fetch_array ($comments_query);
-    //$comment_id = $rwo['comment_id'];
+    //$comment_id = $row['comment_id'];
     $count_comments = mysqli_num_rows ($comments_query); 
 
     echo "<td><a href='./post_comments.php?c_id={$post_id}'>{$count_comments}</a></td>";
