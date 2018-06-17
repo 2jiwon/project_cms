@@ -84,8 +84,13 @@ if (isset ($_POST['checkBoxArray'])) {
   <tbody>
 
 <?php
+// Join comments & posts table to pull out their records in one query.
+$query  = "SELECT comments.comment_id, comments.comment_post_id, comments.comment_author, comments.comment_email, ";
+$query .= "comments.comment_content, comments.comment_status, comments.comment_date, ";
+$query .= "posts.post_id, posts.post_title ";
+$query .= "FROM comments ";
+$query .= "LEFT JOIN posts ON comment_post_id = post_id ";
 
-$query = "SELECT * FROM comments";
 $select_all_comments = mysqli_query ($connection, $query);
 confirm_query ($select_all_comments);
 
@@ -97,20 +102,14 @@ confirm_query ($select_all_comments);
     $comment_content = $row['comment_content'];
     $comment_status  = $row['comment_status'];
     $comment_date    = $row['comment_date'];
+    
+    $post_id         = $row['post_id'];
+    $response_to     = $row['post_title'];
 
     echo "<tr>
           <td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$comment_id}'></td>
-          <td>{$comment_id}</td>";
-
-    $query = "SELECT * FROM posts WHERE post_id = {$comment_post_id} ";
-    $comment_post = mysqli_query ($connection, $query);
-
-    while ($row = mysqli_fetch_assoc ($comment_post)) {
-      $post_id     = $row['post_id'];
-      $response_to = $row['post_title'];
-    }
-
-    echo "<td><a href='../post.php?p_id={$post_id}'>{$response_to}</a></td>
+          <td>{$comment_id}</td>
+          <td><a href='../post.php?p_id={$post_id}'>{$response_to}</a></td>
           <td>{$comment_author}</td>
           <td>{$comment_email}</td>
           <td>{$comment_content}</td>

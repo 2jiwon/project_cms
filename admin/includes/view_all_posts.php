@@ -23,14 +23,13 @@ if (isset ($_POST['checkBoxArray'])) {
           $post_date        = $row['post_date'];
           $post_image       = $row['post_image'];
           $post_tags        = $row['post_tags'];
-         // $post_comments    = $row['post_comment_count'];
           $post_view_count  = $row['post_view_count'];
           $post_status      = $row['post_status'];
         }
 
         $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, ";
         $query .= "post_tags, post_view_count, post_status) ";
-        $query .= "VALUES ({$post_category_id}, '{$post_title}', '{$post_author}', NOW(), '{$post_image}', ";
+        $query .= "VALUES ({$post_category_id}, '{$post_title}', '{$post_author}', '{$post_date}', '{$post_image}', ";
         $query .= "'{$post_tags}', '{$post_view_count}', '{$post_status}') ";
         break;
 
@@ -98,13 +97,16 @@ if (isset ($_POST['checkBoxArray'])) {
 <tbody>
 
 <?php
+// Join posts & categories table to pull out their records in one query.
+$query  = "SELECT posts.post_id, posts.post_category_id, posts.post_title, posts.post_author, posts.post_date, ";
+$query .= "posts.post_image, posts.post_tags, posts.post_view_count, posts.post_status, ";
+$query .= "categories.cat_id, categories.cat_title ";
+$query .= "FROM posts ";
+$query .= "LEFT JOIN categories ON posts.post_category_id = categories.cat_id ";
+$query .= "ORDER BY posts.post_id DESC";
 
-$query = "SELECT * FROM posts";
 $select_all_posts = mysqli_query ($connection, $query);
-
-if (!$select_all_posts) {
-  die ("QUERY FAILED" . mysqli_error ($connection));
-} else {
+confirm_query ($select_all_posts);
 
   while ($row = mysqli_fetch_assoc ($select_all_posts)) {
     $post_id          = $row['post_id'];
@@ -114,36 +116,27 @@ if (!$select_all_posts) {
     $post_date        = $row['post_date'];
     $post_image       = $row['post_image'];
     $post_tags        = $row['post_tags'];
- // $post_comments    = $row['post_comment_count'];
     $post_view_count  = $row['post_view_count'];
     $post_status      = $row['post_status'];
+    $cat_id           = $row['cat_id'];
+    $cat_title        = $row['cat_title'];
 
     echo "<tr>";
 ?>
   <td><input class="checkboxes" type="checkbox" name="checkBoxArray[]" value="<?php echo $post_id; ?>"></td>
 
 <?php
-    echo "<td>{$post_id}</td>";
-
-    // Get category_id
-    $query = "SELECT cat_title FROM categories WHERE cat_id = {$post_category_id} ";
-    $select_categories_id = mysqli_query ($connection, $query);
-    $row = mysqli_fetch_assoc ($select_categories_id);
-    $post_category_id = $row['cat_title'];
-
-    echo "<td>{$post_category_id}</td>";
-    echo "<td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>";
-    echo "<td>{$post_author}</td>";
-    echo "<td>{$post_date}</td>";
-    echo "<td><img class='img-responsive' width='100' src='../images/{$post_image}' alt='{$post_image}'></td>";
-    echo "<td>{$post_tags}</td>";
+    echo "<td>{$post_id}</td>
+          <td>{$cat_title}</td>
+          <td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>
+          <td>{$post_author}</td>
+          <td>{$post_date}</td>
+          <td><img class='img-responsive' width='100' src='../images/{$post_image}' alt='{$post_image}'></td>
+          <td>{$post_tags}</td>";
 
     // Get the numbers of comments 
     $query = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
     $comments_query = mysqli_query ($connection, $query);
-
-    //$row = mysqli_fetch_array ($comments_query);
-    //$comment_id = $row['comment_id'];
     $count_comments = mysqli_num_rows ($comments_query); 
 
     echo "<td><a href='./post_comments.php?c_id={$post_id}'>{$count_comments}</a></td>";
@@ -157,7 +150,6 @@ if (!$select_all_posts) {
     
     delete_modal ($post_id, 'post', 'posts.php');
   }
-}
 ?>
 
 </tbody>
