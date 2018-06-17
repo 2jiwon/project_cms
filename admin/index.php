@@ -50,12 +50,7 @@ permission_warning ();
                                     </div>
                                     <div class="col-xs-9 text-right">
 <?php
-$query = "SELECT * FROM posts";
-$select_all_posts_query = mysqli_query ($connection, $query);
-confirm_query ($select_all_posts_query);
-
-$posts_counts = mysqli_num_rows ($select_all_posts_query);
-
+$posts_counts = recordCount ('posts');
 echo "<div class='huge'>{$posts_counts}</div>";
 ?>
                                         <div>Posts</div>
@@ -82,12 +77,7 @@ echo "<div class='huge'>{$posts_counts}</div>";
                                     </div>
                                     <div class="col-xs-9 text-right">
 <?php
-$query = "SELECT * FROM comments";
-$select_all_comments_query = mysqli_query ($connection, $query);
-confirm_query ($select_all_comments_query);
-
-$comments_counts = mysqli_num_rows ($select_all_comments_query);
-
+$comments_counts = recordCount ('comments');
 echo "<div class='huge'>{$comments_counts}</div>";
 ?>
                                       <div>Comments</div>
@@ -114,13 +104,8 @@ echo "<div class='huge'>{$comments_counts}</div>";
                                     </div>
                                     <div class="col-xs-9 text-right">
 <?php
-$query = "SELECT * FROM users";
-$select_all_users_query = mysqli_query ($connection, $query);
-confirm_query ($select_all_users_query);
-$users_counts = mysqli_num_rows ($select_all_users_query);
-
+$users_counts = recordCount ('users');
 echo "<div class='huge'>{$users_counts}</div>";
-
 ?>
                                         <div> Users</div>
                                     </div>
@@ -146,13 +131,8 @@ echo "<div class='huge'>{$users_counts}</div>";
                                     </div>
                                     <div class="col-xs-9 text-right">
 <?php
-$query = "SELECT * FROM categories";
-$select_all_categories_query = mysqli_query ($connection, $query);
-confirm_query ($select_all_categories_query);
-$categories_counts = mysqli_num_rows ($select_all_categories_query);
-
+$categories_counts = recordCount ('categories');
 echo "<div class='huge'>{$categories_counts}</div>";
-
 ?>
                                          <div>Categories</div>
                                     </div>
@@ -173,51 +153,17 @@ echo "<div class='huge'>{$categories_counts}</div>";
                 <!-- Chart -->
                 <div class="row">
 <?php
+// Status count for posts table 
+$published_posts = checkStatus ('posts', 'post_status', 'Published');
+$draft_posts     = checkStatus ('posts', 'post_status', 'Draft');
 
-// Posts 
-$query = "SELECT * FROM posts "; 
-$select_posts_query = mysqli_query ($connection, $query);
-confirm_query ($select_posts_query);
-$published_posts = 0;
-$draft_posts = 0;
+// Status count for comments table 
+$approved_comments   = checkStatus ('comments', 'comment_status', 'Approved');
+$unapproved_comments = checkStatus ('comments', 'comment_status', 'Unapproved');
 
-While ($row = mysqli_fetch_assoc ($select_posts_query)) {
-  if ($row['post_status'] == 'Published') {
-    $published_posts++;
-  } else {
-    $draft_posts++;
-  }
-}
-
-// Comments 
-$query = "SELECT * FROM comments ";
-$select_comments_query = mysqli_query ($connection, $query);
-confirm_query ($select_comments_query);
-$approved_comments = 0;
-$unapproved_comments = 0;
-
-while ($row = mysqli_fetch_assoc ($select_comments_query)) {
-  if ($row['comment_status'] === 'Approved') {
-    $approved_comments++;
-  } else {
-    $unapproved_comments++;
-  }
-}
-
-// Users 
-$query = "SELECT * FROM users";
-$select_users_query = mysqli_query ($connection, $query);
-confirm_query ($select_users_query);
-$approved_users = 0;
-$unapproved_users = 0;
-
-while ($row = mysqli_fetch_assoc ($select_users_query)) {
-  if ($row['user_status'] === 'Approved') {
-    $approved_users++;
-  } else {
-    $unapproved_users++;
-  }
-}
+// Status count for Users table 
+$approved_users   = checkStatus ('users', 'user_status', 'Approved');
+$unapproved_users = checkStatus ('users', 'user_status', 'Unapproved');
 ?>
                 <script type="text/javascript">
                       google.charts.load('current', {'packages':['bar']});

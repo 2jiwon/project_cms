@@ -154,4 +154,32 @@ function delete_modal ($deleteId, $element, $address) {
             </div><!-- /.modal -->";
 }
 
+// used 'index.php', displaying Cards
+// Count the number of records from each table.
+function recordCount ($tableName){
+  
+  global $connection;
+
+  $query = "SELECT * FROM ".$tableName;
+  $select_all_posts_query = mysqli_query ($connection, $query);
+  confirm_query ($select_all_posts_query);
+  $result = mysqli_num_rows ($select_all_posts_query);
+
+  return $result;
+}
+
+// used 'index.php', displaying Charts
+// Count the number of records depending on each status from tables. 
+function checkStatus ($tableName, $columnName, $status){
+
+  global $connection;
+
+  $query = "SELECT * FROM ".$tableName." WHERE ".$columnName." = '{$status}' "; 
+  $select_query = mysqli_query ($connection, $query);
+  confirm_query ($select_query);
+  $result = mysqli_num_rows ($select_query);
+
+  return $result;
+}
+
 ?>
