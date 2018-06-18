@@ -84,33 +84,32 @@ if (isset ($_POST['checkBoxArray'])) {
   <tbody>
 
 <?php
+// Join comments & posts table to pull out their records in one query.
+$query  = "SELECT comments.comment_id, comments.comment_post_id, comments.comment_author, comments.comment_email, ";
+$query .= "comments.comment_content, comments.comment_status, comments.comment_date, ";
+$query .= "posts.post_id, posts.post_title ";
+$query .= "FROM comments ";
+$query .= "LEFT JOIN posts ON comment_post_id = post_id ";
 
-$query = "SELECT * FROM comments";
 $select_all_comments = mysqli_query ($connection, $query);
 confirm_query ($select_all_comments);
 
   while ($row = mysqli_fetch_assoc ($select_all_comments)) {
-    $comment_id = $row['comment_id'];
+    $comment_id      = $row['comment_id'];
     $comment_post_id = $row['comment_post_id'];
-    $comment_author = $row['comment_author'];
-    $comment_email = $row['comment_email'];
+    $comment_author  = $row['comment_author'];
+    $comment_email   = $row['comment_email'];
     $comment_content = $row['comment_content'];
-    $comment_status = $row['comment_status'];
-    $comment_date = $row['comment_date'];
+    $comment_status  = $row['comment_status'];
+    $comment_date    = $row['comment_date'];
+    
+    $post_id         = $row['post_id'];
+    $response_to     = $row['post_title'];
 
     echo "<tr>
           <td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$comment_id}'></td>
-          <td>{$comment_id}</td>";
-
-    $query = "SELECT * FROM posts WHERE post_id = {$comment_post_id} ";
-    $comment_post = mysqli_query ($connection, $query);
-
-    while ($row = mysqli_fetch_assoc ($comment_post)) {
-      $post_id     = $row['post_id'];
-      $response_to = $row['post_title'];
-    }
-
-    echo "<td><a href='../post.php?p_id={$post_id}'>{$response_to}</a></td>
+          <td>{$comment_id}</td>
+          <td><a href='../post.php?p_id={$post_id}'>{$response_to}</a></td>
           <td>{$comment_author}</td>
           <td>{$comment_email}</td>
           <td>{$comment_content}</td>
@@ -122,24 +121,7 @@ confirm_query ($select_all_comments);
           <td><a data-toggle='modal' data-target='#delete{$comment_id}'>Delete</a></td>
           </tr>";
 
-    echo "  <!-- Modal for delete -->
-            <div id='delete{$comment_id}' class='modal fade' tabindex='-1' role='dialog'>
-              <div class='modal-dialog' role='document'>
-                <div class='modal-content'>
-                  <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <h4 class='modal-title'>Delete Comment</h4>
-                  </div>
-                  <div class='modal-body'>
-                    <p>Are you sure to delete this comment?</p>
-                  </div>
-                  <div class='modal-footer'>
-                    <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
-                    <a type='button' class='btn btn-primary' href='comments.php?delete={$comment_id}'>Delete</a>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->";
+    delete_modal ($comment_id, 'comment', 'comments.php');
   }
 ?>
   </tbody>

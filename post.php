@@ -1,7 +1,7 @@
 <?php 
 include ('includes/db.php'); 
 include ('includes/header.php'); 
-include ('admin/functions.php');
+include ('includes/main_functions.php');
 ?>
     <!-- Navigation -->
 <?php 
@@ -25,9 +25,13 @@ if (isset ($_GET['p_id'])) {
 
   // Check the User's access authority
   if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
-    $query  = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+    $query      = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+    $query_prev = "SELECT post_id FROM posts WHERE post_id < '{$post_id}' ORDER BY post_id DESC LIMIT 1 ";
+    $query_next = "SELECT post_id FROM posts WHERE post_id > '{$post_id}' ORDER BY post_id ASC LIMIT 1 ";
   } else {
-    $query  = "SELECT * FROM posts WHERE post_id = {$post_id} AND post_status = 'Published' ";
+    $query      = "SELECT * FROM posts WHERE post_id = {$post_id} AND post_status = 'Published' ";
+    $query_prev = "SELECT post_id FROM posts WHERE post_id < '{$post_id}' AND post_status = 'Published' ORDER BY post_id DESC LIMIT 1 ";
+    $query_next = "SELECT post_id FROM posts WHERE post_id > '{$post_id}' AND post_status = 'Published' ORDER BY post_id ASC LIMIT 1 ";
   } 
 
   $select_all_posts_query = mysqli_query ($connection, $query);
@@ -41,25 +45,19 @@ if (isset ($_GET['p_id'])) {
       $post_image   = $row['post_image'];
       $post_content = $row['post_content'];
 ?>
-                <!-- <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1> -->
-
                 <!-- First Blog Post -->
-                <h2>
-                  <a href=""><?php echo $post_title ?></a>
-                </h2>
+                <h3>
+                  <?php echo $post_title ?></a>
+                </h3>
                 <p class="lead">
-                  by <a href="index.php"><?php echo $post_author ?></a>
+                  by <?php echo $post_author ?></a>
                 </p>
                 <p>
-                  <span class="glyphicon glyphicon-time"></span><?php echo $post_date ?>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo $post_date ?>
                 </p>
                 <hr>
 
                   <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
-                <hr>
 
                 <p>
                   <?php echo $post_content ?>
@@ -130,7 +128,6 @@ if (isset ($_GET['p_id'])) {
 
                     </form>
                 </div>
-                <hr>
 
                 <!-- Posted Comments -->
 <?php
@@ -167,13 +164,11 @@ if (isset ($_GET['p_id'])) {
 
                 <!-- Pager -->
                 <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
+<?php
+post_pager ($query_prev, $prev_id, 'previous', '&larr; Older');
+post_pager ($query_next, $next_id, 'next',     'Newer &rarr;');
+?>
+                <!-- End of Pager -->
 <?php
   } else {
     echo "  <h1 class='page-header'>
