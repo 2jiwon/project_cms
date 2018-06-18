@@ -99,10 +99,7 @@ if (isset ($_POST['checkBoxArray'])) {
 
 $query = "SELECT * FROM users";
 $select_all_users = mysqli_query ($connection, $query);
-
-if (!$select_all_users) {
-  die ("QUERY FAILED" . mysqli_error ($connection));
-} else {
+confirm_query ($select_all_users);
 
   while ($row = mysqli_fetch_assoc ($select_all_users)) {
     $user_id        = $row['user_id'];
@@ -131,7 +128,6 @@ if (!$select_all_users) {
 
     delete_modal ($user_id, 'user', 'users.php');
   }
-}
 ?>
   </tbody>
   </table>

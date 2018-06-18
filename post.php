@@ -45,20 +45,15 @@ if (isset ($_GET['p_id'])) {
       $post_image   = $row['post_image'];
       $post_content = $row['post_content'];
 ?>
-                <!-- <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1> -->
-
                 <!-- First Blog Post -->
-                <h2>
-                  <a href=""><?php echo $post_title ?></a>
-                </h2>
+                <h3>
+                  <?php echo $post_title ?></a>
+                </h3>
                 <p class="lead">
-                  by <a href="index.php"><?php echo $post_author ?></a>
+                  by <?php echo $post_author ?></a>
                 </p>
                 <p>
-                  <span class="glyphicon glyphicon-time"></span><?php echo $post_date ?>
+                  <span class="glyphicon glyphicon-time"></span> <?php echo $post_date ?>
                 </p>
                 <hr>
 

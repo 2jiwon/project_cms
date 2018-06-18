@@ -82,7 +82,6 @@ if (mysqli_num_rows ($select_all_posts_query) > 0) {
 
                 <hr>
                   <a href="post.php?p_id=<?php echo $post_id; ?>"><img class="img-responsive" src="images/<?php echo $post_image ?>" alt=""></a>
-                <hr>
                 <p><?php echo $post_content; ?></p>
                 <a class="btn btn-primary" href="post.php?p_id=<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
@@ -98,15 +97,17 @@ if ($last_page != 1) {
 
   if ($pagenum > 1) {
     $prev_page = $pagenum - 1;
+
     echo "<li class='page-item'>";
   } else {
     echo "<li class='page-item disabled'>";
   }
-    echo "<a class='page-link' href='index.php?page={$prev_page}' aria-label='Previous'>";
-    echo "  <span aria-hidden='true'>&laquo;</span>";
-    echo "  <span class='sr-only'>Previous</span>";
-    echo "</a>";
-    echo "</li>";
+
+    echo "  <a class='page-link' href='index.php?page={$prev_page}' aria-label='Previous'>
+              <span aria-hidden='true'>&laquo;</span>
+              <span class='sr-only'>Previous</span>
+            </a>
+          </li>";
 
   for ($i = $pagenum - 3; $i < $pagenum; $i++) {
     if ($i > 0) {
@@ -116,18 +117,18 @@ if ($last_page != 1) {
     }
   }
 
-    echo "<li class='active'>";
-    echo "    <a href='index.php?page={$pagenum}'>{$pagenum}<span class='sr-only'>(current)</span></a>";
-    echo "</li>";
+    echo "<li class='active'>
+            <a href='index.php?page={$pagenum}'>{$pagenum}<span class='sr-only'>(current)</span></a>
+          </li>";
 
   for ($i = $pagenum + 1; $i <= $last_page; $i++) {
+      if ($i >= $pagenum + 3) {
+        break;
+      }
       echo "<li>
               <a href='index.php?page={$i}'>{$i}</a>
             </li>";
 
-      if ($i >= $pagenum + 3) {
-        break;
-      }
   }
 
   if ($pagenum != $last_page) {
@@ -136,11 +137,11 @@ if ($last_page != 1) {
   } else {
     echo "<li class='page-item disabled'>";
   }
-    echo "<a class='page-link' href='index.php?page={$next_page}' aria-label='Next'>";
-    echo "  <span aria-hidden='true'>&raquo;</span>";
-    echo "  <span class='sr-only'>Next</span>";
-    echo "</a>";
-    echo "</li>";
+    echo "  <a class='page-link' href='index.php?page={$next_page}' aria-label='Next'>
+              <span aria-hidden='true'>&raquo;</span>
+              <span class='sr-only'>Next</span>
+            </a>
+          </li>";
 }
 ?>
                   </ul>
