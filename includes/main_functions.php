@@ -128,7 +128,7 @@ function login ($username, $password) {
     $_SESSION['lastname']  = $db_user_lastname;
     $_SESSION['user_role'] = $db_user_role;
 
-    redirect ("index.php");
+    redirect ("/cms/index.php");
   } else {
     echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. Try again?</div>";
   }
