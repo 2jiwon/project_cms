@@ -13,6 +13,13 @@ include "admin/functions.php";
 
 if (isset ($_POST['submit'])) {
   $username  = $_POST['username'];
+
+  if (username_exists ($username)) {
+    die ("<div class='alert alert-danger' role='alert'>
+            Sorry, username is already exists. Please enter other username.
+            <a class='alert-link' href='./registration.php'> Go Back.</a></div>");
+  }
+
   $firstname = $_POST['user_firstname'];
   $lastname  = $_POST['user_lastname'];
   $email     = $_POST['email'];
