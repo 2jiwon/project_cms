@@ -23,8 +23,12 @@ if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
 $total_posts_query = mysqli_query ($connection, $query);
 $total_posts = mysqli_num_rows ($total_posts_query);
 
+// How many posts to display for each page
 $per_page = 5;
+// last_page means total pages;
 $last_page = ceil ($total_posts / $per_page);
+// How many numbers to display for a set of pagination
+$pageset = 5;
 
 if (isset ($_GET['page'])) {
   $pagenum = preg_replace('#[^0-9]#', '', $_GET['page']);
@@ -98,19 +102,24 @@ if ($last_page != 1) {
   if ($pagenum > 1) {
     $prev_page = $pagenum - 1;
 
-    echo "<li class='page-item'>";
-  } else {
-    echo "<li class='page-item disabled'>";
-  }
-
-    echo "  <a class='page-link' href='index.php?page={$prev_page}' aria-label='Previous'>
+    echo "<li class='page-item'>
+            <a class='page-link' href='index.php?page={$prev_page}' aria-label='Previous'>
               <span aria-hidden='true'>&laquo;</span>
               <span class='sr-only'>Previous</span>
-            </a>
-          </li>";
+            </a>";
+  } else {
+    echo "<li class='page-item disabled'>
+            <span aria-hidden='true'>&laquo;</span>";
+  }
+    echo "</li>";
 
-  for ($i = $pagenum - 3; $i < $pagenum; $i++) {
-    if ($i > 0) {
+$startnum = (floor($pagenum / $pageset) * $pageset) + 1;
+if ($pagenum < $startnum) {
+  $startnum = (floor (($pagenum - 1) / $pageset) * $pageset) + 1;
+}
+
+  for ($i = $startnum; $i < $pagenum; $i++) {
+    if ($i > 0 && $i >= $startnum) {
       echo "<li>
               <a href='index.php?page={$i}'>{$i}</a>
             </li>";
@@ -121,27 +130,31 @@ if ($last_page != 1) {
             <a href='index.php?page={$pagenum}'>{$pagenum}<span class='sr-only'>(current)</span></a>
           </li>";
 
-  for ($i = $pagenum + 1; $i <= $last_page; $i++) {
-      if ($i >= $pagenum + 3) {
-        break;
-      }
+  for ($i = $pagenum + 1; $i <= ($pagenum + $pageset - 1); $i++) {
+    if ($pagenum % $pageset == 0 || $i > $last_page) {
+       break;
+    }
       echo "<li>
               <a href='index.php?page={$i}'>{$i}</a>
             </li>";
 
+    if ($i % $pageset == 0) {
+      break;
+    }
   }
 
   if ($pagenum != $last_page) {
     $next_page = $pagenum + 1;
-    echo "<li class='page-item'>";
-  } else {
-    echo "<li class='page-item disabled'>";
-  }
-    echo "  <a class='page-link' href='index.php?page={$next_page}' aria-label='Next'>
+    echo "<li class='page-item'>
+            <a class='page-link' href='index.php?page={$next_page}' aria-label='Next'>
               <span aria-hidden='true'>&raquo;</span>
               <span class='sr-only'>Next</span>
-            </a>
-          </li>";
+            </a>";
+  } else {
+    echo "<li class='page-item disabled'>
+            <span aria-hidden='true'>&raquo;</span>";
+  }
+    echo "</li>";
 }
 ?>
                   </ul>

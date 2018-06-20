@@ -9,6 +9,10 @@ function confirm_query ($result) {
   }
 }
 
+function redirect ($location) {
+
+  return header ("Location: ".$location);
+}
 
 function insert_categories () {
 
