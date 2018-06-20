@@ -81,12 +81,6 @@ function register_user ($username, $firstname, $lastname, $email, $password) {
 
   global $connection;
 
-  $username  = trim ($_POST['username']);
-  $firstname = trim ($_POST['firstname']);
-  $lastname  = trim ($_POST['lastname']);
-  $email     = trim ($_POST['email']);
-  $password  = trim ($_POST['password']);
-
   if (field_exists ($username, 'user_name') || field_exists ($email, 'user_email')) {
      die ("<div class='alert alert-danger' role='alert'>
              Sorry, username or email already exists. Please enter other username or email.
