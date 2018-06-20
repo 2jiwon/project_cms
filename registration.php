@@ -1,7 +1,7 @@
 <?php  
 include "includes/db.php";
 include "includes/header.php";
-include "admin/functions.php";
+include "includes/main_functions.php";
 ?>
     <!-- Navigation -->
     <?php  include "includes/navigation.php"; ?>
@@ -12,34 +12,7 @@ include "admin/functions.php";
 <?php
 
 if (isset ($_POST['submit'])) {
-  $username  = $_POST['username'];
-
-  if (field_exists ($username, 'user_name')) {
-    die ("<div class='alert alert-danger' role='alert'>
-            Sorry, username is already exists. Please enter other username.
-            <a class='alert-link' href='./registration.php'> Go Back.</a></div>");
-  }
-
-  $firstname = $_POST['user_firstname'];
-  $lastname  = $_POST['user_lastname'];
-  $email     = $_POST['email'];
-  $password  = $_POST['password'];
-
-  $username  = mysqli_real_escape_string ($connection, $username);
-  $firstname = mysqli_real_escape_string ($connection, $firstname);
-  $lastname  = mysqli_real_escape_string ($connection, $lastname);
-  $email     = mysqli_real_escape_string ($connection, $email);
-  $password  = mysqli_real_escape_string ($connection, $password);
-
-  // Using BCRYPT
-  $password = password_hash ($password, PASSWORD_BCRYPT, array ('cost' => 10));
-  
-  $query  = "INSERT INTO users (user_name, user_firstname, user_lastname, user_email, user_password, user_role) ";
-  $query .= "VALUES ('{$username}', '{$firstname}', '{$lastname}', '{$email}', '{$password}', 'Subscriber') ";
-  $register_query = mysqli_query ($connection, $query);
-  confirm_query ($register_query);
-  
-  echo "<div class='alert alert-info' role='alert'>You are registered successfully.</div>";
+ register_user ($username, $firstname, $lastname, $email, $password);
 }
 
 ?>
