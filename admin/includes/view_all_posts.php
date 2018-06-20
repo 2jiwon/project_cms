@@ -53,7 +53,8 @@ if (isset ($_POST['checkBoxArray'])) {
 
 <table class="table table-bordered table-hover">
 
-      <div class="row form-inline">
+    <div class="row">
+      <div class="form-inline">
         <div id="bulkOptionsContainer" class="col-md-6">
           <div class="input-group">
             <select class="form-control" id="" name="bulk_options">
@@ -73,7 +74,105 @@ if (isset ($_POST['checkBoxArray'])) {
           <a class="btn btn-primary" href="posts.php?source=add_post">Add New Post</a>
         </div>
       </div>
-      <p></p>
+
+      <nav aria-label="..." id="custom_nav" class="col-md-6 text-right">
+        <ul class="pagination pagination-sm">
+<?php
+
+// Count total posts and set the variables for pagination 
+$query  = "SELECT * FROM posts ";
+$total_posts_query = mysqli_query ($connection, $query);
+$total_posts = mysqli_num_rows ($total_posts_query);
+
+// How many posts to display for each page
+$per_page = 10;
+// last_page means total pages;
+$last_page = ceil ($total_posts / $per_page);
+// How many numbers to display for a set of pagination
+$pageset = 5;
+
+if (isset ($_GET['page'])) {
+  $pagenum = preg_replace('#[^0-9]#', '', $_GET['page']);
+} else {
+  $pagenum = 1;
+}
+
+if ($pagenum < 1) {
+  $pagenum = 1;
+} else if ($pagenum > $last_page) {
+  $pagenum = $last_page;
+}
+
+$limit = 'LIMIT '.($pagenum - 1) * $per_page .','.$per_page;
+?>
+
+<?php
+
+if ($last_page != 1) {
+
+  if ($pagenum > 1) {
+    $prev_page = $pagenum - 1;
+
+    echo "<li class='page-item'>
+            <a class='page-link' href='posts.php?page={$prev_page}' aria-label='Previous'>
+              <span aria-hidden='true'>&laquo;</span>
+              <span class='sr-only'>Previous</span>
+            </a>";
+  } else {
+    echo "<li class='page-item disabled'>
+           <span aria-hidden='true'>&laquo;</span>";
+  }
+    echo "</li>";
+
+$startnum = (floor($pagenum / $pageset) * $pageset) + 1;
+if ($pagenum < $startnum) {
+  $startnum = (floor (($pagenum - 1) / $pageset) * $pageset) + 1;
+}
+
+ for ($i = $startnum; $i < $pagenum; $i++) {
+    if ($i > 0 && $i >= $startnum) {
+      echo "<li>
+              <a href='posts.php?page={$i}'>{$i}</a>
+            </li>";
+    }
+  }
+
+    echo "<li class='active'>
+            <a href='posts.php?page={$pagenum}'>{$pagenum}<span class='sr-only'>(current)</span></a>
+          </li>";
+
+  for ($i = $pagenum + 1; $i <= ($pagenum + $pageset - 1); $i++) {
+    if ($pagenum % $pageset == 0 || $i > $last_page) {
+       break;
+    }
+
+    echo "<li>
+              <a href='posts.php?page={$i}'>{$i}</a>
+          </li>";
+    if ($i % $pageset == 0) {
+      break;
+    }
+  }
+
+  if ($pagenum != $last_page) {
+    $next_page = $pagenum + 1;
+    echo "<li class='page-item'>
+            <a class='page-link' href='posts.php?page={$next_page}' aria-label='Next'>
+              <span aria-hidden='true'>&raquo;</span>
+              <span class='sr-only'>Next</span>
+            </a>";
+  } else {
+    echo "<li class='page-item disabled'>
+           <span aria-hidden='true'>&raquo;</span>";
+  }
+    echo "</li>";
+}
+?>
+        </ul>
+      </nav>
+
+    </div>
+    <p></p>
 
   <thead>
     <tr>
@@ -96,6 +195,7 @@ if (isset ($_POST['checkBoxArray'])) {
   </thead>
 <tbody>
 
+
 <?php
 // Join posts & categories table to pull out their records in one query.
 $query  = "SELECT posts.post_id, posts.post_category_id, posts.post_title, posts.post_author, posts.post_date, ";
@@ -103,7 +203,7 @@ $query .= "posts.post_image, posts.post_tags, posts.post_view_count, posts.post_
 $query .= "categories.cat_id, categories.cat_title ";
 $query .= "FROM posts ";
 $query .= "LEFT JOIN categories ON posts.post_category_id = categories.cat_id ";
-$query .= "ORDER BY posts.post_id DESC";
+$query .= "ORDER BY posts.post_id DESC {$limit} ";
 
 $select_all_posts = mysqli_query ($connection, $query);
 confirm_query ($select_all_posts);
