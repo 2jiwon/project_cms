@@ -114,11 +114,11 @@ function is_admin ($username) {
 // }
 */
 
-function username_exists ($username) {
+function field_exists ($field, $column) {
   
   global $connection;
   
-  $query  = "SELECT user_name FROM users WHERE user_name = '$username' ";
+  $query  = "SELECT user_name FROM users WHERE {$column} = '{$field}' ";
   $result = mysqli_query ($connection, $query);
   confirm_query ($result);
   
@@ -128,7 +128,6 @@ function username_exists ($username) {
     return false;
   }
 }
-
 
 function users_online () {
 
