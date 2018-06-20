@@ -19,7 +19,40 @@ if (isset ($_POST['submit'])) {
   $email     = trim ($_POST['email']);
   $password  = trim ($_POST['password']);
 
-  register_user ($username, $firstname, $lastname, $email, $password);
+  $error = [
+    'username'  => '',
+    'firstname' => '',
+    'lastname'  => '',
+    'email'     => '',
+    'password'  => ''
+  ];
+
+  if (strlen ($username) < 4) {
+    $error['username'] = 'Username needs to be longer';
+  }  
+
+  if (field_exists ($username, 'user_name')) {
+    $error['username'] = "<div class='alert alert-danger' role='alert'>
+       <p>Sorry, username already exists. Please enter other username.</p>
+       <p>If you already had an ID, please <a class='alert-link' href='index.php'>Log in.</a></p></div>";
+  }
+
+  if (field_exists ($email, 'user_email')) {
+    $error['email'] = "<div class='alert alert-danger' role='alert'>
+       <p>Sorry, user email already exists. Please check your email address.</p>
+       <p>If you already had an ID, please <a class='alert-link' href='index.php'>Log in.</a></p></div>";
+  }
+
+  foreach ($error as $key => $value) {
+    if (empty ($value)) {
+      unset ($error[$key]); 
+    }
+  }
+
+  if (empty ($error)) {
+    register_user ($username, $firstname, $lastname, $email, $password);
+    login ($username, $password);
+  }
 }
 
 ?>
@@ -36,6 +69,7 @@ if (isset ($_POST['submit'])) {
                             <input type="text" name="username" id="username" class="form-control" 
                                    value="<?php echo isset($username) ? $username : '' ?>"
                                    placeholder="Enter Desired Username" autocomplete="on" required>
+                            <p><?php echo isset($error['username']) ? $error['username'] : '' ?></p>
                         </div>
 
                         <div class="form-group">
@@ -55,6 +89,7 @@ if (isset ($_POST['submit'])) {
                             <input type="email" name="email" id="email" class="form-control"
                                    value="<?php echo isset($email) ? $email : '' ?>"
                                    placeholder="Enter Email Address e.g. somebody@example.com" required>
+                            <p><?php echo isset($error['email']) ? $error['email'] : '' ?></p>
                         </div>
                          <div class="form-group">
                             <label for="password" class="sr-only">Password</label>

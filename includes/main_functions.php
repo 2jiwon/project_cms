@@ -9,7 +9,6 @@ function confirm_query ($result) {
   }
 }
 
-
 function redirect ($location) {
 
   return header ("Location: ".$location);
@@ -81,30 +80,6 @@ function register_user ($username, $firstname, $lastname, $email, $password) {
 
   global $connection;
 
-  if (field_exists ($username, 'user_name') || field_exists ($email, 'user_email')) {
-     die ("<div class='alert alert-danger' role='alert'>
-             Sorry, username or email already exists. Please enter other username or email.
-             <a class='alert-link' href='./registration.php'> Go Back.</a><br>
-              If you already had an ID, please <a class='alert-link' href='index.php'>Log in.</a></div>");
- }
-
- $error = [
-   'username'  => '',
-   'firstname' => '',
-   'lastname'  => '',
-   'email'     => '',
-   'password'  => ''
-  ];
-
-  if (strlen ($username) < 4) {
-    $error['username'] = 'Username needs to be longer';
-  }
-
- # foreach ($error as $key => $value) {
- #   if (empty ($value)) {
- #   }
- # }
-
   $username  = mysqli_real_escape_string ($connection, $username);
   $firstname = mysqli_real_escape_string ($connection, $firstname);
   $lastname  = mysqli_real_escape_string ($connection, $lastname);
@@ -153,9 +128,9 @@ function login ($username, $password) {
     $_SESSION['lastname']  = $db_user_lastname;
     $_SESSION['user_role'] = $db_user_role;
 
-    header ("Location: ../admin");
+    redirect ("index.php");
   } else {
-    header ("Location: ../index.php");
+    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. Try again?</div>";
   }
 }
 
