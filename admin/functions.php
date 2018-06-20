@@ -90,6 +90,29 @@ function permission_warning () {
   }
 }
 
+/* Another way to check if user is admin or not.
+function is_admin ($username) {
+  
+  global $connection;
+
+  $query  = "SELECT user_role FROM users WHERE user_name = '$username' ";
+  $result = mysqli_query ($connection, $query);
+  confirm_query ($result);
+
+  $row = mysqli_fetch_array ($result); 
+
+  if ($row['user_role'] == 'Admin') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// use this where you want to check
+// if (!is_admin ($_SESSION['username'])) {
+//    header ("Location: index.php");
+// }
+*/
 
 function users_online () {
 
