@@ -11,7 +11,7 @@ include "includes/main_functions.php";
 
 <?php
 
-if (isset ($_POST['submit'])) {
+if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   $username  = trim ($_POST['username']);
   $firstname = trim ($_POST['firstname']);
