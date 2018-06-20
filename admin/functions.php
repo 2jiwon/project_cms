@@ -139,23 +139,30 @@ users_online ();
 
 function delete_modal ($deleteId, $element, $address) {
     echo "  <!-- Modal for delete -->
-            <div id='delete{$deleteId}' class='modal fade' tabindex='-1' role='dialog'>
-              <div class='modal-dialog' role='document'>
-                <div class='modal-content'>
-                  <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <h4 class='modal-title'>Delete {$element}</h4>
-                  </div>
-                  <div class='modal-body'>
-                    <p>Are you sure to delete this {$element}?</p>
-                  </div>
-                  <div class='modal-footer'>
-                    <a type='button' class='btn btn-primary' href='{$address}?delete={$deleteId}'>Delete</a>
-                    <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->";
+            <form action='' method='post'>
+              <div id='delete{$deleteId}' class='modal fade' tabindex='-1' role='dialog'>
+                <div class='modal-dialog' role='document'>
+                  <div class='modal-content'>
+                    <div class='modal-header'>
+                      <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                      <h4 class='modal-title'>Delete {$element}</h4>
+                    </div>
+                    <div class='modal-body'>
+                      <p>Are you sure to delete this {$element}?</p>
+                    </div>
+                    <div class='modal-footer'>";
+
+                    //<a type='button' class='btn btn-primary' href='{$address}?delete={$deleteId}'>Delete</a>
+
+      echo " <input type='hidden' name='post_id' value='{$deleteId}'>
+                     <input class='btn btn-danger' type='submit' name='delete' value='Delete'>
+
+                      <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+             </div><!-- /.modal -->
+            </form>";
 }
 
 // used 'index.php', displaying Cards

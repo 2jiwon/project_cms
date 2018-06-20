@@ -277,8 +277,12 @@ if (isset ($_GET['draft'])) {
   header ("Location: posts.php");
 }
 
-if (isset ($_GET['delete'])) {
-  $post_id_for_delete = $_GET['delete'];
+//if (isset ($_GET['delete'])) {
+//  $post_id_for_delete = $_GET['delete'];
+
+
+if (isset ($_POST['delete'])) {
+  $post_id_for_delete = $_POST['post_id'];
 
   $query = "DELETE FROM posts WHERE post_id = {$post_id_for_delete} ";
   $delete_query = mysqli_query ($connection, $query);
