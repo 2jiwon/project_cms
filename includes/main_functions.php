@@ -81,18 +81,35 @@ function register_user ($username, $firstname, $lastname, $email, $password) {
 
   global $connection;
 
- $username  = $_POST['username'];
+  $username  = trim ($_POST['username']);
+  $firstname = trim ($_POST['firstname']);
+  $lastname  = trim ($_POST['lastname']);
+  $email     = trim ($_POST['email']);
+  $password  = trim ($_POST['password']);
 
- if (field_exists ($username, 'user_name')) {
-   die ("<div class='alert alert-danger' role='alert'>
-           Sorry, username is already exists. Please enter other username.
-           <a class='alert-link' href='./registration.php'> Go Back.</a></div>");
+  if (field_exists ($username, 'user_name') || field_exists ($email, 'user_email')) {
+     die ("<div class='alert alert-danger' role='alert'>
+             Sorry, username or email already exists. Please enter other username or email.
+             <a class='alert-link' href='./registration.php'> Go Back.</a><br>
+              If you already had an ID, please <a class='alert-link' href='index.php'>Log in.</a></div>");
  }
 
-  $firstname = $_POST['firstname'];
-  $lastname  = $_POST['lastname'];
-  $email     = $_POST['email'];
-  $password  = $_POST['password'];
+ $error = [
+   'username'  => '',
+   'firstname' => '',
+   'lastname'  => '',
+   'email'     => '',
+   'password'  => ''
+  ];
+
+  if (strlen ($username) < 4) {
+    $error['username'] = 'Username needs to be longer';
+  }
+
+ # foreach ($error as $key => $value) {
+ #   if (empty ($value)) {
+ #   }
+ # }
 
   $username  = mysqli_real_escape_string ($connection, $username);
   $firstname = mysqli_real_escape_string ($connection, $firstname);
@@ -111,6 +128,41 @@ function register_user ($username, $firstname, $lastname, $email, $password) {
   confirm_query ($register_query);
   
   echo "<div class='alert alert-info' role='alert'>You are registered successfully.</div>";
+}
+
+function login ($username, $password) {
+
+  global $connection;
+
+  $username = trim ($username);
+  $password = trim ($password);
+
+  $username = mysqli_real_escape_string ($connection, $username);
+  $password = mysqli_real_escape_string ($connection, $password);
+
+  $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
+  $select_user_query = mysqli_query ($connection, $query);
+  confirm_query ($select_user_query);
+
+  while ($row = mysqli_fetch_array ($select_user_query)) {
+    $db_user_id         = $row['user_id'];
+    $db_username        = $row['user_name'];
+    $db_password        = $row['user_password'];
+    $db_user_firstname  = $row['user_firstname'];
+    $db_user_lastname   = $row['user_lastname'];
+    $db_user_role       = $row['user_role'];
+  }
+
+  if (password_verify ($password, $db_password)) {
+    $_SESSION['username']  = $db_username;
+    $_SESSION['firstname'] = $db_user_firstname;
+    $_SESSION['lastname']  = $db_user_lastname;
+    $_SESSION['user_role'] = $db_user_role;
+
+    header ("Location: ../admin");
+  } else {
+    header ("Location: ../index.php");
+  }
 }
 
 ?>
