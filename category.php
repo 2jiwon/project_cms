@@ -1,6 +1,7 @@
 <?php 
 include ('includes/db.php'); 
 include ('includes/header.php'); 
+include ('includes/main_functions.php');
 ?>
     <!-- Navigation -->
 <?php 
@@ -17,25 +18,44 @@ include ('includes/navigation.php');
 
 if (isset ($_GET['category'])) {
   $post_category_id = $_GET['category'];
+  $published = 'Published';
 
   if (is_admin ($_SESSION['username'])) {
-    $query  = "SELECT * FROM posts WHERE post_category_id = {$post_category_id} ";
+    $query  = "SELECT post_id, post_title, post_author, post_date, post_image, post_content FROM posts WHERE post_category_id = ? ORDER BY post_id DESC ";
+    $stmt1  = mysqli_prepare ($connection, $query);
+
   } else {
-    $query  = "SELECT * FROM posts WHERE post_category_id = {$post_category_id} AND post_status = 'Published' ";
+    $query  = "SELECT post_id, post_title, post_author, post_date, post_image, post_content FROM posts WHERE post_category_id = ? AND post_status = ? ORDER BY post_id DESC ";
+    $stmt2  = mysqli_prepare ($connection, $query);
   } 
 
-  $query .= "ORDER BY post_id DESC ";
-  $select_category_posts = mysqli_query ($connection, $query);
+  if (isset ($stmt1)) {
+    mysqli_stmt_bind_param ($stmt1, "i", $post_category_id);
+    mysqli_stmt_execute ($stmt1);
+    mysqli_stmt_store_result ($stmt1);
+    mysqli_stmt_bind_result ($stmt1, $post_id,
+                                     $post_title,
+                                     $post_author,
+                                     $post_date,
+                                     $post_image,
+                                     $post_content);
+    $stmt = $stmt1;
 
-  if (mysqli_num_rows ($select_category_posts) > 0) {
+  } else {
+    mysqli_stmt_bind_param ($stmt2, "is", $post_category_id, $published);
+    mysqli_stmt_execute ($stmt2);
+    mysqli_stmt_store_result ($stmt2);
+    mysqli_stmt_bind_result ($stmt2, $post_id,
+                                     $post_title,
+                                     $post_author,
+                                     $post_date,
+                                     $post_image,
+                                     $post_content);
+    $stmt = $stmt2;
+  }
 
-    while ($row = mysqli_fetch_assoc ($select_category_posts)) {
-      $post_id          = $row['post_id'];
-      $post_title       = $row['post_title'];
-      $post_author      = $row['post_author'];
-      $post_date        = $row['post_date'];
-      $post_image       = $row['post_image'];
-      $post_content = substr ($row['post_content'], 0, 100);
+  if (mysqli_stmt_num_rows ($stmt) > 0) {
+    while (mysqli_stmt_fetch ($stmt)) {
 ?>
                 <h1 class="page-header">
                     Page Heading
