@@ -9,12 +9,14 @@ if (isset ($_GET['edit'])) {  //<-- this is not from a form but from a table
 
   global $connection;
 
-  $query = "SELECT * FROM categories WHERE cat_id = {$cat_id} ";
-  $select_categories_id = mysqli_query ($connection, $query);
+  $statement = mysqli_prepare ($connection, 
+    "SELECT cat_id, cat_title FROM categories WHERE cat_id = ? ");
 
-  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
-    $cat_id = $row['cat_id'];
-    $cat_title = $row['cat_title'];
+  mysqli_stmt_bind_param ($statement, "i", $cat_id);
+  mysqli_stmt_execute ($statement);
+  mysqli_stmt_bind_result ($statement, $cat_id, $cat_title);
+
+  while (mysqli_stmt_fetch ($statement)) { 
 ?>
                             <input class="form-control" name="cat_title" 
                                    value="<?php 
@@ -33,10 +35,13 @@ if (isset ($_GET['edit'])) {  //<-- this is not from a form but from a table
 if (isset ($_POST['edit'])) {
   $cat_title_for_edit = $_POST['cat_title'];
 
-  $query = "UPDATE categories SET cat_title = '{$cat_title_for_edit}' WHERE cat_id = {$cat_id} ";
-  $update_query = mysqli_query ($connection, $query);
+  $statement = mysqli_prepare ($connection, 
+    "UPDATE categories SET cat_title = ? WHERE cat_id = ? ");
+  
+  mysqli_stmt_bind_param ($statement, "si", $cat_title_for_edit, $cat_id);
+  mysqli_stmt_execute ($statement);
 
-  if (!$update_query) {
+  if (!$statement) {
     die ("QUERY FAILED" . mysqli_error ($connection));
   }
 }

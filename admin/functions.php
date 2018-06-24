@@ -41,13 +41,13 @@ function display_categories () {
 
   global $connection;
 
-  $query = "SELECT * FROM categories";
-  $select_all_categories = mysqli_query ($connection, $query);
-  confirm_query ($select_all_categories);
+  $statement = mysqli_prepare ($connection, 
+    "SELECT cat_id, cat_title FROM categories ");
 
-  while ($row = mysqli_fetch_assoc ($select_all_categories)) {
-    $cat_id = $row['cat_id'];
-    $cat_title = $row['cat_title'];
+  mysqli_stmt_execute ($statement);
+  mysqli_stmt_bind_result ($statement, $cat_id, $cat_title); 
+
+  while (mysqli_stmt_fetch ($statement)) {
 
       echo "<tr>";
       echo "<td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$cat_id}'></td>";
@@ -58,7 +58,6 @@ function display_categories () {
       echo "</tr>";
 
       delete_modal ($cat_id, 'category', 'categories.php');
-
   }
 }
 
@@ -67,13 +66,22 @@ function delete_categories () {
   global $connection;
 
   // Get the cat_id for delete value, make delete query.
-  if (isset ($_GET['delete'])) {
-    $cat_id_for_delete = $_GET['delete'];
+  if (isset ($_POST['delete'])) {
+    $cat_id_for_delete = $_POST['id'];
 
-    $query = "DELETE FROM categories WHERE cat_id = {$cat_id_for_delete} ";
-    $delete_query = mysqli_query ($connection, $query);
+    $stmt = mysqli_prepare ($connection,
+      "DELETE FROM categories WHERE cat_id = ? ");
+    mysqli_stmt_bind_param ($stmt, 'i', $cat_id_for_delete);
+    mysqli_stmt_execute ($stmt);
 
-    header ("Location: categories.php");
+    if (!$stmt) {
+      die ("QUERY FAILED" . mysqli_error ($connection));
+    }
+    //$query = "DELETE FROM categories WHERE cat_id = {$cat_id_for_delete} ";
+    //$delete_query = mysqli_query ($connection, $query);
+
+    redirect ("categories.php");
+    //header ("Location: categories.php");
   }
 }
 
@@ -154,7 +162,7 @@ function delete_modal ($deleteId, $element, $address) {
 
                     //<a type='button' class='btn btn-primary' href='{$address}?delete={$deleteId}'>Delete</a>
 
-      echo " <input type='hidden' name='post_id' value='{$deleteId}'>
+      echo " <input type='hidden' name='id' value='{$deleteId}'>
                      <input class='btn btn-danger' type='submit' name='delete' value='Delete'>
 
                       <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>

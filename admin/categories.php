@@ -92,8 +92,8 @@ if (isset ($_POST['checkBoxArray'])) {
                       <th><input type="checkbox" name="" id="selectAllBoxes"></th>
                       <th>ID</th>
                       <th>Categoty Title</th>
-                      <th>Delete</th>
                       <th>Edit</th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
