@@ -1,6 +1,7 @@
 <?php 
 include ('includes/db.php'); 
 include ('includes/header.php'); 
+include ('includes/main_functions.php');
 ?>
     <!-- Navigation -->
 <?php 
@@ -15,18 +16,23 @@ include ('includes/navigation.php');
             <div class="col-md-8">
 <?php
 // Count total posts and set the variables for pagination 
-if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+if (is_admin ($_SESSION['username'])) {
   $query  = "SELECT * FROM posts ";
 } else {
   $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
-} 
-$total_posts_query = mysqli_query ($connection, $query);
-$total_posts = mysqli_num_rows ($total_posts_query);
+}
+
+$total_posts_stmt = $connection->prepare ($query);
+$total_posts_stmt->execute();
+$total_posts_stmt->store_result();
+$total_posts = $total_posts_stmt->num_rows();
 
 // How many posts to display for each page
 $per_page = 5;
+
 // last_page means total pages;
 $last_page = ceil ($total_posts / $per_page);
+
 // How many numbers to display for a set of pagination
 $pageset = 5;
 
@@ -49,23 +55,27 @@ $limit = 'LIMIT '.($pagenum - 1) * $per_page .','.$per_page;
 <?php
 // post display
 // if user is not 'Admin', don't display draft posts.
-if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+if (is_admin ($_SESSION['username'])) {
   $query  = "SELECT * FROM posts ";
 } else {
   $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 } 
 $query .= "ORDER BY post_id DESC {$limit} ";
-$select_all_posts_query = mysqli_query ($connection, $query);
 
-if (mysqli_num_rows ($select_all_posts_query) > 0) {
+$select_all_posts_stmt = $connection->prepare ($query);
+$select_all_posts_stmt->execute();
+$result = $select_all_posts_stmt->store_result();
+$result = $select_all_posts_stmt->get_result();
 
-  while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
+if ($result->num_rows > 0) {
+  while ($row = $result->fetch_assoc()) {
     $post_id      = $row['post_id'];
     $post_title   = $row['post_title'];
     $post_author  = $row['post_author'];
     $post_date    = $row['post_date'];
     $post_image   = $row['post_image'];
     $post_content = substr ($row['post_content'], 0, 100);
+
 ?>
                 <h1 class="page-header">
                     Page Heading
