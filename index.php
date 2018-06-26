@@ -22,17 +22,16 @@ if (is_admin ($_SESSION['username'])) {
   $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 }
 
-$total_posts_stmt = $connection->prepare ($query);
-$total_posts_stmt->execute();
-$total_posts_stmt->store_result();
-$total_posts = $total_posts_stmt->num_rows();
+$stmt = $connection->prepare ($query);
+$stmt->execute();
+$result = $stmt->get_result();
+$total_posts = $result->num_rows;
+$stmt->close();
 
 // How many posts to display for each page
 $per_page = 5;
-
 // last_page means total pages;
 $last_page = ceil ($total_posts / $per_page);
-
 // How many numbers to display for a set of pagination
 $pageset = 5;
 
@@ -48,8 +47,7 @@ if ($pagenum < 1) {
   $pagenum = $last_page;
 }
 
-$limit = 'LIMIT '.($pagenum - 1) * $per_page .','.$per_page;
-
+$start = ($pagenum - 1) * $per_page;
 ?>
 
 <?php
@@ -60,12 +58,12 @@ if (is_admin ($_SESSION['username'])) {
 } else {
   $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 } 
-$query .= "ORDER BY post_id DESC {$limit} ";
+$query .= "ORDER BY post_id DESC LIMIT ?, ? ";
 
-$select_all_posts_stmt = $connection->prepare ($query);
-$select_all_posts_stmt->execute();
-$result = $select_all_posts_stmt->store_result();
-$result = $select_all_posts_stmt->get_result();
+$stmt = $connection->prepare ($query);
+$stmt->bind_param ("ii", $start, $per_page);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
   while ($row = $result->fetch_assoc()) {
@@ -77,15 +75,10 @@ if ($result->num_rows > 0) {
     $post_content = substr ($row['post_content'], 0, 100);
 
 ?>
-                <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
-
                 <!-- First Blog Post -->
-                <h2>
+                <h1>
                   <?php echo $post_id; ?><a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
-                </h2>
+                </h1>
                 <p class="lead">
                 by <a href="author_posts.php?author=<?php echo $post_author; ?>&p_id=<?php echo $post_id; ?>">
                     <?php echo $post_author ?></a>
