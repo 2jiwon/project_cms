@@ -24,13 +24,13 @@ function insert_categories () {
     if ($cat_title == "" || empty ($cat_title)) {
       echo "This field should not be empty.";
     } else {
-      $statement1 = mysqli_prepare ($connection, 
+      $stmt = mysqli_prepare ($connection, 
         "INSERT INTO categories (cat_title) VALUES (?) ");
 
-      mysqli_stmt_bind_param ($statement1, 's', $cat_title);
-      mysqli_stmt_execute ($statement1);
+      mysqli_stmt_bind_param ($stmt, 's', $cat_title);
+      mysqli_stmt_execute ($stmt);
 
-      if (!$statement1) {
+      if (!$stmt) {
         die ("QUERY FAILED" . mysqli_error ($connection));
       }
     }
@@ -77,18 +77,15 @@ function delete_categories () {
     if (!$stmt) {
       die ("QUERY FAILED" . mysqli_error ($connection));
     }
-    //$query = "DELETE FROM categories WHERE cat_id = {$cat_id_for_delete} ";
-    //$delete_query = mysqli_query ($connection, $query);
 
     redirect ("categories.php");
-    //header ("Location: categories.php");
   }
 }
 
 function update_categories () {
   
   if (isset ($_GET['edit'])) {  //<-- this value is from table
-    $cat_id = $_GET['edit'];
+    $cat_id = preg_replace ('#[^0-9]#', '', $_GET['edit']);
 
     include "includes/update_categories.php";
   }
@@ -119,25 +116,35 @@ function users_online () {
     $timeout = $time - $timeout_in_seconds;
 
     // If this user's in the DB. 
-    $query = "SELECT * FROM users_online WHERE session_id = '$session_id'";
-    $user_session_query = mysqli_query ($connection, $query);
-    confirm_query ($user_session_query);
-    $user_count = mysqli_num_rows ($user_session_query);
+
+    $query = "SELECT * FROM users_online WHERE session_id = ? ";
+    $stmt  = $connection->prepare ($query);
+    $stmt->bind_param ("s", $session_id);
+    $stmt->execute ();
+    $result = $stmt->get_result ();
+    $user_count = $result->num_rows;
 
     // If this user's not in the DB, insert current users id and time.
     // and if this user's in the DB, just update the infomations.
     if ($user_count === 0) {
-      $query = "INSERT INTO users_online (session_id, time) VALUES ('$session_id', '$time')";
+      $query = "INSERT INTO users_online (session_id, time) VALUES ( ?, ? )";
+      $stmt  = $connection->prepare ($query);
+      $stmt->bind_param ("ss", $session_id, $time);
+      $stmt->execute ();
     } else {
-      $query = "UPDATE users_online SET time = '$time' WHERE session_id = '$session_id'";
+      $query = "UPDATE users_online SET time = ? WHERE session_id = ? ";
+      $stmt  = $connection->prepare ($query);
+      $stmt->bind_param ("ss", $time, $session_id);
+      $stmt->execute ();
     }
-    $insert_query = mysqli_query ($connection, $query);
-    confirm_query ($insert_query);
 
     // Now show all users online.
-    $query = "SELECT * FROM users_online WHERE time > '$timeout'";
-    $users_online_query = mysqli_query ($connection, $query);
-    $howmany_users = mysqli_num_rows ($users_online_query);
+    $query    = "SELECT * FROM users_online WHERE `time` > ? ";
+    $stmt  = $connection->prepare ($query);
+    $stmt->bind_param ("s", $timeout);
+    $stmt->execute ();
+    $result = $stmt->get_result ();
+    $howmany_users = $result->num_rows;
 
     echo $howmany_users;
     }
