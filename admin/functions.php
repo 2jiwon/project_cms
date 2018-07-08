@@ -186,10 +186,10 @@ function recordCount ($tableName){
   
   global $connection;
 
-  $query = "SELECT * FROM ".$tableName;
-  $select_all_posts_query = mysqli_query ($connection, $query);
-  confirm_query ($select_all_posts_query);
-  $result = mysqli_num_rows ($select_all_posts_query);
+  $stmt  = $connection->prepare ("SELECT * FROM {$tableName} ");
+  $stmt->execute ();
+  $res   = $stmt->get_result ();
+  $result = $res->num_rows;
 
   return $result;
 }
@@ -200,10 +200,16 @@ function checkStatus ($tableName, $columnName, $status){
 
   global $connection;
 
-  $query = "SELECT * FROM ".$tableName." WHERE ".$columnName." = '{$status}' "; 
-  $select_query = mysqli_query ($connection, $query);
-  confirm_query ($select_query);
-  $result = mysqli_num_rows ($select_query);
+  //$query = "SELECT * FROM ".$tableName." WHERE ".$columnName." = '{$status}' "; 
+  //$select_query = mysqli_query ($connection, $query);
+  //confirm_query ($select_query);
+  //$result = mysqli_num_rows ($select_query);
+  //
+  $stmt = $connection->prepare ("SELECT * FROM {$tableName} WHERE {$columnName} = ? ");
+  $stmt->bind_param ("s", $status);
+  $stmt->execute ();
+  $res   = $stmt->get_result ();
+  $result = $res->num_rows;
 
   return $result;
 }
