@@ -17,20 +17,25 @@
                 <ul class="nav navbar-nav">
 <?php
             $query = "SELECT * FROM categories";
-            $select_all_categories_query = mysqli_query ($connection, $query);
-            
-            while ($row = mysqli_fetch_assoc ($select_all_categories_query)) {
-              $cat_title = $row['cat_title'];
-              $cat_id    = $row['cat_id'];
+            $stmt  = $connection->prepare ($query);
+            $stmt->execute ();
+            $result = $stmt->get_result ();
 
-              $category_class       = '';
-              $pageName = basename ($_SERVER['PHP_SELF']);
+            if ($result->num_rows > 0) {
+              while ($row = $result->fetch_assoc ()) {
 
-              if (isset ($_GET['category']) && $_GET['category'] == $cat_id) {
-                $category_class = 'active';
-              }
+               $cat_title = $row['cat_title'];
+               $cat_id    = $row['cat_id'];
+
+               $category_class       = '';
+               $pageName = basename ($_SERVER['PHP_SELF']);
+
+               if (isset ($_GET['category']) && $_GET['category'] == $cat_id) {
+                 $category_class = 'active';
+               }
 
                 echo "<li class='$category_class'><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
+              }
             }
 ?>
 <?php if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') : ?>
