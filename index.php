@@ -1,6 +1,7 @@
 <?php 
 include ('includes/db.php'); 
 include ('includes/header.php'); 
+include ('includes/main_functions.php');
 ?>
     <!-- Navigation -->
 <?php 
@@ -15,13 +16,17 @@ include ('includes/navigation.php');
             <div class="col-md-8">
 <?php
 // Count total posts and set the variables for pagination 
-if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+if (is_admin ($_SESSION['username'])) {
   $query  = "SELECT * FROM posts ";
 } else {
   $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
-} 
-$total_posts_query = mysqli_query ($connection, $query);
-$total_posts = mysqli_num_rows ($total_posts_query);
+}
+
+$stmt = $connection->prepare ($query);
+$stmt->execute();
+$result = $stmt->get_result();
+$total_posts = $result->num_rows;
+$stmt->close();
 
 // How many posts to display for each page
 $per_page = 5;
@@ -42,40 +47,38 @@ if ($pagenum < 1) {
   $pagenum = $last_page;
 }
 
-$limit = 'LIMIT '.($pagenum - 1) * $per_page .','.$per_page;
-
+$start = ($pagenum - 1) * $per_page;
 ?>
 
 <?php
 // post display
 // if user is not 'Admin', don't display draft posts.
-if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+if (is_admin ($_SESSION['username'])) {
   $query  = "SELECT * FROM posts ";
 } else {
   $query  = "SELECT * FROM posts WHERE post_status = 'Published' ";
 } 
-$query .= "ORDER BY post_id DESC {$limit} ";
-$select_all_posts_query = mysqli_query ($connection, $query);
+$query .= "ORDER BY post_id DESC LIMIT ?, ? ";
 
-if (mysqli_num_rows ($select_all_posts_query) > 0) {
+$stmt = $connection->prepare ($query);
+$stmt->bind_param ("ii", $start, $per_page);
+$stmt->execute();
+$result = $stmt->get_result();
 
-  while ($row = mysqli_fetch_assoc ($select_all_posts_query)) {
+if ($result->num_rows > 0) {
+  while ($row = $result->fetch_assoc()) {
     $post_id      = $row['post_id'];
     $post_title   = $row['post_title'];
     $post_author  = $row['post_author'];
     $post_date    = $row['post_date'];
     $post_image   = $row['post_image'];
     $post_content = substr ($row['post_content'], 0, 100);
-?>
-                <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
-                </h1>
 
+?>
                 <!-- First Blog Post -->
-                <h2>
+                <h1>
                   <?php echo $post_id; ?><a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
-                </h2>
+                </h1>
                 <p class="lead">
                 by <a href="author_posts.php?author=<?php echo $post_author; ?>&p_id=<?php echo $post_id; ?>">
                     <?php echo $post_author ?></a>

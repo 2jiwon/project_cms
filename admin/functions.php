@@ -19,18 +19,18 @@ function insert_categories () {
   global $connection;
 
   if (isset ($_POST['submit'])) {
-  //  echo "It's working";
     $cat_title = $_POST['cat_title'];
 
     if ($cat_title == "" || empty ($cat_title)) {
       echo "This field should not be empty.";
     } else {
-      $query  = "INSERT INTO categories (cat_title) ";
-      $query .= "VALUES ('{$cat_title}') ";
+      $stmt = mysqli_prepare ($connection, 
+        "INSERT INTO categories (cat_title) VALUES (?) ");
 
-      $create_category_query = mysqli_query ($connection, $query);
+      mysqli_stmt_bind_param ($stmt, 's', $cat_title);
+      mysqli_stmt_execute ($stmt);
 
-      if (!$create_category_query) {
+      if (!$stmt) {
         die ("QUERY FAILED" . mysqli_error ($connection));
       }
     }
@@ -41,13 +41,13 @@ function display_categories () {
 
   global $connection;
 
-  $query = "SELECT * FROM categories";
-  $select_all_categories = mysqli_query ($connection, $query);
-  confirm_query ($select_all_categories);
+  $statement = mysqli_prepare ($connection, 
+    "SELECT cat_id, cat_title FROM categories ");
 
-  while ($row = mysqli_fetch_assoc ($select_all_categories)) {
-    $cat_id = $row['cat_id'];
-    $cat_title = $row['cat_title'];
+  mysqli_stmt_execute ($statement);
+  mysqli_stmt_bind_result ($statement, $cat_id, $cat_title); 
+
+  while (mysqli_stmt_fetch ($statement)) {
 
       echo "<tr>";
       echo "<td><input class='checkboxes' type='checkbox' name='checkBoxArray[]' value='{$cat_id}'></td>";
@@ -58,7 +58,6 @@ function display_categories () {
       echo "</tr>";
 
       delete_modal ($cat_id, 'category', 'categories.php');
-
   }
 }
 
@@ -67,20 +66,26 @@ function delete_categories () {
   global $connection;
 
   // Get the cat_id for delete value, make delete query.
-  if (isset ($_GET['delete'])) {
-    $cat_id_for_delete = $_GET['delete'];
+  if (isset ($_POST['delete'])) {
+    $cat_id_for_delete = $_POST['id'];
 
-    $query = "DELETE FROM categories WHERE cat_id = {$cat_id_for_delete} ";
-    $delete_query = mysqli_query ($connection, $query);
+    $stmt = mysqli_prepare ($connection,
+      "DELETE FROM categories WHERE cat_id = ? ");
+    mysqli_stmt_bind_param ($stmt, 'i', $cat_id_for_delete);
+    mysqli_stmt_execute ($stmt);
 
-    header ("Location: categories.php");
+    if (!$stmt) {
+      die ("QUERY FAILED" . mysqli_error ($connection));
+    }
+
+    redirect ("categories.php");
   }
 }
 
 function update_categories () {
   
   if (isset ($_GET['edit'])) {  //<-- this value is from table
-    $cat_id = $_GET['edit'];
+    $cat_id = preg_replace ('#[^0-9]#', '', $_GET['edit']);
 
     include "includes/update_categories.php";
   }
@@ -111,25 +116,35 @@ function users_online () {
     $timeout = $time - $timeout_in_seconds;
 
     // If this user's in the DB. 
-    $query = "SELECT * FROM users_online WHERE session_id = '$session_id'";
-    $user_session_query = mysqli_query ($connection, $query);
-    confirm_query ($user_session_query);
-    $user_count = mysqli_num_rows ($user_session_query);
+
+    $query = "SELECT * FROM users_online WHERE session_id = ? ";
+    $stmt  = $connection->prepare ($query);
+    $stmt->bind_param ("s", $session_id);
+    $stmt->execute ();
+    $result = $stmt->get_result ();
+    $user_count = $result->num_rows;
 
     // If this user's not in the DB, insert current users id and time.
     // and if this user's in the DB, just update the infomations.
     if ($user_count === 0) {
-      $query = "INSERT INTO users_online (session_id, time) VALUES ('$session_id', '$time')";
+      $query = "INSERT INTO users_online (session_id, time) VALUES ( ?, ? )";
+      $stmt  = $connection->prepare ($query);
+      $stmt->bind_param ("ss", $session_id, $time);
+      $stmt->execute ();
     } else {
-      $query = "UPDATE users_online SET time = '$time' WHERE session_id = '$session_id'";
+      $query = "UPDATE users_online SET time = ? WHERE session_id = ? ";
+      $stmt  = $connection->prepare ($query);
+      $stmt->bind_param ("ss", $time, $session_id);
+      $stmt->execute ();
     }
-    $insert_query = mysqli_query ($connection, $query);
-    confirm_query ($insert_query);
 
     // Now show all users online.
-    $query = "SELECT * FROM users_online WHERE time > '$timeout'";
-    $users_online_query = mysqli_query ($connection, $query);
-    $howmany_users = mysqli_num_rows ($users_online_query);
+    $query    = "SELECT * FROM users_online WHERE `time` > ? ";
+    $stmt  = $connection->prepare ($query);
+    $stmt->bind_param ("s", $timeout);
+    $stmt->execute ();
+    $result = $stmt->get_result ();
+    $howmany_users = $result->num_rows;
 
     echo $howmany_users;
     }
@@ -139,23 +154,30 @@ users_online ();
 
 function delete_modal ($deleteId, $element, $address) {
     echo "  <!-- Modal for delete -->
-            <div id='delete{$deleteId}' class='modal fade' tabindex='-1' role='dialog'>
-              <div class='modal-dialog' role='document'>
-                <div class='modal-content'>
-                  <div class='modal-header'>
-                    <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                    <h4 class='modal-title'>Delete {$element}</h4>
-                  </div>
-                  <div class='modal-body'>
-                    <p>Are you sure to delete this {$element}?</p>
-                  </div>
-                  <div class='modal-footer'>
-                    <a type='button' class='btn btn-primary' href='{$address}?delete={$deleteId}'>Delete</a>
-                    <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
-                  </div>
-                </div><!-- /.modal-content -->
-              </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->";
+            <form action='' method='post'>
+              <div id='delete{$deleteId}' class='modal fade' tabindex='-1' role='dialog'>
+                <div class='modal-dialog' role='document'>
+                  <div class='modal-content'>
+                    <div class='modal-header'>
+                      <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                      <h4 class='modal-title'>Delete {$element}</h4>
+                    </div>
+                    <div class='modal-body'>
+                      <p>Are you sure to delete this {$element}?</p>
+                    </div>
+                    <div class='modal-footer'>";
+
+                    //<a type='button' class='btn btn-primary' href='{$address}?delete={$deleteId}'>Delete</a>
+
+      echo " <input type='hidden' name='id' value='{$deleteId}'>
+                     <input class='btn btn-danger' type='submit' name='delete' value='Delete'>
+
+                      <button type='button' class='btn btn-default' data-dismiss='modal'>Cancel</button>
+                    </div>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+             </div><!-- /.modal -->
+            </form>";
 }
 
 // used 'index.php', displaying Cards
@@ -164,10 +186,10 @@ function recordCount ($tableName){
   
   global $connection;
 
-  $query = "SELECT * FROM ".$tableName;
-  $select_all_posts_query = mysqli_query ($connection, $query);
-  confirm_query ($select_all_posts_query);
-  $result = mysqli_num_rows ($select_all_posts_query);
+  $stmt  = $connection->prepare ("SELECT * FROM {$tableName} ");
+  $stmt->execute ();
+  $res   = $stmt->get_result ();
+  $result = $res->num_rows;
 
   return $result;
 }
@@ -178,10 +200,16 @@ function checkStatus ($tableName, $columnName, $status){
 
   global $connection;
 
-  $query = "SELECT * FROM ".$tableName." WHERE ".$columnName." = '{$status}' "; 
-  $select_query = mysqli_query ($connection, $query);
-  confirm_query ($select_query);
-  $result = mysqli_num_rows ($select_query);
+  //$query = "SELECT * FROM ".$tableName." WHERE ".$columnName." = '{$status}' "; 
+  //$select_query = mysqli_query ($connection, $query);
+  //confirm_query ($select_query);
+  //$result = mysqli_num_rows ($select_query);
+  //
+  $stmt = $connection->prepare ("SELECT * FROM {$tableName} WHERE {$columnName} = ? ");
+  $stmt->bind_param ("s", $status);
+  $stmt->execute ();
+  $res   = $stmt->get_result ();
+  $result = $res->num_rows;
 
   return $result;
 }

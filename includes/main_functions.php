@@ -37,7 +37,7 @@ function permission_warning () {
   }
 }
 
-/* Another way to check if user is admin or not.
+// To check if user is admin or not.
 function is_admin ($username) {
   
   global $connection;
@@ -54,12 +54,10 @@ function is_admin ($username) {
     return false;
   }
 }
-
 // use this where you want to check
 // if (!is_admin ($_SESSION['username'])) {
 //    header ("Location: index.php");
 // }
-*/
 
 function field_exists ($field, $column) {
   

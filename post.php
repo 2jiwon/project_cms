@@ -17,11 +17,13 @@ include ('includes/navigation.php');
 <?php
 
 if (isset ($_GET['p_id'])) {
-  $post_id = mysqli_real_escape_string ($connection, $_GET['p_id']);
+  $post_id = preg_replace('#[^0-9]#', '', $_GET['p_id']);
 
-  $query = "UPDATE posts SET post_view_count = post_view_count + 1 WHERE post_id = {$post_id} ";
-  $update_view_count_query = mysqli_query ($connection, $query);
-  confirm_query ($update_view_count_query);
+  $query = "UPDATE posts SET post_view_count = post_view_count + 1 WHERE post_id = ? ";
+  $stmt = $connection->prepare ($query);
+  $stmt->bind_param ("i", $post_id);
+  $stmt->execute ();
+  $stmt->close ();
 
   // Check the User's access authority
   if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
@@ -65,9 +67,9 @@ if (isset ($_GET['p_id'])) {
 
 <!-- Edit post button -->
 <?php
-      //if (isset ($_SESSION['user_role']) && $_SESSION['username'] === $post_author) {
-      if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] === 'Admin') {
-        if (isset ($_GET['p_id'])) {
+      if (is_admin ($_SESSION['username'])) {
+        $post_id =  preg_replace ('#[^0-9]#', '', $_GET['p_id']);
+        if (isset ($post_id)) {
           echo "    <div class='row'>
                        <div class='col-md-offset-10 col-xs-2'>
                           <a href='admin/posts.php?source=edit_post&p_id={$post_id}'>
@@ -88,21 +90,18 @@ if (isset ($_GET['p_id'])) {
                 <!-- Blog Comments -->
 <?php
     if (isset ($_POST['create_comment'])) {
-      $post_id = $_GET['p_id'];
+      $post_id = preg_replace('#[^0-9]#', '', $_GET['p_id']);
       $comment_author  = $_POST['comment_author'];
       $comment_email   = $_POST['comment_email'];
       $comment_content = $_POST['comment_content'];
 
       $query  = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_date) ";
-      $query .= "VALUES ('{$post_id}', '{$comment_author}', '{$comment_email}', '{$comment_content}', NOW()) ";
-
-      $create_comment = mysqli_query ($connection, $query);
-      confirm_query ($create_comment);
-
-    //  $query  = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
-    //  $query .= "WHERE post_id = $post_id ";
-    //  $update_comment_count = mysqli_query ($connection, $query);
-    //  confirm_query ($update_comment_count);
+      $query .= "VALUES ( ?, ?, ?, ?, NOW()) ";
+      
+      $stmt = $connection->prepare ($query);
+      $stmt->bind_param ("isss", $post_id, $comment_author, $comment_email, $comment_content);
+      $stmt->execute ();
+      $stmt->close ();
     }
 ?>
                 <!-- Comments Form -->
@@ -131,19 +130,22 @@ if (isset ($_GET['p_id'])) {
 
                 <!-- Posted Comments -->
 <?php
-      $query  = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
+
+      $query  = "SELECT * FROM comments WHERE comment_post_id = ? ";
       $query .= "AND comment_status = 'Approved' ";
       $query .= "ORDER BY comment_id DESC ";
-      
-      $show_comments = mysqli_query ($connection, $query);
-      confirm_query ($show_comments);
-      
-      while ($row = mysqli_fetch_assoc ($show_comments)) {
-        $comment_author = $row['comment_author'];
-        $comment_email = $row['comment_email'];
+
+      $stmt = $connection->prepare ($query);
+      $stmt->bind_param ("i", $post_id);
+      $stmt->execute ();
+      $result = $stmt->get_result ();
+
+      while ($row = $result->fetch_assoc ()) {
+        $comment_author  = $row['comment_author'];
+        $comment_email   = $row['comment_email'];
         $comment_content = $row['comment_content'];
-        $comment_status = $row['comment_status'];
-        $comment_date = $row['comment_date'];
+        $comment_status  = $row['comment_status'];
+        $comment_date    = $row['comment_date'];
 ?>
                 <!-- Comment -->
                 <div class="media">
