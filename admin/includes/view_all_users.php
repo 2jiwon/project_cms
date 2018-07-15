@@ -7,16 +7,26 @@ if (isset ($_POST['checkBoxArray'])) {
 
     switch ($bulk_options) {
       case 'approve':
-        $query = "UPDATE users SET user_status = 'Approved' WHERE user_id = {$checkboxValue} ";
+        $query = "UPDATE users SET user_status = 'Approved' WHERE user_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
-      case 'disapprove':
-        $query = "UPDATE users SET user_status = 'Unapproved' WHERE user_id = {$checkboxValue} ";
-        break;
-      case 'clone':
-        $select_query = "SELECT * FROM users WHERE user_id = {$checkboxValue} ";
-        $select_user_query = mysqli_query ($connection, $select_query);
 
-        while ($row = mysqli_fetch_assoc ($select_user_query)) {
+      case 'disapprove':
+        $query = "UPDATE users SET user_status = 'Unapproved' WHERE user_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
+        break;
+
+      case 'clone':
+        $query = "SELECT * FROM users WHERE user_id = ? ";
+        $stmt = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
+        $stmt->execute ();
+        
+        $result = $stmt->get_result ();
+
+        while ($row = $result->fetch_assoc ()) {
           $user_name        = $row['user_name'];
           $user_firstname   = $row['user_firstname'];
           $user_lastname    = $row['user_lastname'];
@@ -29,20 +39,25 @@ if (isset ($_POST['checkBoxArray'])) {
 
         $query  = "INSERT INTO users (user_name, user_firstname, user_lastname, user_password, ";
         $query .= "user_email, user_image, user_role, user_status) ";
-        $query .= "VALUES ('{$user_name}', '{$user_firstname}', '{$user_lastname}', '{$user_password}', ";
-        $query .= "'{$user_email}', '{$user_image}', '{$user_role}', '{$user_status}') ";
+        $query .= "VALUES ( ?, ?, ?, ?, ?, ?, ?, ? )";
+        $stmt   = $connection->prepare ($query);
+        $stmt->bind_param ("ssssssss", $user_name, $user_firstname, $user_lastname, $user_password, $user_email, $user_image, $user_role, $user_status);
         break;
 
       case 'delete':
-        $query = "DELETE FROM users WHERE user_id = {$checkboxValue} ";
+        $query = "DELETE FROM users WHERE user_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
+
       case 'reset':
-        $query = "UPDATE users SET user_password = '' WHERE user_id = {$checkboxValue} ";
+        $query = "UPDATE users SET user_password = '' WHERE user_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
     }
 
-    $bulk_query = mysqli_query ($connection, $query);
-    confirm_query ($bulk_query);
+    $stmt->execute ();
     header ("Location: users.php");
   }
 }
@@ -136,32 +151,32 @@ confirm_query ($select_all_users);
 <?php
 
 if (isset ($_GET['approve'])) {
-  $user_id_for_approve = mysqli_real_escape_string ($connection, $_GET['approve']);
+  $user_id_for_approve = $_GET['approve'];
 
-  $query = "UPDATE users SET user_status = 'Approved' WHERE user_id = {$user_id_for_approve} ";
-  $approve_query = mysqli_query ($connection, $query);
-
-  confirm_query ($approve_query);
+  $query = "UPDATE users SET user_status = 'Approved' WHERE user_id = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("i", $user_id_for_approve);
+  $stmt->execute ();
   header ("Location: users.php");
 }
 
 if (isset ($_GET['disapprove'])) {
   $user_id_for_disapprove = mysqli_real_escape_string ($connection, $_GET['disapprove']);
 
-  $query = "UPDATE users SET user_status = 'Unapproved' WHERE user_id = {$user_id_for_disapprove} ";
-  $disapprove_query = mysqli_query ($connection, $query);
-
-  confirm_query ($disapprove_query);
+  $query = "UPDATE users SET user_status = 'Unapproved' WHERE user_id = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("i", $user_id_for_disapprove);
+  $stmt->execute ();
   header ("Location: users.php");
 }
 
-if (isset ($_GET['delete'])) {
-  $user_id_for_delete = mysqli_real_escape_string ($connection, $_GET['delete']);
-  $query = "DELETE FROM users WHERE user_id = {$user_id_for_delete} ";
-  $delete_query = mysqli_query ($connection, $query);
+if (isset ($_POST['delete'])) {
+  $user_id_for_delete = mysqli_real_escape_string ($connection, $_POST['id']);
 
-  confirm_query ($delete_query);
+  $query = "DELETE FROM users WHERE user_id = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("i", $user_id_for_delete);
+  $stmt->execute ();
   header ("Location: users.php");
 }
 ?>
-
