@@ -21,10 +21,11 @@ if (isset ($_POST['create_post'])) {
   $post_status      = $_POST['post_status'];
 
   $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_status) ";
-  $query .= "VALUES ('{$post_category_id}', '{$post_title}', '{$post_author}', '{$post_date}', '{$post_image}', '{$post_content}', '{$post_tags}', '{$post_status}') ";
-
-  $create_post_query = mysqli_query ($connection, $query);
-  confirm_query ($create_post_query); 
+  $query .= "VALUES ( ?, ?, ?, ?, ?, ?, ?, ? ) ";
+  
+  $stmt   = $connection->prepare ($query);
+  $stmt->bind_param ("isssssss", $post_category_id, $post_title, $post_author, $post_date, $post_image, $post_content, $post_tags, $post_status);
+  $stmt->execute ();
 
   echo "<div class='alert alert-success'>
           Post successfully created.
@@ -38,12 +39,15 @@ if (isset ($_POST['create_post'])) {
   if (isset ($_SESSION['username'])) {
     $username = $_SESSION['username'];
 
-    $query = "SELECT * FROM users WHERE user_name = '{$username}' ";
-    $select_user_query = mysqli_query ($connection, $query);
-
-    while ($row = mysqli_fetch_array ($select_user_query)) {
-      $post_author    = $row['user_name'];
-    }
+    $query = "SELECT user_name FROM users WHERE user_name = ? ";
+    $stmt  = $connection->prepare ($query);
+    $stmt->bind_param ("s", $username);
+    $stmt->execute ();
+    
+    $result = $stmt->get_result ();
+    $row    = $result->fetch_assoc ();
+    $post_author = $row['user_name'];
+  
   } else {
     die ("<div class='alert alert-danger'>Something's wrong. You may need to log in again.</div>");
   }
@@ -56,14 +60,16 @@ if (isset ($_POST['create_post'])) {
     <div>
       <select class="form-control" name="post_category_id" id="post_category">
 <?php
-  $query = "SELECT * FROM categories"; 
-  $select_categories_id = mysqli_query ($connection, $query);
 
-  confirm_query ($select_categories_id);
+  $query = "SELECT cat_id, cat_title FROM categories ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->execute ();
+  
+  $result = $stmt->get_result ();
 
-  while ($row = mysqli_fetch_assoc ($select_categories_id)) {
+  while ($row = $result->fetch_assoc ()) {
     $post_category_id = $row['cat_id'];
-    $cat_title = $row['cat_title'];
+    $cat_title        = $row['cat_title'];
 
     echo "<option value='{$post_category_id}'>{$cat_title}</option>";
   }
@@ -101,11 +107,6 @@ if (isset ($_POST['create_post'])) {
       });
     });
   </script>
-
-  <!-- <div class="form-group">
-    <label for="post_date">Post Date</label>
-    <input class="form-control" name="post_date" type="datetime" value="<?php //echo date ('Y-m-d H:i:s'); ?>">
-  </div> -->
 
   <div class="form-group">
     <label for="post_image">Post Image</label>
