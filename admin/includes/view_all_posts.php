@@ -7,16 +7,26 @@ if (isset ($_POST['checkBoxArray'])) {
 
     switch ($bulk_options) {
       case 'publish':
-        $query = "UPDATE posts SET post_status = 'Published' WHERE post_id = {$checkboxValue} ";
+        $query = "UPDATE posts SET post_status = 'Published' WHERE post_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
-      case 'draft'  :
-        $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = {$checkboxValue} ";
-        break;
-      case 'clone'  :
-        $select_query = "SELECT * FROM posts WHERE post_id = {$checkboxValue} ";
-        $select_post_query = mysqli_query ($connection, $select_query);
 
-        while ($row = mysqli_fetch_assoc ($select_post_query)) {
+      case 'draft'  :
+        $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
+        break;
+
+      case 'clone'  :
+        $query = "SELECT * FROM posts WHERE post_id = ? ";
+        $stmt = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
+        $stmt->execute ();
+        
+        $result = $stmt->get_result ();
+
+        while ($row = $result->fetch_assoc ()) {
           $post_category_id = $row['post_category_id'];
           $post_title       = $row['post_title'];
           $post_author      = $row['post_author'];
@@ -27,23 +37,26 @@ if (isset ($_POST['checkBoxArray'])) {
           $post_status      = $row['post_status'];
         }
 
-        $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, ";
-        $query .= "post_tags, post_view_count, post_status) ";
-        $query .= "VALUES ({$post_category_id}, '{$post_title}', '{$post_author}', '{$post_date}', '{$post_image}', ";
-        $query .= "'{$post_tags}', '{$post_view_count}', '{$post_status}') ";
+        $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_tags, post_view_count, post_status) ";
+        $query .= "VALUES ( ?, ?, ?, ?, ?, ?, ?, ? ) ";
+        $stmt   = $connection->prepare ($query);
+        $stmt->bind_param ("isssssss", $post_category_id, $post_title, $post_author, $post_date, $post_image, $post_tags, $post_view_count, $post_status);
         break;
 
       case 'reset' :
-        $query = "UPDATE posts SET post_view_count = 0 WHERE post_id = {$checkboxValue} ";
+        $query = "UPDATE posts SET post_view_count = 0 WHERE post_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
 
       case 'delete' :
-        $query = "DELETE FROM posts WHERE post_id = {$checkboxValue} ";
+        $query = "DELETE FROM posts WHERE post_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
       }
-
-     $update_query = mysqli_query ($connection, $query);
-      confirm_query ($update_query);
+      
+      $stmt->execute ();
       header ("Location: posts.php");
   }
 }
@@ -81,8 +94,11 @@ if (isset ($_POST['checkBoxArray'])) {
 
 // Count total posts and set the variables for pagination 
 $query  = "SELECT * FROM posts ";
-$total_posts_query = mysqli_query ($connection, $query);
-$total_posts = mysqli_num_rows ($total_posts_query);
+$stmt   = $connection->prepare ($query);
+$stmt->execute ();
+$total_posts_query = $stmt->get_result ();
+$total_posts = $total_posts_query->num_rows;
+
 
 // How many posts to display for each page
 $per_page = 10;
@@ -103,7 +119,7 @@ if ($pagenum < 1) {
   $pagenum = $last_page;
 }
 
-$limit = 'LIMIT '.($pagenum - 1) * $per_page .','.$per_page;
+$start = ($pagenum - 1) * $per_page;
 ?>
 
 <?php
@@ -200,15 +216,16 @@ if ($pagenum < $startnum) {
 // Join posts & categories table to pull out their records in one query.
 $query  = "SELECT posts.post_id, posts.post_category_id, posts.post_title, posts.post_author, posts.post_date, ";
 $query .= "posts.post_image, posts.post_tags, posts.post_view_count, posts.post_status, ";
-$query .= "categories.cat_id, categories.cat_title ";
-$query .= "FROM posts ";
+$query .= "categories.cat_id, categories.cat_title FROM posts ";
 $query .= "LEFT JOIN categories ON posts.post_category_id = categories.cat_id ";
-$query .= "ORDER BY posts.post_id DESC {$limit} ";
+$query .= "ORDER BY posts.post_id DESC LIMIT  ?, ? ";
 
-$select_all_posts = mysqli_query ($connection, $query);
-confirm_query ($select_all_posts);
+$stmt = $connection->prepare ($query);
+$stmt->bind_param ("ii", $start, $per_page);
+$stmt->execute();
+$result = $stmt->get_result();
 
-  while ($row = mysqli_fetch_assoc ($select_all_posts)) {
+  while ($row = $result->fetch_assoc()) {
     $post_id          = $row['post_id'];
     $post_category_id = $row['post_category_id'];
     $post_title       = $row['post_title'];
@@ -235,9 +252,12 @@ confirm_query ($select_all_posts);
           <td>{$post_tags}</td>";
 
     // Get the numbers of comments 
-    $query = "SELECT * FROM comments WHERE comment_post_id = {$post_id} ";
-    $comments_query = mysqli_query ($connection, $query);
-    $count_comments = mysqli_num_rows ($comments_query); 
+    $query = "SELECT * FROM comments WHERE comment_post_id = ? ";
+    $stmt  = $connection->prepare ($query);
+    $stmt->bind_param ("i", $post_id);
+    $stmt->execute ();
+    $res = $stmt->get_result ();
+    $count_comments = $res->num_rows;
 
     echo "<td><a href='./post_comments.php?c_id={$post_id}'>{$count_comments}</a></td>";
     echo "<td>{$post_view_count}</td>";
@@ -260,34 +280,30 @@ confirm_query ($select_all_posts);
 if (isset ($_GET['publish'])) {
   $post_id_for_publish = $_GET['publish'];
 
-  $query = "UPDATE posts SET post_status = 'Published' WHERE post_id = {$post_id_for_publish} ";
-  $publish_query = mysqli_query ($connection, $query);
-
-  confirm_query ($publish_query);
+  $query = "UPDATE posts SET post_status = 'Published' WHERE post_id = ? ";
+  $stmt = $connection->prepare ($query);
+  $stmt->bind_param ("i", $post_id_for_publish);
+  $stmt->execute();
   header ("Location: posts.php");
 }
 
 if (isset ($_GET['draft'])) {
   $post_id_for_draft = $_GET['draft'];
 
-  $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = {$post_id_for_draft} ";
-  $draft_query = mysqli_query ($connection, $query);
-
-  confirm_query ($draft_query);
+  $query = "UPDATE posts SET post_status = 'Draft' WHERE post_id = ? ";
+  $stmt = $connection->prepare ($query);
+  $stmt->bind_param ("i", $post_id_for_draft);
+  $stmt->execute();
   header ("Location: posts.php");
 }
 
-//if (isset ($_GET['delete'])) {
-//  $post_id_for_delete = $_GET['delete'];
-
-
 if (isset ($_POST['delete'])) {
-  $post_id_for_delete = $_POST['post_id'];
+  $post_id_for_delete = $_POST['id'];
 
-  $query = "DELETE FROM posts WHERE post_id = {$post_id_for_delete} ";
-  $delete_query = mysqli_query ($connection, $query);
-
-  confirm_query ($delete_query);
+  $query = "DELETE FROM posts WHERE post_id = ? ";
+  $stmt = $connection->prepare ($query);
+  $stmt->bind_param ("i", $post_id_for_delete);
+  $stmt->execute();
   header ("Location: posts.php");
 }
 ?>
