@@ -6,18 +6,26 @@ if (isset ($_POST['checkBoxArray'])) {
 
     switch ($bulk_options) {
       case 'approve':
-        $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_id = {$checkboxValue} ";
+        $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
+
       case 'disapprove':
-        $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_id = {$checkboxValue} ";
+        $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
 
       case 'clone':
-        $query  = "SELECT * FROM comments WHERE comment_id = {$checkboxValue} ";
-        $select_comment = mysqli_query ($connection, $query);
-        confirm_query ($select_comment);
+        $query  = "SELECT * FROM comments WHERE comment_id = ? ";
+        $stmt   = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
+        $stmt->execute ();
+        
+        $result = $stmt->get_result ();
 
-        while ($row = mysqli_fetch_assoc ($select_comment)) {
+        while ($row = $result->fetch_assoc ()) {
           $comment_post_id = $row['comment_post_id'];
           $comment_author  = $row['comment_author'];
           $comment_email   = $row['comment_email'];
@@ -27,16 +35,20 @@ if (isset ($_POST['checkBoxArray'])) {
         }
 
         $query  = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_status, comment_date) ";
-        $query .= "VALUES ('{$comment_post_id}', '{$comment_author}', '{$comment_email}', '{$comment_content}', '{$comment_status}', '{$comment_date}') ";
+        $query .= "VALUES ( ?, ?, ?, ?, ?, ? ) ";
+
+        $stmt   = $connection->prepare ($query);
+        $stmt->bind_param ("isssss", $comment_post_id, $comment_author, $comment_email, $comment_content, $comment_status, $comment_date);
         break;
 
       case 'delete':
-        $query = "DELETE FROM comments WHERE comment_id = {$checkboxValue} ";
+        $query = "DELETE FROM comments WHERE comment_id = ? ";
+        $stmt  = $connection->prepare ($query);
+        $stmt->bind_param ("i", $checkboxValue);
         break;
     }
 
-    $bulk_query = mysqli_query ($connection, $query);
-    confirm_query ($bulk_query);
+    $stmt->execute ();
     header ("Location: comments.php");
   }
 }
@@ -133,34 +145,31 @@ confirm_query ($select_all_comments);
 if (isset ($_GET['approve'])) {
   $comment_id_for_approve = $_GET['approve'];
 
-  $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_id = {$comment_id_for_approve} ";
-  $approve_query = mysqli_query ($connection, $query);
+  $query = "UPDATE comments SET comment_status = 'Approved' WHERE comment_id = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("i", $comment_id_for_approve);
+  $stmt->execute ();
 
-  confirm_query ($approve_query);
   header ("Location: comments.php");
 }
 
 if (isset ($_GET['disapprove'])) {
   $comment_id_for_disapprove = $_GET['disapprove'];
 
-  $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_id = {$comment_id_for_disapprove} ";
-  $disapprove_query = mysqli_query ($connection, $query);
-
-  confirm_query ($disapprove_query);
+  $query = "UPDATE comments SET comment_status = 'Unapproved' WHERE comment_id = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("i", $comment_id_for_disapprove);
+  $stmt->execute ();
   header ("Location: comments.php");
 }
 
-if (isset ($_GET['delete'])) {
-  $comment_id_for_delete = $_GET['delete'];
+if (isset ($_POST['delete'])) {
+  $comment_id_for_delete = $_POST['id'];
 
-  $query = "DELETE FROM comments WHERE comment_id = {$comment_id_for_delete} ";
-  $delete_query = mysqli_query ($connection, $query);
-  confirm_query ($delete_query);
+  $query = "DELETE FROM comments WHERE comment_id = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("i", $comment_id_for_delete);
+  $stmt->execute ();
   header ("Location: comments.php");
-
-  //$query  = "UPDATE posts SET post_comment_count = post_comment_count - 1 ";
-  //$query .= "WHERE post_id = {$post_id} ";
-  //$minus_comment_count = mysqli_query ($connection, $query);
-  //confirm_query ($minus_comment_count);
 }
 ?>
