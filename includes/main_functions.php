@@ -25,7 +25,7 @@ function post_pager ($query, $id, $class, $button) {
 
   if (!empty ($id)) {
     echo "<li class='{$class}'>
-            <a href='post.php?p_id={$id}'>$button</a>
+            <a href='{$id}'>$button</a>
           </li>";
   }
 }

@@ -26,7 +26,7 @@ if (isset ($_GET['p_id'])) {
   $stmt->close ();
 
   // Check the User's access authority
-  if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') {
+  if (is_admin ($_SESSION['username'])) {
     $query      = "SELECT * FROM posts WHERE post_id = {$post_id} ";
     $query_prev = "SELECT post_id FROM posts WHERE post_id < '{$post_id}' ORDER BY post_id DESC LIMIT 1 ";
     $query_next = "SELECT post_id FROM posts WHERE post_id > '{$post_id}' ORDER BY post_id ASC LIMIT 1 ";

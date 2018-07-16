@@ -78,13 +78,11 @@ if (isset ($_GET['category'])) {
 
                 <!-- Pager -->
                 <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
+<?php
+post_pager ($query_prev, $prev_id, 'previous', '&larr; Older');
+post_pager ($query_next, $next_id, 'next',     'Newer &rarr;');
+?>
+                <!-- End of Pager -->
 <?php
   } else {
     echo "  <h1 class='page-header'>
