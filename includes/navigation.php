@@ -34,7 +34,7 @@
                  $category_class = 'active';
                }
 
-                echo "<li class='$category_class'><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
+                echo "<li class='$category_class'><a href='{$home_url}/category/{$cat_id}'>{$cat_title}</a></li>";
               }
             }
 ?>

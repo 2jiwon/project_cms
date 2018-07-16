@@ -59,7 +59,7 @@ if (isset ($_GET['p_id'])) {
                 </p>
                 <hr>
 
-                  <img class="img-responsive" src="images/<?php echo $post_image ?>" alt="">
+                  <img class="img-responsive" src="<?php echo $home_url ?>/images/<?php echo $post_image ?>" alt="">
 
                 <p>
                   <?php echo $post_content ?>

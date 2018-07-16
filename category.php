@@ -60,17 +60,17 @@ if (isset ($_GET['category'])) {
 
                 <!-- First Blog Post -->
                 <h2>
-                  <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title ?></a>
+                  <a href="post/<?php echo $post_id; ?>"><?php echo $post_title ?></a>
                 </h2>
                   <p class="lead">
-                  by <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a>
+                  by <a href="post/<?php echo $post_id; ?>"><?php echo $post_author ?></a>
                   </p>
                   <p class="text-right"><span class="glyphicon glyphicon-time"></span> <?php echo $post_date ?></p>
                 <hr>
-                <a href="post.php?p_id=<?php echo $post_id; ?>"><img class="img-responsive" src="images/<?php echo $post_image ?>" alt=""></a>
+                <a href="post/<?php echo $post_id; ?>"><img class="img-responsive" src="<?php echo $home_url ?>/images/<?php echo $post_image ?>" alt=""></a>
                 <hr>
                 <p><?php echo substr ($post_content, 0, 100) . " ..."; ?></p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a class="btn btn-primary" href="post/<?php echo $post_id ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
 <?php
     } // End of while
