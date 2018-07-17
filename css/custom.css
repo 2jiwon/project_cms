@@ -1,0 +1,11 @@
+
+.custom-panel {
+  border-color: #ddd;
+  margin-bottom: 20px;
+  padding: 0 0 0 10px;
+  background-color: #8bd6c4;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+          box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+}

@@ -48,9 +48,11 @@ if (isset ($_GET['p_id'])) {
       $post_content = $row['post_content'];
 ?>
                 <!-- First Blog Post -->
-                <h3>
-                  <?php echo $post_title ?></a>
-                </h3>
+                <div class="custom-panel">
+                  <h3>
+                    <?php echo $post_title ?></a>
+                  </h3>
+                </div>
                 <p class="lead">
                   by <?php echo $post_author ?></a>
                 </p>
