@@ -32,9 +32,12 @@
 
                if (isset ($_GET['category']) && $_GET['category'] == $cat_id) {
                  $category_class = 'active';
+                 echo "<li class='$category_class'><a href='category/{$cat_id}'>{$cat_title}</a></li>";
+               } else {
+              
+              //echo "<li class='$category_class'><a href='./{$cat_id}'>{$cat_title}</a></li>";
+                echo "<li class='$category_class'><a href='category/{$cat_id}'>{$cat_title}</a></li>";
                }
-
-                echo "<li class='$category_class'><a href='{$home_url}/category/{$cat_id}'>{$cat_title}</a></li>";
               }
             }
 ?>
