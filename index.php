@@ -77,7 +77,7 @@ if ($result->num_rows > 0) {
 ?>
                 <!-- First Blog Post -->
                 <h1>
-                  <?php echo $post_id; ?><a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
+                  <?php echo $post_id; ?><a href="post/<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
                 </h1>
                 <p class="lead">
                 by <a href="author_posts.php?author=<?php echo $post_author; ?>&p_id=<?php echo $post_id; ?>">
@@ -88,9 +88,9 @@ if ($result->num_rows > 0) {
                 </p>
 
                 <hr>
-                  <a href="post.php?p_id=<?php echo $post_id; ?>"><img class="img-responsive" src="images/<?php echo $post_image ?>" alt=""></a>
+                  <a href="post/<?php echo $post_id; ?>"><img class="img-responsive" src="images/<?php echo $post_image ?>" alt=""></a>
                 <p><?php echo $post_content; ?></p>
-                <a class="btn btn-primary" href="post.php?p_id=<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a class="btn btn-primary" href="post/<?php echo $post_id; ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
 <?php
   } // End of while

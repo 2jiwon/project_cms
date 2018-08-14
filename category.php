@@ -54,37 +54,121 @@ if (isset ($_GET['category'])) {
     $stmt = $stmt2;
   }
 
-  if (mysqli_stmt_num_rows ($stmt) > 0) {
+  $total_posts = mysqli_stmt_num_rows ($stmt);
+
+// Page related values
+  // How many posts to display for each page
+  $per_page = 5;
+  // last_page means total pages;
+  $last_page = ceil ($total_posts / $per_page);
+  // How many numbers to display for a set of pagination
+  $pageset = 5;
+
+  if (isset ($_GET['page'])) {
+    //$pagenum = preg_replace('#[^0-9]#', '', $_GET['page']);
+    $pagenum = $_GET['page'];
+  } else {
+    $pagenum = 1;
+  }
+
+  if ($pagenum < 1) {
+    $pagenum = 1;
+  } else if ($pagenum > $last_page) {
+    $pagenum = $last_page;
+  }
+
+  $start = ($pagenum - 1) * $per_page;
+
+  if ($total_posts > 0) {
     while (mysqli_stmt_fetch ($stmt)) {
 ?>
 
                 <!-- First Blog Post -->
                 <h2>
-                  <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title ?></a>
+                  <a href="post/<?php echo $post_id; ?>"><?php echo $post_title ?></a>
                 </h2>
                   <p class="lead">
-                  by <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_author ?></a>
+                  by <a href="post/<?php echo $post_id; ?>"><?php echo $post_author ?></a>
                   </p>
                   <p class="text-right"><span class="glyphicon glyphicon-time"></span> <?php echo $post_date ?></p>
                 <hr>
-                <a href="post.php?p_id=<?php echo $post_id; ?>"><img class="img-responsive" src="images/<?php echo $post_image ?>" alt=""></a>
+                <a href="post/<?php echo $post_id; ?>"><img class="img-responsive" src="<?php echo $home_url ?>/images/<?php echo $post_image ?>" alt=""></a>
                 <hr>
                 <p><?php echo substr ($post_content, 0, 100) . " ..."; ?></p>
-                <a class="btn btn-primary" href="#">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+                <a class="btn btn-primary" href="post/<?php echo $post_id ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
                 <hr>
 <?php
     } // End of while
 ?>
 
                 <!-- Pager -->
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="#">&larr; Older</a>
-                    </li>
-                    <li class="next">
-                        <a href="#">Newer &rarr;</a>
-                    </li>
-                </ul>
+                <nav aria-label="Page navigation" class="col-md-6 col-md-offset-3">
+                  <ul class="pagination">
+<?php
+  if ($last_page != 1) {
+
+    if ($pagenum > 1) {
+      $prev_page = $pagenum - 1;
+
+      echo "<li class='page-item'>
+            <a class='page-link' href='./page/{$prev_page}' aria-label='Previous'>
+              <span aria-hidden='true'>&laquo;</span>
+              <span class='sr-only'>Previous</span>
+            </a>";
+    } else {
+      echo "<li class='page-item disabled'>
+            <span aria-hidden='true'>&laquo;</span>";
+    }
+      echo "</li>";
+
+    $startnum = (floor($pagenum / $pageset) * $pageset) + 1;
+  
+    if ($pagenum < $startnum) {
+      $startnum = (floor (($pagenum - 1) / $pageset) * $pageset) + 1;
+    }
+
+    for ($i = $startnum; $i < $pagenum; $i++) {
+      if ($i > 0 && $i >= $startnum) {
+        echo "<li>
+              <a href='category/{$post_category_id}/page/{$i}'>{$i}</a>
+              </li>";
+      }
+    }
+
+    echo "<li class='active'>
+            <a href='category/{$post_category_id}/page/{$pagenum}'>{$pagenum}<span class='sr-only'>(current)</span></a>
+          </li>";
+
+    for ($i = $pagenum + 1; $i <= ($pagenum + $pageset - 1); $i++) {
+      if ($pagenum % $pageset == 0 || $i > $last_page) {
+         break;
+      }
+      echo "<li>
+              <a href='category/{$post_category_id}/page/{$i}'>{$i}</a>
+            </li>";
+
+      if ($i % $pageset == 0) {
+        break;
+      }
+    } 
+
+    if ($pagenum != $last_page) {
+      $next_page = $pagenum + 1;
+      echo "<li class='page-item'>
+              <a class='page-link' href='page/{$next_page}' aria-label='Next'>
+              <span aria-hidden='true'>&raquo;</span>
+              <span class='sr-only'>Next</span>
+              </a>";
+    } else {
+      echo "<li class='page-item disabled'>
+              <span aria-hidden='true'>&raquo;</span>";
+    }
+    echo "</li>";
+  }
+?>
+                  </ul>
+                </nav>
+                <!-- End of Pager -->
 <?php
   } else {
     echo "  <h1 class='page-header'>
@@ -94,7 +178,7 @@ if (isset ($_GET['category'])) {
   }
 
   mysqli_stmt_close ($stmt);
-} // End of fist if
+} // End of first if
 ?>
             </div>
 

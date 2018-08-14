@@ -25,15 +25,16 @@ function post_pager ($query, $id, $class, $button) {
 
   if (!empty ($id)) {
     echo "<li class='{$class}'>
-            <a href='post.php?p_id={$id}'>$button</a>
+            <a href='{$id}'>$button</a>
           </li>";
   }
 }
+
 function permission_warning () {
   if (!isset ($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     die ("<div class='alert alert-danger'>
           I'm sorry but you may not have a right permission to see this page.
-          <a class='alert-link' href='/cms/'> Back to Home.</a></div>");
+          <a class='alert-link' href='{$home_url}'> Back to Home.</a></div>");
   }
 }
 

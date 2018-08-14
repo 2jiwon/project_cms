@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.php">BLOG HOME</a>
+                <a class="navbar-brand" href="<?php echo $home_url; ?>">BLOG HOME</a>
 
             </div>
 
@@ -32,15 +32,18 @@
 
                if (isset ($_GET['category']) && $_GET['category'] == $cat_id) {
                  $category_class = 'active';
+                 echo "<li class='$category_class'><a href='category/{$cat_id}'>{$cat_title}</a></li>";
+               } else {
+              
+              //echo "<li class='$category_class'><a href='./{$cat_id}'>{$cat_title}</a></li>";
+                echo "<li class='$category_class'><a href='{$home_url}/category/{$cat_id}'>{$cat_title}</a></li>";
                }
-
-                echo "<li class='$category_class'><a href='category.php?category={$cat_id}'>{$cat_title}</a></li>";
               }
             }
 ?>
 <?php if (isset ($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin') : ?>
                     <li>
-                        <a href="admin/index.php">Admin</a>
+                        <a href="<?php echo $home_url; ?>/admin/index.php">Admin</a>
                     </li>
 <?php endif; ?>
                 </ul>
@@ -50,7 +53,7 @@
                 <div class="nav navbar-nav navbar-right center-block">
                   <a id="loginBtn" class="btn btn-primary navbar-btn" role="button" data-toggle="collapse" 
                      href="#collapseLogin" aria-expanded="false" aria-controls="collapseLogin">Log In</a>
-                  <a class="btn btn-default navbar-btn" role="button" href="./registration.php">Register</a>
+                  <a class="btn btn-default navbar-btn" role="button" href="<?php echo $home_url; ?>/registration">Register</a>
                 </div>
 <?php endif; ?>
                 <!-- /. navbar-btn -->              
