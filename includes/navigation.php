@@ -36,7 +36,7 @@
                } else {
               
               //echo "<li class='$category_class'><a href='./{$cat_id}'>{$cat_title}</a></li>";
-                echo "<li class='$category_class'><a href='category/{$cat_id}'>{$cat_title}</a></li>";
+                echo "<li class='$category_class'><a href='{$home_url}/category/{$cat_id}'>{$cat_title}</a></li>";
                }
               }
             }
