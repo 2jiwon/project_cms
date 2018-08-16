@@ -132,7 +132,7 @@ function login ($username, $password) {
 
     redirect ("${home_url}/index.php");
   } else {
-    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. Try again?</div>";
+    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. <a href='${home_url}/login'>Try again?</a></div>";
   }
 }
 
