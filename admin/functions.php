@@ -215,29 +215,4 @@ function checkStatus ($tableName, $columnName, $status){
   return $result;
 }
 
-// A helper function
-function IsItMethod ($method=null) {
-  
-  if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)) {
-    return true;
-  }
-
-  return false;
-}
-
-function isLoggedIn () {
-
-  if (isset($_SESSION['user_role'])) {
-    return true;
-  }
-
-  return false;
-}
-
-function checkLoggedInAndRedirect ($redirectLocation=null) {
-  if (isLoggedIn ()) {
-    redirect ($redirectLocation);
-  } 
-}
-
 ?>
