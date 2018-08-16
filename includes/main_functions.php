@@ -130,9 +130,9 @@ function login ($username, $password) {
     $_SESSION['lastname']  = $db_user_lastname;
     $_SESSION['user_role'] = $db_user_role;
 
-    redirect ("${home_url}/index.php");
+    redirect ("{$home_url}/index.php");
   } else {
-    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. <a href='${home_url}/login'>Try again?</a></div>";
+    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. <a href='{$home_url}/login'>Try again?</a></div>";
   }
 }
 
@@ -159,21 +159,6 @@ function checkLoggedInAndRedirect ($redirectLocation=null) {
   if (isLoggedIn ()) {
     redirect ($redirectLocation);
   } 
-}
-
-function email_exists($email){
-
-    global $connection;
-
-    $query = "SELECT user_email FROM users WHERE user_email = '$email'";
-    $result = mysqli_query($connection, $query);
-    confirmQuery($result);
-
-    if(mysqli_num_rows($result) > 0) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 ?>
