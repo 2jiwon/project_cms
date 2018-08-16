@@ -57,6 +57,11 @@
                      href="#collapseLogin" aria-expanded="false" aria-controls="collapseLogin">Log In</a> -->
                   <a class="btn btn-default navbar-btn" role="button" href="<?php echo $home_url; ?>/registration">Register</a>
                 </div>
+<?php else: ?>
+                <div class="nav navbar-nav navbar-right center-block">
+                <a class="btn btn-warning navbar-btn" role="button"
+                    href="<?php echo $home_url; ?>/includes/logout.php">Log out</a>
+                </div>
 <?php endif; ?>
                 <!-- /. navbar-btn -->              
 

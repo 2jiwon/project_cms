@@ -4,7 +4,7 @@
 <?php if (isset ($_SESSION['user_role'])) : ?>
                 <div class="well">
                    <h4>Logged in as <?php echo $_SESSION['username']; ?></h4>
-                   <a class="btn btn-primary " href="includes/logout.php">Log Out</a> 
+                   <a class="btn btn-warning" href="includes/logout.php">Log Out</a> 
                 </div>
 <?php else: ?>
                 <div class="collapse panel panel-primary" id="collapseLogin">
