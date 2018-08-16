@@ -1,6 +1,8 @@
 
 *includes/db.php
 
+*.bak
+
 *.sw[pon]
 
 *.orig

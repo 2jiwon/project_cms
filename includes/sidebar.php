@@ -8,7 +8,7 @@
                 </div>
 <?php else: ?>
                 <div class="collapse panel panel-primary" id="collapseLogin">
-                    <div class="panel-heading"> Log In </div> 
+                    <div class="panel-heading"><a class="btn-primary" href="login.php"> Log In </a></div> 
 
                     <!-- Login form -->
                     <div class="panel-body">
