@@ -5,7 +5,6 @@ include "includes/main_functions.php";
 ?>
 
 <!-- Navigation -->
-
 <?php  include "includes/navigation.php"; ?>
 
 
@@ -24,6 +23,19 @@ include "includes/main_functions.php";
 							<h3><i class="fa fa-user fa-4x"></i></h3>
 							<h2 class="text-center">Login</h2>
 							<div class="panel-body">
+
+<?php
+  
+checkLoggedInAndRedirect ('${home_url}/admin');
+
+if (IsItMethod ('post')) {
+  if (isset($_POST['username']) && isset ($_POST['password'])) {
+    login ($_POST['username'], $_POST['password']);
+  } else {
+    redirect ('${home_url}/login');
+  }
+}
+?>
 
 
 								<form id="login-form" role="form" autocomplete="off" class="form" method="post">
