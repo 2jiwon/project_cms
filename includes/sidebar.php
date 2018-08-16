@@ -22,8 +22,15 @@
                             <button class="btn btn-primary" name="login" type="submit">Login</button>
                           </span>
                         </div>
+                        
                       <!-- /.input-group -->
                       </form>
+                    </div>
+                
+                    <div class="panel-footer">
+                        <div class="form-group text-right">
+                            <a href="forgot.php?id=<?php echo uniqid(true); ?>">Forgot Password?</a>
+                        </div>
                     </div>
                 </div>
 <?php endif; ?>
