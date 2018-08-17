@@ -23,10 +23,6 @@ include "includes/main_functions.php";
     $stmt->bind_result ($user_name, $user_email, $token);
     $stmt->fetch();
     $stmt->close(); 
-
-//    if ($_GET['token'] !== $token || $_GET['email'] !== $email) {
-//      redirect ('index');
-//    }
     
     if (isset($_POST['password']) && isset($_POST['confirmPassword'])) {
       if ($_POST['password'] !== $_POST['confirmPassword']) {
@@ -40,7 +36,10 @@ include "includes/main_functions.php";
         if ($stmt = $connection->prepare ($query)) {
           $stmt->bind_param("ss", $password, $user_name);
           $stmt->execute();
-          $isChanged = true;
+
+          if ($stmt->affected_rows > 0) {
+            $isChanged = true;
+          }
         }
       } 
     }
@@ -91,7 +90,7 @@ include "includes/main_functions.php";
 
 <?php else: ?>
 
-          <div class='alert alert-success'>Password reset succefully. Please log in.</div>
+          <div class='alert alert-success'>Password reset succefully. <a href='login'>Please log in.</a></div>
 
 <?php endIf; ?>
 
