@@ -76,9 +76,9 @@ if (IsItMethod('post')) {
             $mail->isHTML(true);                     // Set email format to HTML
             $mail->Subject = 'Here is the subject';
             //$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-            $mail->Body    = '안녕하세요. 테스트 메일입니다.';
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-        
+            $mail->Body = "<p><a href='http://uphp.com/cms/reset.php?email={$email}&token={$token}'>
+              Please click reset your password.</a></p>";
+  
             $mail->send();
             echo "<div class='btn btn-info'>Message has been sent</div>";
         } catch (Exception $e) {
