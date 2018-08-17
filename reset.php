@@ -13,7 +13,23 @@ include "includes/main_functions.php";
     redirect ('index');
   }
 
+  $token = $_GET['token'];
+
+  $query = "SELECT user_name, user_email, token FROM users WHERE token = ? ";
+
+  if ($stmt  = $connection->prepare ($query)) {
+    $stmt->bind_param ("s", $token);
+    $stmt->execute();
+    $stmt->bind_result ($user_name, $user_email, $token);
+    $stmt->fetch();
+    
+    echo $user_name;
+    //if ($_GET['token'] !== $token || $_GET['email'] !== $email) {
+    //  redirect ('index');
+    //}
+  }
 ?>
+
 
 <!-- Page Content -->
 <div class="container">
@@ -29,7 +45,6 @@ include "includes/main_functions.php";
               <h2 class="text-center">Reset Password</h2>
               <p>You can reset your password here.</p>
               <div class="panel-body">
-
 
                 <form id="register-form" role="form" autocomplete="off" class="form" method="post">
 
