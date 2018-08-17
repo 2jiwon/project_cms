@@ -22,11 +22,28 @@ include "includes/main_functions.php";
     $stmt->execute();
     $stmt->bind_result ($user_name, $user_email, $token);
     $stmt->fetch();
+    $stmt->close(); 
+
+//    if ($_GET['token'] !== $token || $_GET['email'] !== $email) {
+//      redirect ('index');
+//    }
     
-    echo $user_name;
-    //if ($_GET['token'] !== $token || $_GET['email'] !== $email) {
-    //  redirect ('index');
-    //}
+    if (isset($_POST['password']) && isset($_POST['confirmPassword'])) {
+      if ($_POST['password'] !== $_POST['confirmPassword']) {
+        echo "Please recheck password.";
+        exit;
+      } else {
+        $password = password_hash ($_POST['password'], PASSWORD_BCRYPT, array ('cost' => 10));
+
+        $query = "UPDATE users SET user_password = ? , token = '' WHERE user_name = ? ";
+
+        if ($stmt = $connection->prepare ($query)) {
+          $stmt->bind_param("ss", $password, $user_name);
+          $stmt->execute();
+          $isChanged = true;
+        }
+      } 
+    }
   }
 ?>
 
@@ -44,6 +61,9 @@ include "includes/main_functions.php";
               <h3><i class="fa fa-lock fa-4x"></i></h3>
               <h2 class="text-center">Reset Password</h2>
               <p>You can reset your password here.</p>
+
+<?php if (!isset($isChanged)): ?>
+
               <div class="panel-body">
 
                 <form id="register-form" role="form" autocomplete="off" class="form" method="post">
@@ -68,6 +88,12 @@ include "includes/main_functions.php";
 
                     <input type="hidden" class="hide" name="token" id="token" value="">
                 </form>
+
+<?php else: ?>
+
+          <div class='alert alert-success'>Password reset succefully. Please log in.</div>
+
+<?php endIf; ?>
 
               </div><!-- Body-->
 
