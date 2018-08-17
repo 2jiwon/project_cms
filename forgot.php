@@ -66,7 +66,8 @@ if (IsItMethod('post')) {
             $mail->Port = Config::SMTP_PORT;         // TCP port to connect to
             $mail->SMTPAuth = true;                  // Enable SMTP authentication
             $mail->SMTPSecure = 'tls';               // Enable TLS encryption, `ssl` also accepted
-        
+            $mail->CharSet = 'UTF-8';
+
             //Recipients
             $mail->setFrom('ljwjulian@gmail.com', 'Admin');
             $mail->addAddress($email);               // Name is optional
@@ -74,7 +75,8 @@ if (IsItMethod('post')) {
             //Content
             $mail->isHTML(true);                     // Set email format to HTML
             $mail->Subject = 'Here is the subject';
-            $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+            //$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+            $mail->Body    = '안녕하세요. 테스트 메일입니다.';
             $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
         
             $mail->send();
