@@ -7,6 +7,14 @@ include "includes/main_functions.php";
 <!-- Navigation -->
 <?php  include "includes/navigation.php"; ?>
 
+<?php
+
+  if (!isset($_GET['email']) && !isset($_GET['token'])) {
+    redirect ('index');
+  }
+
+?>
+
 <!-- Page Content -->
 <div class="container">
 
