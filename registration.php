@@ -2,7 +2,22 @@
 include "includes/db.php";
 include "includes/header.php";
 include "includes/main_functions.php";
+
+require './vendor/autoload.php';  
 ?>
+<?php
+$app_id = 'YOUR_APP_ID';
+$app_key = 'YOUR_APP_KEY';
+$app_secret = 'YOUR_APP_SECRET';
+$app_cluster = array(
+  'cluster'   => 'YOUR_APP_CLUSTER',
+  'encrypted' => true
+);
+
+$pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, $app_cluster);
+
+?>
+
     <!-- Navigation -->
     <?php  include "includes/navigation.php"; ?>
  
@@ -51,8 +66,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   if (empty ($error)) {
     register_user ($username, $firstname, $lastname, $email, $password);
+
+    $data['message'] = $username;
+    $pusher->trigger ('notifications', 'new_user', $data);
+
     login ($username, $password);
   }
+
 }
 
 ?>
@@ -130,3 +150,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <hr>
 
 <?php include "includes/footer.php";?>
+
+

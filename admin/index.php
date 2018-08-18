@@ -211,3 +211,23 @@ for ($i = 0; $i < 6; $i++) {
 <?php
 include "includes/admin_footer.php";
 ?>
+
+<!-- pusher -->
+<script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+<script>
+
+$(document).ready(function () {
+  var pusher = new Pusher('d46d701fb2d82d462f9c', {
+    cluster: 'ap1',
+    encrypted: true
+  });
+
+  var channel = pusher.subscribe('notifications');
+  channel.bind('new_user', function(data) {
+    alert(JSON.stringify(data));
+     var message = data.message;
+     console.log(message);
+  });
+});
+  //Pusher.logToConsole = true;
+</script>
