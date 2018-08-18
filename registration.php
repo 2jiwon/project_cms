@@ -4,13 +4,19 @@ include "includes/header.php";
 include "includes/main_functions.php";
 
 require './vendor/autoload.php';  
+
+$dotenv = new Dotenv\Dotenv(__DIR__);
+//echo __DIR__;
+$dotenv->load();
+
 ?>
 <?php
-$app_id = 'YOUR_APP_ID';
-$app_key = 'YOUR_APP_KEY';
-$app_secret = 'YOUR_APP_SECRET';
+
+$app_id = getenv('APP_ID');
+$app_key = getenv('APP_KEY');
+$app_secret = getenv('APP_SECRET');
 $app_cluster = array(
-  'cluster'   => 'YOUR_APP_CLUSTER',
+  'cluster'   => 'ap1',
   'encrypted' => true
 );
 

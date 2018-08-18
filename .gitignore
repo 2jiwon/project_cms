@@ -11,9 +11,9 @@
 
 *images/*
 
-*/images/*
-
-
 /vendor/
 
+.env
+
 *classes/config.php
+
