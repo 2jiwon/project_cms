@@ -2,7 +2,28 @@
 include "includes/db.php";
 include "includes/header.php";
 include "includes/main_functions.php";
+
+require './vendor/autoload.php';  
+
+$dotenv = new Dotenv\Dotenv(__DIR__);
+//echo __DIR__;
+$dotenv->load();
+
 ?>
+<?php
+
+$app_id = getenv('APP_ID');
+$app_key = getenv('APP_KEY');
+$app_secret = getenv('APP_SECRET');
+$app_cluster = array(
+  'cluster'   => 'ap1',
+  'encrypted' => true
+);
+
+$pusher = new Pusher\Pusher($app_key, $app_secret, $app_id, $app_cluster);
+
+?>
+
     <!-- Navigation -->
     <?php  include "includes/navigation.php"; ?>
  
@@ -51,8 +72,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
   if (empty ($error)) {
     register_user ($username, $firstname, $lastname, $email, $password);
+
+    $data['message'] = $username;
+    $pusher->trigger ('notifications', 'new_user', $data);
+
     login ($username, $password);
   }
+
 }
 
 ?>
@@ -130,3 +156,5 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <hr>
 
 <?php include "includes/footer.php";?>
+
+
