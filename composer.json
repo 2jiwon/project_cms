@@ -2,6 +2,13 @@
     "name": "jiwon/cms",
     "description": "blog cms",
     "type": "project",
+  
+    "autoload": {
+      "classmap": [
+        "classes"
+      ]
+    },
+
     "authors": [
         {
             "name": "2jiwon",

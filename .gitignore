@@ -16,4 +16,4 @@
 
 /vendor/
 
-/classes/config.php
+*classes/config.php
