@@ -4,11 +4,11 @@
 <?php if (isset ($_SESSION['user_role'])) : ?>
                 <div class="well">
                    <h4>Logged in as <?php echo $_SESSION['username']; ?></h4>
-                   <a class="btn btn-primary " href="includes/logout.php">Log Out</a> 
+                   <a class="btn btn-warning" href="includes/logout.php">Log Out</a> 
                 </div>
 <?php else: ?>
                 <div class="collapse panel panel-primary" id="collapseLogin">
-                    <div class="panel-heading"> Log In </div> 
+                    <div class="panel-heading"><a class="btn-primary" href="login.php"> Log In </a></div> 
 
                     <!-- Login form -->
                     <div class="panel-body">
@@ -22,8 +22,15 @@
                             <button class="btn btn-primary" name="login" type="submit">Login</button>
                           </span>
                         </div>
+                        
                       <!-- /.input-group -->
                       </form>
+                    </div>
+                
+                    <div class="panel-footer">
+                        <div class="form-group text-right">
+                            <a href="forgot.php?id=<?php echo uniqid(true); ?>">Forgot Password?</a>
+                        </div>
                     </div>
                 </div>
 <?php endif; ?>

@@ -76,9 +76,9 @@ if ($result->num_rows > 0) {
 
 ?>
                 <!-- First Blog Post -->
-                <h1>
-                  <?php echo $post_id; ?><a href="post/<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
-                </h1>
+                <h3>
+                  <a href="post/<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
+                </h3>
                 <p class="lead">
                 by <a href="author_posts.php?author=<?php echo $post_author; ?>&p_id=<?php echo $post_id; ?>">
                     <?php echo $post_author ?></a>

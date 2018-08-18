@@ -11,7 +11,8 @@ function confirm_query ($result) {
 
 function redirect ($location) {
 
-  return header ("Location: ".$location);
+  header ("Location: ".$location);
+  exit;
 }
 
 function insert_categories () {

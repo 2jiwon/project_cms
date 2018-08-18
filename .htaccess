@@ -3,7 +3,7 @@ RewriteEngine on
 
 RewriteBase /cms/
 
-RewriteRule ^(index|contact|registration)$ $1.php [NC,L]
+RewriteRule ^(index|contact|login|registration)$ $1.php [NC,L]
 
 RewriteRule ^.*post/(\d+)$ post.php?p_id=$1 [NC,L]
 
