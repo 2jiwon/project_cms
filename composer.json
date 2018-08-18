@@ -17,6 +17,7 @@
     ],
     "require": {
         "phpmailer/phpmailer": "^6.0",
-        "pusher/pusher-php-server": "^3.2"
+        "pusher/pusher-php-server": "^3.2",
+        "vlucas/phpdotenv": "^2.5"
     }
 }
