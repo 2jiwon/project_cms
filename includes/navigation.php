@@ -51,9 +51,16 @@
                 <!-- Button for Log In & Register -->
 <?php if (!isset ($_SESSION['user_role'])) : ?>
                 <div class="nav navbar-nav navbar-right center-block">
-                  <a id="loginBtn" class="btn btn-primary navbar-btn" role="button" data-toggle="collapse" 
-                     href="#collapseLogin" aria-expanded="false" aria-controls="collapseLogin">Log In</a>
+                <a class="btn btn-primary navbar-btn" role="button"
+                   href="<?php echo $home_url; ?>/login.php">Log In</a>
+                  <!-- <a id="loginBtn" class="btn btn-primary navbar-btn" role="button" data-toggle="collapse" 
+                     href="#collapseLogin" aria-expanded="false" aria-controls="collapseLogin">Log In</a> -->
                   <a class="btn btn-default navbar-btn" role="button" href="<?php echo $home_url; ?>/registration">Register</a>
+                </div>
+<?php else: ?>
+                <div class="nav navbar-nav navbar-right center-block">
+                <a class="btn btn-warning navbar-btn" role="button"
+                    href="<?php echo $home_url; ?>/includes/logout.php">Log out</a>
                 </div>
 <?php endif; ?>
                 <!-- /. navbar-btn -->              

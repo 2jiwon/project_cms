@@ -1,6 +1,8 @@
 
 *includes/db.php
 
+*.bak
+
 *.sw[pon]
 
 *.orig
@@ -11,3 +13,8 @@
 
 */images/*
 
+.env
+
+/vendor/
+
+*classes/config.php

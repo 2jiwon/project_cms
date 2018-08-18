@@ -1,4 +1,5 @@
 <?php
+$home_url = "/cms"; 
 
 function confirm_query ($result) {
 
@@ -11,7 +12,8 @@ function confirm_query ($result) {
 
 function redirect ($location) {
 
-  return header ("Location: ".$location);
+  header ("Location: ".$location);
+  exit;
 }
 
 function post_pager ($query, $id, $class, $button) {
@@ -101,6 +103,7 @@ function register_user ($username, $firstname, $lastname, $email, $password) {
 function login ($username, $password) {
 
   global $connection;
+  global $home_url;
 
   $username = trim ($username);
   $password = trim ($password);
@@ -127,10 +130,35 @@ function login ($username, $password) {
     $_SESSION['lastname']  = $db_user_lastname;
     $_SESSION['user_role'] = $db_user_role;
 
-    redirect ("/cms/index.php");
+    redirect ("{$home_url}/index.php");
   } else {
-    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. Try again?</div>";
+    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. <a href='{$home_url}/login'>Try again?</a></div>";
   }
+}
+
+// A helper function
+function IsItMethod ($method=null) {
+  
+  if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)) {
+    return true;
+  }
+
+  return false;
+}
+
+function isLoggedIn () {
+
+  if (isset($_SESSION['user_role'])) {
+    return true;
+  }
+
+  return false;
+}
+
+function checkLoggedInAndRedirect ($redirectLocation=null) {
+  if (isLoggedIn ()) {
+    redirect ($redirectLocation);
+  } 
 }
 
 ?>
