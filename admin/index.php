@@ -212,6 +212,10 @@ for ($i = 0; $i < 6; $i++) {
 include "includes/admin_footer.php";
 ?>
 
+<!-- toastr -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
 <!-- pusher -->
 <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
 <script>
@@ -224,8 +228,9 @@ $(document).ready(function () {
 
   var channel = pusher.subscribe('notifications');
   channel.bind('new_user', function(data) {
-    alert(JSON.stringify(data));
+    //alert(JSON.stringify(data));
      var message = data.message;
+     toastr.success(`${message} just registerd`);
      console.log(message);
   });
 });
