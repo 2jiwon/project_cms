@@ -9,4 +9,5 @@ CREATE TABLE posts (
   ,post_tags VARCHAR(255) NOT NULL
   ,post_comment_count INT(11) NOT NULL
   ,post_status VARCHAR(255) NOT NULL default 'draft'
+  ,post_view_count INT(11) DEFAULT 0
 );
