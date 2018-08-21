@@ -85,6 +85,21 @@ if (isset ($_GET['p_id'])) {
       }
 ?>
                 <hr>
+
+<!-- Likes button -->
+<div class="row">
+  <p class="pull-left col-md-2"><a href=""><span class="glyphicon glyphicon-thumbs-up"></span> Like</a></p>
+<!-- Likes status -->
+  <p class="left col-md-2">Likes: 10</a></p>
+</div>
+
+
+
+
+
+
+
+
 <?php
     } // End of first while
 ?>
