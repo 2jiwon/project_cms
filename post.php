@@ -7,6 +7,14 @@ include ('includes/main_functions.php');
 <?php 
 include ('includes/navigation.php'); 
 ?>
+
+<?php
+
+if (isset($_POST['like'])) {
+  echo "<h1> It works</h1>";
+}
+
+?>
     <!-- Page Content -->
     <div class="container">
 
@@ -88,7 +96,7 @@ if (isset ($_GET['p_id'])) {
 
 <!-- Likes button -->
 <div class="row">
-  <p class="pull-left col-md-2"><a href=""><span class="glyphicon glyphicon-thumbs-up"></span> Like</a></p>
+  <p class="pull-left col-md-2"><a id="like" href="#"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a></p>
 <!-- Likes status -->
   <p class="left col-md-2">Likes: 10</a></p>
 </div>
@@ -215,3 +223,24 @@ include ('includes/sidebar.php');
 include ('includes/footer.php');
 ?>
 
+// For like
+<script>
+$(document).ready(function () {
+  var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
+  var post_id = '<?php echo $post_id; ?>';
+  var user_id = 36;
+
+  $('#like').click(function () {
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: {
+        'like': 1,
+        'post_id': encodeURI(post_id),
+        'user_id': user_id
+
+      }
+    });
+  });
+});
+</script>
