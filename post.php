@@ -12,7 +12,7 @@ include ('includes/navigation.php');
 
 if (isset($_POST['like'])) {
   $post_id = $_POST['post_id'];
-  $user_id = $_POST['user_id'];
+  $user_id = getLoggedInUserID (); 
 
   // selecting the liked post 
   $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
@@ -25,9 +25,9 @@ if (isset($_POST['like'])) {
   mysqli_query ($connection, $query);
 
   // inserting likes
-  $query = "INSERT INTO likes (user_id, post_id) VALUES ($user_id, $post_id) ";
-  mysqli_query ($connection, $query);
-  
+  $query = "INSERT INTO likes (user_id, post_id) VALUES ( '{$user_id}', '{$post_id}' ) ";
+  $result = mysqli_query ($connection, $query);
+  confirm_query ($result);
 }
 
 if (isset($_POST['unlike'])) {
@@ -47,8 +47,6 @@ if (isset($_POST['unlike'])) {
   // deleting likes
   $query = "DELETE FROM likes WHERE post_id = {$post_id} AND user_id = {$user_id} ";
   mysqli_query ($connection, $query);
-
-
 }
 
 ?>
@@ -114,6 +112,8 @@ if (isset ($_GET['p_id'])) {
 
 <!-- Edit post button -->
 <?php
+
+
       if (is_admin ($_SESSION['username'])) {
         $post_id =  preg_replace ('#[^0-9]#', '', $_GET['p_id']);
         if (isset ($post_id)) {
@@ -134,15 +134,16 @@ if (isset ($_GET['p_id'])) {
 <!-- Like button -->
 <div class="row">
   <p class="pull-left col-md-2">
-  <a id="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
-  <span class="glyphicon glyphicon-thumbs-up"></span> 
-    <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
-  </a></p>
+    <a id="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
+      <span class="glyphicon glyphicon-thumbs-up"></span> 
+        <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
+    </a>
+  </p>
 
   <!-- Unlike button -->
   <p class="pull-left col-md-2"><a id="unlike" href="#"><span class="glyphicon glyphicon-thumbs-down"></span>Unlike</a></p>
-<!-- Likes status -->
-  <p class="left col-md-2">Likes: 10</a></p>
+  <!-- Likes status -->
+  <p class="left col-md-2">Likes: <?php getPostLikes ($post_id); ?></p>
 </div>
 
 
@@ -152,7 +153,7 @@ if (isset ($_GET['p_id'])) {
 
 
 
-<?phP
+<?php
     } // End of first while
 ?>
 
@@ -272,7 +273,7 @@ include ('includes/footer.php');
 $(document).ready(function () {
   var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
   var post_id = '<?php echo $post_id; ?>';
-  var user_id = 36;
+  var user_id = '<?php echo $user_id; ?>';
 
   // Like
   $('#like').click(function () {
