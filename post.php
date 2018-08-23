@@ -13,14 +13,16 @@ include ('includes/navigation.php');
 if (isset($_POST['like'])) {
   $post_id = $_POST['post_id'];
 
+  // selecting the liked post 
   $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
   $result = mysqli_query ($connection, $query);
   $postResult = mysqli_fetch_array ($result);
   $likes = $postResult['post_likes'];
 
-  if (mysqli_num_rows ($result) >= 1) {
-    echo $postResult['post_id'];
-  }
+  // updating post_likes
+  $query = "UPDATE posts SET post_likes = {$likes} + 1 WHERE post_id = {$post_id} ";
+  $result = mysqli_query ($connection, $query);
+
 }
 
 ?>
@@ -232,7 +234,7 @@ include ('includes/sidebar.php');
 include ('includes/footer.php');
 ?>
 
-// For like
+<!-- For like -->
 <script>
 $(document).ready(function () {
   var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
