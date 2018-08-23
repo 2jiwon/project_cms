@@ -20,7 +20,7 @@ if (isset($_POST['like'])) {
   $postResult = mysqli_fetch_array ($result);
   $likes = $postResult['post_likes'];
 
-  // updating post_likes
+  // incrementing post_likes
   $query = "UPDATE posts SET post_likes = {$likes} + 1 WHERE post_id = {$post_id} ";
   mysqli_query ($connection, $query);
 
@@ -31,7 +31,24 @@ if (isset($_POST['like'])) {
 }
 
 if (isset($_POST['unlike'])) {
-  echo 'unliked';
+  $post_id = $_POST['post_id'];
+  $user_id = $_POST['user_id'];
+
+  // selecting the liked post 
+  $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+  $result = mysqli_query ($connection, $query);
+  $postResult = mysqli_fetch_array ($result);
+  $likes = $postResult['post_likes'];
+
+  // decrementing post_likes
+  $query = "UPDATE posts SET post_likes = {$likes} - 1 WHERE post_id = {$post_id} ";
+  mysqli_query ($connection, $query);
+
+  // deleting likes
+  $query = "DELETE FROM likes WHERE post_id = {$post_id} AND user_id = {$user_id} ";
+  mysqli_query ($connection, $query);
+
+
 }
 
 ?>
