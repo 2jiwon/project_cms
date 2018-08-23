@@ -133,7 +133,12 @@ if (isset ($_GET['p_id'])) {
 
 <!-- Like button -->
 <div class="row">
-  <p class="pull-left col-md-2"><a id="like" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>Like</a></p>
+  <p class="pull-left col-md-2">
+  <a id="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
+  <span class="glyphicon glyphicon-thumbs-up"></span> 
+    <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
+  </a></p>
+
   <!-- Unlike button -->
   <p class="pull-left col-md-2"><a id="unlike" href="#"><span class="glyphicon glyphicon-thumbs-down"></span>Unlike</a></p>
 <!-- Likes status -->
@@ -147,7 +152,7 @@ if (isset ($_GET['p_id'])) {
 
 
 
-<?php
+<?phP
     } // End of first while
 ?>
 
@@ -296,10 +301,6 @@ $(document).ready(function () {
       }
     });
   });
-  
-
-
-
 
 });
 </script>
