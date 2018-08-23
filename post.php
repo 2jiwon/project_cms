@@ -12,6 +12,7 @@ include ('includes/navigation.php');
 
 if (isset($_POST['like'])) {
   $post_id = $_POST['post_id'];
+  $user_id = $_POST['user_id'];
 
   // selecting the liked post 
   $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
@@ -21,8 +22,12 @@ if (isset($_POST['like'])) {
 
   // updating post_likes
   $query = "UPDATE posts SET post_likes = {$likes} + 1 WHERE post_id = {$post_id} ";
-  $result = mysqli_query ($connection, $query);
+  mysqli_query ($connection, $query);
 
+  // inserting likes
+  $query = "INSERT INTO likes (user_id, post_id) VALUES ($user_id, $post_id) ";
+  mysqli_query ($connection, $query);
+  
 }
 
 ?>
