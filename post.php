@@ -110,9 +110,11 @@ if (isset ($_GET['p_id'])) {
 ?>
                 <hr>
 
-<!-- Likes button -->
+<!-- Like button -->
 <div class="row">
-  <p class="pull-left col-md-2"><a id="like" href="#"><span class="glyphicon glyphicon-thumbs-up"></span> Like</a></p>
+  <p class="pull-left col-md-2"><a id="like" href="#"><span class="glyphicon glyphicon-thumbs-up"></span>Like</a></p>
+  <!-- Unlike button -->
+  <p class="pull-left col-md-2"><a id="unlike" href="#"><span class="glyphicon glyphicon-thumbs-down"></span>Unlike</a></p>
 <!-- Likes status -->
   <p class="left col-md-2">Likes: 10</a></p>
 </div>
