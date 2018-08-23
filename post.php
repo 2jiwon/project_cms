@@ -30,6 +30,10 @@ if (isset($_POST['like'])) {
   
 }
 
+if (isset($_POST['unlike'])) {
+  echo 'unliked';
+}
+
 ?>
     <!-- Page Content -->
     <div class="container">
@@ -248,6 +252,7 @@ $(document).ready(function () {
   var post_id = '<?php echo $post_id; ?>';
   var user_id = 36;
 
+  // Like
   $('#like').click(function () {
     $.ajax({
       url: url,
@@ -260,5 +265,24 @@ $(document).ready(function () {
       }
     });
   });
+  
+  // Unlike
+  $('#unlike').click(function () {
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: {
+        'unlike': 1,
+        'post_id': encodeURI(post_id),
+        'user_id': user_id
+
+      }
+    });
+  });
+  
+
+
+
+
 });
 </script>
