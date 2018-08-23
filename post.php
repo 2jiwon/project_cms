@@ -32,7 +32,7 @@ if (isset($_POST['like'])) {
 
 if (isset($_POST['unlike'])) {
   $post_id = $_POST['post_id'];
-  $user_id = $_POST['user_id'];
+  $user_id = getLoggedInUserID (); 
 
   // selecting the liked post 
   $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
@@ -131,27 +131,26 @@ if (isset ($_GET['p_id'])) {
 ?>
                 <hr>
 
-<!-- Like button -->
-<div class="row">
-  <p class="pull-left col-md-2">
-    <a id="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
-      <span class="glyphicon glyphicon-thumbs-up"></span> 
-        <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
-    </a>
-  </p>
+  <div class="row">
 
-  <!-- Unlike button -->
-  <p class="pull-left col-md-2"><a id="unlike" href="#"><span class="glyphicon glyphicon-thumbs-down"></span>Unlike</a></p>
-  <!-- Likes status -->
-  <p class="left col-md-2">Likes: <?php getPostLikes ($post_id); ?></p>
-</div>
+<?php if (isLoggedIn ()) { ?>
+  <!-- Like button -->
+    <p class="col-xs-4 col-xs-push-6 text-right">
+      <a id="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
+        <span class="glyphicon glyphicon-thumbs-up"></span> 
+          <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
+      </a>
+    </p>
 
+<?php } else { ?>
+    <p></p>
+<?php } ?>
 
+    <!-- Likes status -->
+    <p class="pull-right col-xs-4 text-right">Likes: <?php getPostLikes ($post_id); ?></p>
 
-
-
-
-
+  </div>
+  <div class="clearfix"></div>
 
 <?php
     } // End of first while
@@ -298,7 +297,6 @@ $(document).ready(function () {
         'unlike': 1,
         'post_id': encodeURI(post_id),
         'user_id': user_id
-
       }
     });
   });
