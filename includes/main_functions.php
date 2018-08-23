@@ -168,6 +168,25 @@ function checkLoggedInAndRedirect ($redirectLocation=null) {
   } 
 }
 
+function getLoggedInUserID () {
+  if (isLoggedIn ()) {
+    $result = i_query ("SELECT * FROM users WHERE user_name = ".$_SESSION['username']."' ");
+    confirm_query ($result);
+    $userResult = mysqli_fetch_array ($result);
 
+    if (mysqli_num_rows ($result)) {
+      return $userResult['user_id'];
+    }
+  }
+
+  return false;
+}
+
+function doesUserLikedThisPost ($post_id = '') {
+  $result = i_query ("SELECT * FROM users WHERE user_id = ".getLoggedInUserID()." AND post_id = {$post_id} ");
+  confirm_query ($result);
+
+  return mysqli_num_rows ($result) >= 1 ? true : false;
+}
 
 ?>
