@@ -10,6 +10,13 @@ function confirm_query ($result) {
   }
 }
 
+function i_query ($query) {
+
+  global $connection;
+
+  return mysqli_query ($connection, $query);
+}
+
 function redirect ($location) {
 
   header ("Location: ".$location);
@@ -136,7 +143,7 @@ function login ($username, $password) {
   }
 }
 
-// A helper function
+// helper functions
 function IsItMethod ($method=null) {
   
   if ($_SERVER['REQUEST_METHOD'] == strtoupper($method)) {
@@ -160,5 +167,7 @@ function checkLoggedInAndRedirect ($redirectLocation=null) {
     redirect ($redirectLocation);
   } 
 }
+
+
 
 ?>
