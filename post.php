@@ -11,7 +11,16 @@ include ('includes/navigation.php');
 <?php
 
 if (isset($_POST['like'])) {
-  echo "<h1> It works</h1>";
+  $post_id = $_POST['post_id'];
+
+  $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+  $result = mysqli_query ($connection, $query);
+  $postResult = mysqli_fetch_array ($result);
+  $likes = $postResult['post_likes'];
+
+  if (mysqli_num_rows ($result) >= 1) {
+    echo $postResult['post_id'];
+  }
 }
 
 ?>
