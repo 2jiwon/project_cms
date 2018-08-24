@@ -12,7 +12,7 @@ include ('includes/navigation.php');
 
 if (isset($_POST['like'])) {
   $post_id = $_POST['post_id'];
-  $user_id = getLoggedInUserID (); 
+  $user_id = $_POST['user_id']; 
 
   // selecting the liked post 
   $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
@@ -32,7 +32,7 @@ if (isset($_POST['like'])) {
 
 if (isset($_POST['unlike'])) {
   $post_id = $_POST['post_id'];
-  $user_id = getLoggedInUserID (); 
+  $user_id = $_POST['user_id']; 
 
   // selecting the liked post 
   $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
@@ -131,26 +131,24 @@ if (isset ($_GET['p_id'])) {
 ?>
                 <hr>
 
-  <div class="row">
+    <div class="row">
 
 <?php if (isLoggedIn ()) { ?>
-  <!-- Like button -->
-    <p class="col-xs-4 col-xs-push-6 text-right">
-      <a id="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
-        <span class="glyphicon glyphicon-thumbs-up"></span> 
-          <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
-      </a>
-    </p>
+    <!-- Like button -->
+      <p class="col-xs-4 col-xs-push-6 text-right">
+        <a class="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
+          <span class="glyphicon <?php echo doesUserLikedThisPost($post_id) ? 'glyphicon-thumbs-down' : 'glyphicon-thumbs-up'; ?>"></span>
+            <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
+        </a>
+      </p>
 
 <?php } else { ?>
-    <p></p>
+      <p><a href="#">You should login</a></p>
 <?php } ?>
-
-    <!-- Likes status -->
-    <p class="pull-right col-xs-4 text-right">Likes: <?php getPostLikes ($post_id); ?></p>
-
-  </div>
-  <div class="clearfix"></div>
+  <!-- Likes status -->
+      <p class="pull-right col-xs-2 text-right">Likes: <?php getPostLikes ($post_id); ?></p>
+    </div>
+    <div class="clearfix"></div>
 
 <?php
     } // End of first while
@@ -272,10 +270,10 @@ include ('includes/footer.php');
 $(document).ready(function () {
   var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
   var post_id = '<?php echo $post_id; ?>';
-  var user_id = '<?php echo $user_id; ?>';
+  var user_id = '<?php echo getLoggedInUserID(); ?>';
 
   // Like
-  $('#like').click(function () {
+  $('.like').click(function () {
     $.ajax({
       url: url,
       type: 'post',
@@ -283,13 +281,12 @@ $(document).ready(function () {
         'like': 1,
         'post_id': encodeURI(post_id),
         'user_id': user_id
-
       }
     });
   });
   
   // Unlike
-  $('#unlike').click(function () {
+  $('.unlike').click(function () {
     $.ajax({
       url: url,
       type: 'post',
