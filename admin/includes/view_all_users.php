@@ -133,7 +133,7 @@ confirm_query ($select_all_users);
     <td>{$user_firstname}</td>
     <td>{$user_lastname}</td>
     <td>{$user_email}</td>
-    <td><img class='img-responsive' width='100' src='../images/{$user_image}' alt='{$user_image}'></td>
+    <td><img class='img-responsive' width='100' src='../images/users/{$user_image}' alt='{$user_image}'></td>
     <td>{$user_role}</td>
     <td>{$user_status}</td>
     <td><a href='users.php?approve={$user_id}'>Approve</a></td>
