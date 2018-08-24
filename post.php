@@ -7,6 +7,49 @@ include ('includes/main_functions.php');
 <?php 
 include ('includes/navigation.php'); 
 ?>
+
+<?php
+
+if (isset($_POST['like'])) {
+  $post_id = $_POST['post_id'];
+  $user_id = $_POST['user_id']; 
+
+  // selecting the liked post 
+  $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+  $result = mysqli_query ($connection, $query);
+  $postResult = mysqli_fetch_array ($result);
+  $likes = $postResult['post_likes'];
+
+  // incrementing post_likes
+  $query = "UPDATE posts SET post_likes = {$likes} + 1 WHERE post_id = {$post_id} ";
+  mysqli_query ($connection, $query);
+
+  // inserting likes
+  $query = "INSERT INTO likes (user_id, post_id) VALUES ( '{$user_id}', '{$post_id}' ) ";
+  $result = mysqli_query ($connection, $query);
+  confirm_query ($result);
+}
+
+if (isset($_POST['unlike'])) {
+  $post_id = $_POST['post_id'];
+  $user_id = $_POST['user_id']; 
+
+  // selecting the liked post 
+  $query = "SELECT * FROM posts WHERE post_id = {$post_id} ";
+  $result = mysqli_query ($connection, $query);
+  $postResult = mysqli_fetch_array ($result);
+  $likes = $postResult['post_likes'];
+
+  // decrementing post_likes
+  $query = "UPDATE posts SET post_likes = {$likes} - 1 WHERE post_id = {$post_id} ";
+  mysqli_query ($connection, $query);
+
+  // deleting likes
+  $query = "DELETE FROM likes WHERE post_id = {$post_id} AND user_id = {$user_id} ";
+  mysqli_query ($connection, $query);
+}
+
+?>
     <!-- Page Content -->
     <div class="container">
 
@@ -69,6 +112,8 @@ if (isset ($_GET['p_id'])) {
 
 <!-- Edit post button -->
 <?php
+
+
       if (is_admin ($_SESSION['username'])) {
         $post_id =  preg_replace ('#[^0-9]#', '', $_GET['p_id']);
         if (isset ($post_id)) {
@@ -85,6 +130,33 @@ if (isset ($_GET['p_id'])) {
       }
 ?>
                 <hr>
+
+    <div class="row">
+
+<?php if (isLoggedIn ()) { ?>
+    <!-- Like button -->
+      <p class="col-xs-4 col-xs-push-6 text-right">
+        <a class="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="">
+          <span 
+            data-toggle="tooltip"
+            data-placement="top"
+            title="<?php echo doesUserLikedThisPost($post_id) ? 'I liked this before' : 'Want to like it?'; ?>"
+            class="glyphicon <?php echo doesUserLikedThisPost($post_id) ? 'glyphicon-thumbs-down' : 'glyphicon-thumbs-up'; ?>"></span>
+            <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
+        </a>
+      </p>
+
+<?php } else { ?>
+      <p class="col-xs-4 col-xs-push-6 text-right">
+      <a href="<?php echo $home_url; ?>/login">You need to login to like this</a>
+      </p>
+
+<?php } ?>
+  <!-- Likes status -->
+      <p class="pull-right col-xs-2 text-right">Likes: <?php getPostLikes ($post_id); ?></p>
+    </div>
+    <div class="clearfix"></div>
+
 <?php
     } // End of first while
 ?>
@@ -200,3 +272,40 @@ include ('includes/sidebar.php');
 include ('includes/footer.php');
 ?>
 
+<!-- For like -->
+<script>
+$(document).ready(function () {
+  var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
+  var post_id = '<?php echo $post_id; ?>';
+  var user_id = '<?php echo getLoggedInUserID(); ?>';
+
+  $("[data-toggle='tooltip']").tooltip();
+
+  // Like
+  $('.like').click(function () {
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: {
+        'like': 1,
+        'post_id': encodeURI(post_id),
+        'user_id': user_id
+      }
+    });
+  });
+  
+  // Unlike
+  $('.unlike').click(function () {
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: {
+        'unlike': 1,
+        'post_id': encodeURI(post_id),
+        'user_id': user_id
+      }
+    });
+  });
+
+});
+</script>

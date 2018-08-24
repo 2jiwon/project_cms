@@ -19,13 +19,14 @@
     </div>
     <!-- /.container -->
 
-    <script src="js/myscript.js"></script>
-
     <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    <script src="<?php echo $home_url ?>/js/jquery.js"></script>
+    
+    <!-- custom sctipts -->
+    <script src="<?php echo $home_url ?>/js/myscript.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="<?php echo $home_url ?>/js/bootstrap.min.js"></script>
 
 </body>
 
