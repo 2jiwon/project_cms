@@ -12,7 +12,7 @@ if (isset ($_POST['create_user'])) {
 
   $user_image      = $_FILES['user_image']['name'];
   $user_image_temp = $_FILES['user_image']['tmp_name'];
-  move_uploaded_file ($user_image_temp, "../images/{$user_image}");
+  move_uploaded_file ($user_image_temp, "../images/users/{$user_image}");
 
   if (empty ($user_image)) {
     $user_image = '';
