@@ -136,14 +136,21 @@ if (isset ($_GET['p_id'])) {
 <?php if (isLoggedIn ()) { ?>
     <!-- Like button -->
       <p class="col-xs-4 col-xs-push-6 text-right">
-        <a class="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="#">
-          <span class="glyphicon <?php echo doesUserLikedThisPost($post_id) ? 'glyphicon-thumbs-down' : 'glyphicon-thumbs-up'; ?>"></span>
+        <a class="<?php echo doesUserLikedThisPost($post_id) ? 'unlike' : 'like'; ?>" href="">
+          <span 
+            data-toggle="tooltip"
+            data-placement="top"
+            title="<?php echo doesUserLikedThisPost($post_id) ? 'I liked this before' : 'Want to like it?'; ?>"
+            class="glyphicon <?php echo doesUserLikedThisPost($post_id) ? 'glyphicon-thumbs-down' : 'glyphicon-thumbs-up'; ?>"></span>
             <?php echo doesUserLikedThisPost($post_id) ? 'Unlike' : 'Like'; ?>
         </a>
       </p>
 
 <?php } else { ?>
-      <p><a href="#">You should login</a></p>
+      <p class="col-xs-4 col-xs-push-6 text-right">
+      <a href="<?php echo $home_url; ?>/login">You need to login to like this</a>
+      </p>
+
 <?php } ?>
   <!-- Likes status -->
       <p class="pull-right col-xs-2 text-right">Likes: <?php getPostLikes ($post_id); ?></p>
@@ -271,6 +278,8 @@ $(document).ready(function () {
   var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
   var post_id = '<?php echo $post_id; ?>';
   var user_id = '<?php echo getLoggedInUserID(); ?>';
+
+  $("[data-toggle='tooltip']").tooltip();
 
   // Like
   $('.like').click(function () {
