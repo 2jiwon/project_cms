@@ -1,11 +1,13 @@
 <?php
 include "includes/admin_header.php";
+include "../includes/db.php";
 ?>
     <div id="wrapper">
 
         <!-- Navigation -->
 <?php
 include "includes/admin_navigation.php";
+$app_key = getenv('APP_KEY');
 ?>
         <div id="page-wrapper">
 
@@ -221,7 +223,8 @@ include "includes/admin_footer.php";
 <script>
 
 $(document).ready(function () {
-  var pusher = new Pusher('d46d701fb2d82d462f9c', {
+  var key = '<?php echo $app_key; ?>';
+  var pusher = new Pusher(key, {
     cluster: 'ap1',
     encrypted: true
   });

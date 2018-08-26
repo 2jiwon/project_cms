@@ -3,12 +3,6 @@ include "includes/db.php";
 include "includes/header.php";
 include "includes/main_functions.php";
 
-require './vendor/autoload.php';  
-
-$dotenv = new Dotenv\Dotenv(__DIR__);
-//echo __DIR__;
-$dotenv->load();
-
 ?>
 <?php
 
