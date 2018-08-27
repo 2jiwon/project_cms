@@ -1,5 +1,7 @@
 # project_cms
 
+[Here's a completed sample.](https://blog.jiwon.me)
+
 Building a blog system from Udemy's PHP course 
 
 - - -
