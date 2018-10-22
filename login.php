@@ -9,13 +9,13 @@ include "includes/main_functions.php";
 
 <?php
   
-checkLoggedInAndRedirect ('${home_url}/admin');
+checkLoggedInAndRedirect ('${home_url}admin');
 
 if (IsItMethod ('post')) {
   if (isset($_POST['username']) && isset ($_POST['password'])) {
     login ($_POST['username'], $_POST['password']);
   } else {
-    redirect ('${home_url}/login');
+    redirect ('${home_url}login');
   }
 }
 ?>

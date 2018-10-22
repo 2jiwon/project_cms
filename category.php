@@ -92,7 +92,7 @@ if (isset ($_GET['category'])) {
                   </p>
                   <p class="text-right"><span class="glyphicon glyphicon-time"></span> <?php echo $post_date ?></p>
                 <hr>
-                <a href="post/<?php echo $post_id; ?>"><img class="img-responsive" src="<?php echo $home_url ?>/images/<?php echo $post_image ?>" alt=""></a>
+                <a href="post/<?php echo $post_id; ?>"><img class="img-responsive" src="<?php echo $home_url ?>images/<?php echo $post_image ?>" alt=""></a>
                 <hr>
                 <p><?php echo substr ($post_content, 0, 100) . " ..."; ?></p>
                 <a class="btn btn-primary" href="post/<?php echo $post_id ?>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
@@ -111,7 +111,7 @@ if (isset ($_GET['category'])) {
       $prev_page = $pagenum - 1;
 
       echo "<li class='page-item'>
-            <a class='page-link' href='./page/{$prev_page}' aria-label='Previous'>
+            <a class='page-link' href='category/{$post_category_id}/page/{$prev_page}' aria-label='Previous'>
               <span aria-hidden='true'>&laquo;</span>
               <span class='sr-only'>Previous</span>
             </a>";
@@ -155,7 +155,7 @@ if (isset ($_GET['category'])) {
     if ($pagenum != $last_page) {
       $next_page = $pagenum + 1;
       echo "<li class='page-item'>
-              <a class='page-link' href='page/{$next_page}' aria-label='Next'>
+              <a class='page-link' href='category/{$post_category_id}/page/{$next_page}' aria-label='Next'>
               <span aria-hidden='true'>&raquo;</span>
               <span class='sr-only'>Next</span>
               </a>";

@@ -1,4 +1,5 @@
 <?php
+$home_url = '/';
 
 function confirm_query ($result) {
 
@@ -96,7 +97,7 @@ function permission_warning () {
   if (!isset ($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     die ("<div class='alert alert-danger'>
           I'm sorry but you may not have a right permission to see this page.
-          <a class='alert-link' href='/cms/'> Back to Home.</a></div>");
+          <a class='alert-link' href='/blog/'> Back to Home.</a></div>");
   }
 }
 

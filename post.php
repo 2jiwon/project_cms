@@ -104,7 +104,7 @@ if (isset ($_GET['p_id'])) {
                 </p>
                 <hr>
 
-                  <img class="img-responsive" src="<?php echo $home_url ?>/images/<?php echo $post_image ?>" alt="">
+                  <img class="img-responsive" src="<?php echo $home_url ?>images/<?php echo $post_image ?>" alt="">
 
                 <p>
                   <?php echo $post_content ?>
@@ -148,7 +148,7 @@ if (isset ($_GET['p_id'])) {
 
 <?php } else { ?>
       <p class="col-xs-4 col-xs-push-6 text-right">
-      <a href="<?php echo $home_url; ?>/login">You need to login to like this</a>
+      <a href="<?php echo $home_url; ?>login">You need to login to like this</a>
       </p>
 
 <?php } ?>
@@ -275,7 +275,7 @@ include ('includes/footer.php');
 <!-- For like -->
 <script>
 $(document).ready(function () {
-  var url = '<?php echo $home_url; ?>/post/<?php echo $post_id; ?>';
+  var url = '<?php echo $home_url; ?>post/<?php echo $post_id; ?>';
   var post_id = '<?php echo $post_id; ?>';
   var user_id = '<?php echo getLoggedInUserID(); ?>';
 

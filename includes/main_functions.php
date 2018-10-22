@@ -1,5 +1,5 @@
 <?php
-$home_url = "/cms"; 
+$home_url = "/"; 
 
 function confirm_query ($result) {
 
@@ -137,9 +137,9 @@ function login ($username, $password) {
     $_SESSION['lastname']  = $db_user_lastname;
     $_SESSION['user_role'] = $db_user_role;
 
-    redirect ("{$home_url}/index.php");
+    redirect ("{$home_url}");
   } else {
-    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. <a href='{$home_url}/login'>Try again?</a></div>";
+    echo "<div class='alert alert-danger' role='alert'>Sorry! Something's wrong. <a href='{$home_url}login'>Try again?</a></div>";
   }
 }
 

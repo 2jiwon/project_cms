@@ -1,7 +1,7 @@
 Options +FollowSymLinks
 RewriteEngine on
 
-RewriteBase /cms/
+RewriteBase /
 
 RewriteRule ^(index|contact|login|registration)$ $1.php [NC,L]
 

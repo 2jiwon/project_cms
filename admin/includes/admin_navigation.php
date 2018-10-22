@@ -1,5 +1,6 @@
 <?php
 session_start ();
+$home_url = "/";
 ?>
 
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -11,13 +12,13 @@ session_start ();
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/cms/admin/index.php">CMS Admin</a>
+                <a class="navbar-brand" href="<?php echo $home_url; ?>admin/index.php">CMS Admin</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
   
-              <li><a href="/cms/">HOME</a></li>
-              <li><a href="/cms/admin/users.php">
+            <li><a href="<?php echo $home_url; ?>">HOME</a></li>
+              <li><a href="<?php echo $home_url; ?>admin/users.php">
                     <i class="fa fa-users"></i>Users Online: <span class="usersonline"><?php users_online (); ?></span></a></li>
 
                 <li class="dropdown">

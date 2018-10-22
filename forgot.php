@@ -63,7 +63,7 @@ if (IsItMethod('post')) {
             $mail->isHTML(true);                     // Set email format to HTML
             $mail->Subject = 'Here is the subject';
             //$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-            $mail->Body = "<p><a href='http://uphp.com/cms/reset.php?email={$email}&token={$token}'>
+            $mail->Body = "<p><a href='{$_SERVER['DOCUMENT_ROOT']}/{$home_url}reset.php?email={$email}&token={$token}'>
               Please click reset your password.</a></p>";
   
             if ($mail->send()) {

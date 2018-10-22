@@ -1,6 +1,6 @@
 <?php
 session_start ();
-$home_url = "/cms"; 
+$home_url = "/"; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,11 +16,11 @@ $home_url = "/cms";
     <title>Blog Home - Start Bootstrap Template</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="<?php echo $home_url; ?>/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="<?php echo $home_url; ?>/css/blog-home.css" rel="stylesheet">
-    <link href="<?php echo $home_url; ?>/css/custom.css" rel="stylesheet">
+    <link href="/css/blog-home.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
