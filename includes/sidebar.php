@@ -29,7 +29,7 @@
                 
                     <div class="panel-footer">
                         <div class="form-group text-right">
-                            <a href="forgot.php?id=<?php echo uniqid(true); ?>">Forgot Password?</a>
+                            <a href="/forgot.php?id=<?php echo uniqid(true); ?>">Forgot Password?</a>
                         </div>
                     </div>
                 </div>
