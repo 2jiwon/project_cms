@@ -201,7 +201,9 @@ if (isset ($_GET['p_id'])) {
                 <!-- Posted Comments -->
 <?php
 
-      $query  = "SELECT * FROM comments WHERE comment_post_id = ? ";
+      $query  = "SELECT comments.comment_author, comments.comment_email, comments.comment_content, comments.comment_date, users.user_image FROM comments ";
+      $query .= "LEFT JOIN users ON comments.comment_author = users.user_name ";
+      $query .= "WHERE comment_post_id = ? ";
       $query .= "AND comment_status = 'Approved' ";
       $query .= "ORDER BY comment_id DESC ";
 
@@ -214,28 +216,18 @@ if (isset ($_GET['p_id'])) {
         $comment_author  = $row['comment_author'];
         $comment_email   = $row['comment_email'];
         $comment_content = $row['comment_content'];
-        $comment_status  = $row['comment_status'];
         $comment_date    = $row['comment_date'];
+        $user_image      = $row['user_image'];
+
+        if (!$user_image) {
+          $user_image = 'default.png';
+        }
 ?>
                 <!-- Comment -->
                 <div class="media">
                     <a class="pull-left" href="#">
-<?php
-  $query = "SELECT * FROM users WHERE user_name = ? ";
-  $stmt  = $connection->prepare ($query);
-  $stmt->bind_param ("s", $comment_author);
-  $stmt->execute ();
-  $result = $stmt->get_result ();
 
-  while ($row = $result->fetch_assoc ()) {
-    $user_image = $row['user_image'];
-  }
-
-  if (!$user_image) {
-    $user_image = 'default.png';
-  }
-?>
-                      <img class="media-object" src="../images/users/<?php echo $user_image; ?>" alt="" width="50px" style="border-radius:50;">
+                      <img class="media-object" src="../images/users/<?php echo $user_image; ?>" alt="" width="50px" style="border-radius:50%;">
                     </a>
                     <div class="media-body">
                     <h4 class="media-heading">
