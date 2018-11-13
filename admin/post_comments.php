@@ -64,6 +64,7 @@ $select_all_comments = mysqli_query ($connection, $query);
     $comment_content = $row['comment_content'];
     $comment_status = $row['comment_status'];
     $comment_date = $row['comment_date'];
+   }
 
     echo "<tr>";
     echo "<td>{$comment_id}</td>";
@@ -107,7 +108,7 @@ $select_all_comments = mysqli_query ($connection, $query);
     echo "      </div><!-- /.modal-content -->";
     echo "    </div><!-- /.modal-dialog -->";
     echo "  </div><!-- /.modal -->";
-  }
+
 ?>
 </tbody>
 </table>
