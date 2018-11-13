@@ -19,7 +19,7 @@ include ('includes/navigation.php');
 if (isset ($_POST['submit'])) {
   $search = $_POST['search'];
 
-  $query  = "SELECT * FROM posts WHERE post_tags LIKE ? ";
+  $query  = "SELECT * FROM posts WHERE post_content LIKE ? ";
   $stmt   = $connection->prepare ($query);
   $search = "%".$search."%";
 
@@ -43,7 +43,7 @@ if (isset ($_POST['submit'])) {
 ?>
                 <!-- First Blog Post -->
                 <h1>
-                  <?php echo $post_id; ?><a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
+                  <a href="post.php?p_id=<?php echo $post_id; ?>"><?php echo $post_title; ?></a>
                 </h1>
                 <p class="lead">
                 by <a href="author_posts.php?author=<?php echo $post_author; ?>&p_id=<?php echo $post_id; ?>">
