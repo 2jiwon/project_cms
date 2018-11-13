@@ -199,4 +199,35 @@ function getPostLikes ($post_id) {
   echo mysqli_num_rows ($result);
 }
 
+function getLoggedInUsername () {
+  if (isLoggedIn ()) {
+    $username = $_SESSION['username'];
+
+    $result = i_query ("SELECT * FROM users WHERE user_name = '{$username}'" );
+    confirm_query ($result);
+
+    $userResult = mysqli_fetch_array ($result);
+    return (mysqli_num_rows ($result) >= 1) ? $userResult['user_name'] : false;
+  }
+
+  return false;
+}
+
+function getLoggedInUserEmail () {
+  if (isLoggedIn ()) {
+    $username = $_SESSION['username'];
+
+    $result = i_query ("SELECT * FROM users WHERE user_name = '{$username}'" );
+    confirm_query ($result);
+
+    $userResult = mysqli_fetch_array ($result);
+    return (mysqli_num_rows ($result) >= 1) ? $userResult['user_email'] : false;
+  }
+
+  return false;
+}
+
+
+
+
 ?>

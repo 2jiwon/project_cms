@@ -148,7 +148,7 @@ if (isset ($_GET['p_id'])) {
 
 <?php } else { ?>
       <p class="col-xs-4 col-xs-push-6 text-right">
-      <a href="<?php echo $home_url; ?>login">You need to login to like this</a>
+        <a href="<?php echo $home_url; ?>login">You need to login to like this</a>
       </p>
 
 <?php } ?>
@@ -165,8 +165,8 @@ if (isset ($_GET['p_id'])) {
 <?php
     if (isset ($_POST['create_comment'])) {
       $post_id = preg_replace('#[^0-9]#', '', $_GET['p_id']);
-      $comment_author  = $_POST['comment_author'];
-      $comment_email   = $_POST['comment_email'];
+      $comment_author  = getLoggedInUsername();
+      $comment_email   = getLoggedInUserEmail();
       $comment_content = $_POST['comment_content'];
 
       $query  = "INSERT INTO comments (comment_post_id, comment_author, comment_email, comment_content, comment_date) ";
@@ -180,26 +180,22 @@ if (isset ($_GET['p_id'])) {
 ?>
                 <!-- Comments Form -->
                 <div class="well">
-                    <h4>Leave a Comment:</h4>
-                    <form action="" method="post" role="form">
+                  <h4>Leave a Comment:</h4>
 
-                    <div class="form-group">
-                        <label for="Author">Author</label>
-                        <input class="form-control" type="text" name="comment_author" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Email">Email</label>
-                        <input class="form-control" type="email" name="comment_email" required>
-                    </div>
+<?php if (!isLoggedIn ()) { ?>
+      <p class="row text-center">
+        <a href="<?php echo $home_url; ?>login">You need to login to leave a comment.</a>
+      </p>
+<?php } else { ?>
+                  <form action="" method="post" role="form">
 
                         <div class="form-group">
                             <label for="Comment">Comment</label>
                             <textarea class="form-control" name="comment_content" rows="3" required></textarea>
                         </div>
                         <button class="btn btn-primary" name="create_comment" type="submit">Submit</button>
-
-                    </form>
+                  </form>
+<?php } ?>
                 </div>
 
                 <!-- Posted Comments -->
@@ -224,7 +220,22 @@ if (isset ($_GET['p_id'])) {
                 <!-- Comment -->
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object" src="http://placehold.it/64x64" alt="">
+<?php
+  $query = "SELECT * FROM users WHERE user_name = ? ";
+  $stmt  = $connection->prepare ($query);
+  $stmt->bind_param ("s", $comment_author);
+  $stmt->execute ();
+  $result = $stmt->get_result ();
+
+  while ($row = $result->fetch_assoc ()) {
+    $user_image = $row['user_image'];
+  }
+
+  if (!$user_image) {
+    $user_image = 'default.png';
+  }
+?>
+                      <img class="media-object" src="../images/users/<?php echo $user_image; ?>" alt="" width="50px" style="border-radius:50;">
                     </a>
                     <div class="media-body">
                     <h4 class="media-heading">
