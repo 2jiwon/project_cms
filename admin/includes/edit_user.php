@@ -26,7 +26,7 @@
 
     $user_image      = $_FILES['user_image']['name'];
     $user_image_temp = $_FILES['user_image']['tmp_name'];
-    move_uploaded_file ($user_image_temp, "../images/{$user_image}");
+    move_uploaded_file ($user_image_temp, "../images/users/{$user_image}");
 
     if (empty ($user_image)) {
       $query = "SELECT user_image FROM users WHERE user_id={$user_id} ";
@@ -117,7 +117,7 @@
       <div>
 <?php
   if (!empty ($user_image)) {
-    echo "<img src='../images/$user_image' width='100' alt='image'>";
+    echo "<img src='../images/users/$user_image' width='100' alt='image'>";
   }
 ?>
       </div>
