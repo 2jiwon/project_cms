@@ -20,6 +20,7 @@ include "includes/admin_navigation.php";
                   <small>Author</small>
                 </h1>
 <?php
+permission_warning ();
 insert_categories ();
 ?>
                 <div class="col-md-6">

@@ -19,7 +19,7 @@ $home_url = "/";
   
             <li><a href="<?php echo $home_url; ?>">HOME</a></li>
               <li><a href="<?php echo $home_url; ?>admin/users.php">
-                    <i class="fa fa-users"></i>Users Online: <span class="usersonline"><?php users_online (); ?></span></a></li>
+                    <i class="fa fa-users"></i>Users Online: <span class="usersonline"><?php echo users_online (); ?></span></a></li>
 
                 <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fas fa-user-circle"></i>
@@ -58,12 +58,20 @@ $home_url = "/";
                             </li>
                         </ul>
                     </li>
+<?php
+if (is_admin ($_SESSION['username'])) {
+?>
                     <li>
                         <a href="./categories.php"><i class="fa fa-fw fa-desktop"></i> Categories </a>
                     </li>
+<?php } ?>
                     <li>
                         <a href="./comments.php"><i class="fa fa-fw fa-wrench"></i> Comments </a>
                     </li>
+
+<?php
+if (is_admin ($_SESSION['username'])) {
+?>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#users_dropdown">
                           <i class="fa fa-fw fa-arrows-v"></i> Users <i class="fa fa-fw fa-caret-down"></i></a>
@@ -76,7 +84,7 @@ $home_url = "/";
                             </li>
                         </ul>
                     </li>
-
+<?php } ?>
                     <li class="">
                         <a href="profile.php"><i class="fa fa-fw fa-file"></i> Profile </a>
                     </li>

@@ -91,14 +91,24 @@ if (isset ($_POST['checkBoxArray'])) {
       <nav aria-label="..." id="custom_nav" class="col-md-6 text-right">
         <ul class="pagination pagination-sm">
 <?php
+$user = $_SESSION['username'];
 
-// Count total posts and set the variables for pagination 
-$query  = "SELECT * FROM posts ";
-$stmt   = $connection->prepare ($query);
-$stmt->execute ();
-$total_posts_query = $stmt->get_result ();
-$total_posts = $total_posts_query->num_rows;
-
+if (is_admin ($user)) {
+  // Count total posts and set the variables for pagination 
+  $query  = "SELECT * FROM posts ";
+  $stmt   = $connection->prepare ($query);
+  $stmt->execute ();
+  $total_posts_query = $stmt->get_result ();
+  $total_posts = $total_posts_query->num_rows;
+} else {
+  // Count total posts and set the variables for pagination 
+  $query  = "SELECT * FROM posts WHERE post_author = ? ";
+  $stmt   = $connection->prepare ($query);
+  $stmt->bind_param ("s", $user);
+  $stmt->execute ();
+  $total_posts_query = $stmt->get_result ();
+  $total_posts = $total_posts_query->num_rows;
+}
 
 // How many posts to display for each page
 $per_page = 10;
@@ -213,32 +223,46 @@ if ($pagenum < $startnum) {
 
 
 <?php
-// Join posts & categories table to pull out their records in one query.
-$query  = "SELECT posts.post_id, posts.post_category_id, posts.post_title, posts.post_author, posts.post_date, ";
-$query .= "posts.post_image, posts.post_tags, posts.post_view_count, posts.post_status, ";
-$query .= "categories.cat_id, categories.cat_title FROM posts ";
-$query .= "LEFT JOIN categories ON posts.post_category_id = categories.cat_id ";
-$query .= "ORDER BY posts.post_id DESC LIMIT  ?, ? ";
+$user = $_SESSION['username'];
 
-$stmt = $connection->prepare ($query);
-$stmt->bind_param ("ii", $start, $per_page);
-$stmt->execute();
-$result = $stmt->get_result();
+if (is_admin ($user)) {
+  // Join posts & categories table to pull out their records in one query.
+  $query  = "SELECT posts.post_id, posts.post_category_id, posts.post_title, posts.post_author, posts.post_date, ";
+  $query .= "posts.post_image, posts.post_tags, posts.post_view_count, posts.post_status, ";
+  $query .= "categories.cat_id, categories.cat_title FROM posts ";
+  $query .= "LEFT JOIN categories ON posts.post_category_id = categories.cat_id ";
+  $query .= "ORDER BY posts.post_id DESC LIMIT  ?, ? ";
+  $stmt = $connection->prepare ($query);
+  $stmt->bind_param ("ii", $start, $per_page);
+} else {
+  // Join posts & categories table to pull out their records in one query.
+  $query  = "SELECT posts.post_id, posts.post_category_id, posts.post_title, posts.post_author, posts.post_date, ";
+  $query .= "posts.post_image, posts.post_tags, posts.post_view_count, posts.post_status, ";
+  $query .= "categories.cat_id, categories.cat_title FROM posts ";
+  $query .= "LEFT JOIN categories ON posts.post_category_id = categories.cat_id ";
+  $query .= "WHERE posts.post_author = ? ";
+  $query .= "ORDER BY posts.post_id DESC LIMIT  ?, ? ";
+  $stmt = $connection->prepare ($query);
+  $stmt->bind_param ("sii", $user, $start, $per_page);
+}
 
-  while ($row = $result->fetch_assoc()) {
-    $post_id          = $row['post_id'];
-    $post_category_id = $row['post_category_id'];
-    $post_title       = $row['post_title'];
-    $post_author      = $row['post_author'];
-    $post_date        = $row['post_date'];
-    $post_image       = $row['post_image'];
-    $post_tags        = $row['post_tags'];
-    $post_view_count  = $row['post_view_count'];
-    $post_status      = $row['post_status'];
-    $cat_id           = $row['cat_id'];
-    $cat_title        = $row['cat_title'];
+  $stmt->execute();
+  $result = $stmt->get_result();
 
-    echo "<tr>";
+    while ($row = $result->fetch_assoc()) {
+      $post_id          = $row['post_id'];
+      $post_category_id = $row['post_category_id'];
+      $post_title       = $row['post_title'];
+      $post_author      = $row['post_author'];
+      $post_date        = $row['post_date'];
+      $post_image       = $row['post_image'];
+      $post_tags        = $row['post_tags'];
+      $post_view_count  = $row['post_view_count'];
+      $post_status      = $row['post_status'];
+      $cat_id           = $row['cat_id'];
+      $cat_title        = $row['cat_title'];
+
+      echo "<tr>";
 ?>
   <td><input class="checkboxes" type="checkbox" name="checkBoxArray[]" value="<?php echo $post_id; ?>"></td>
 

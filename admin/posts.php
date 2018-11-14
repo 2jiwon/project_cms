@@ -27,7 +27,7 @@ if (isset ($_GET['source'])) {
   $source = '';
 }
 
-permission_warning ();
+//permission_warning ();
 
   switch ($source) {
     case 'add_post':

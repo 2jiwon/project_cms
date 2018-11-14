@@ -97,7 +97,7 @@ function permission_warning () {
   if (!isset ($_SESSION['user_role']) || $_SESSION['user_role'] !== 'Admin') {
     die ("<div class='alert alert-danger'>
           I'm sorry but you may not have a right permission to see this page.
-          <a class='alert-link' href='/blog/'> Back to Home.</a></div>");
+          <a class='alert-link' href='/admin'> Back to Home.</a></div>");
   }
 }
 
@@ -142,6 +142,7 @@ function users_online () {
 
     // Now show all users online.
     $query    = "SELECT * FROM users_online WHERE `time` > ? ";
+    //$query  = "SELECT * FROM users_online WHERE time > {$timeout} ";
     $stmt  = $connection->prepare ($query);
     $stmt->bind_param ("s", $timeout);
     $stmt->execute ();
@@ -195,6 +196,68 @@ function recordCount ($tableName){
 
   return $result;
 }
+
+
+function recordCountOfUser ($tableName, $cond, $user){
+  
+  global $connection;
+
+  $stmt  = $connection->prepare ("SELECT * FROM {$tableName} WHERE {$cond} = '{$user}' ");
+  $stmt->execute ();
+  $res   = $stmt->get_result ();
+  $result = $res->num_rows;
+
+  return $result;
+}
+
+function is_admin ($username) {
+  
+  global $connection;
+
+  $query  = "SELECT user_role FROM users WHERE user_name = '$username' ";
+  $result = mysqli_query ($connection, $query);
+  confirm_query ($result);
+
+  $row = mysqli_fetch_array ($result); 
+
+  if ($row['user_role'] == 'Admin') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function i_query ($query) {
+
+  global $connection;
+
+  return mysqli_query ($connection, $query);
+}
+
+function isLoggedIn () {
+
+  if (isset($_SESSION['user_role'])) {
+    return true;
+  }
+
+  return false;
+}
+
+function getLoggedInUserID () {
+  if (isLoggedIn ()) {
+    $username = $_SESSION['username'];
+
+    $result = i_query ("SELECT * FROM users WHERE user_name = '{$username}'" );
+    confirm_query ($result);
+
+    $userResult = mysqli_fetch_array ($result);
+    return (mysqli_num_rows ($result) >= 1) ? $userResult['user_id'] : false;
+  }
+
+  return false;
+}
+
+
 
 // used 'index.php', displaying Charts
 // Count the number of records depending on each status from tables. 

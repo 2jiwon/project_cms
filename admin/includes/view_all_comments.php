@@ -96,12 +96,25 @@ if (isset ($_POST['checkBoxArray'])) {
   <tbody>
 
 <?php
-// Join comments & posts table to pull out their records in one query.
-$query  = "SELECT comments.comment_id, comments.comment_post_id, comments.comment_author, comments.comment_email, ";
-$query .= "comments.comment_content, comments.comment_status, comments.comment_date, ";
-$query .= "posts.post_id, posts.post_title ";
-$query .= "FROM comments ";
-$query .= "LEFT JOIN posts ON comment_post_id = post_id ";
+
+$user = $_SESSION['username'];
+
+if (is_admin ($user)) {
+  // Join comments & posts table to pull out their records in one query.
+  $query  = "SELECT comments.comment_id, comments.comment_post_id, comments.comment_author, comments.comment_email, ";
+  $query .= "comments.comment_content, comments.comment_status, comments.comment_date, ";
+  $query .= "posts.post_id, posts.post_title ";
+  $query .= "FROM comments ";
+  $query .= "LEFT JOIN posts ON comment_post_id = post_id ";
+} else {
+  // Join comments & posts table to pull out their records in one query.
+  $query  = "SELECT comments.comment_id, comments.comment_post_id, comments.comment_author, comments.comment_email, ";
+  $query .= "comments.comment_content, comments.comment_status, comments.comment_date, ";
+  $query .= "posts.post_id, posts.post_title ";
+  $query .= "FROM comments ";
+  $query .= "LEFT JOIN posts ON comment_post_id = post_id ";
+  $query .= "WHERE comments.comment_author = '{$user}' ";
+}
 
 $select_all_comments = mysqli_query ($connection, $query);
 confirm_query ($select_all_comments);

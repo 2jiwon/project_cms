@@ -14,7 +14,7 @@ $app_key = getenv('APP_KEY');
             <div class="container-fluid">
 
 <?php
-permission_warning ();
+//permission_warning ();
 ?>
                 <!-- Page Heading -->
                 <div class="row">
@@ -22,7 +22,6 @@ permission_warning ();
                         <h1 class="page-header">
 <?php
   echo "Welcome to Admin page <small>".$_SESSION['username']."</small>";
-  echo "<h2>".$howmany_users."</h2>";
 ?>
                         </h1>
                         <ol class="breadcrumb">
@@ -52,7 +51,14 @@ permission_warning ();
                                     </div>
                                     <div class="col-xs-9 text-right">
 <?php
-$posts_counts = recordCount ('posts');
+
+if (is_admin ($_SESSION['username'])) {
+  $posts_counts = recordCount ('posts');
+} else {
+  $user = $_SESSION['username'];
+  $posts_counts = recordCountOfUser ('posts', 'post_author', $user);
+}
+
 echo "<div class='huge'>{$posts_counts}</div>";
 ?>
                                         <div>Posts</div>
@@ -79,7 +85,13 @@ echo "<div class='huge'>{$posts_counts}</div>";
                                     </div>
                                     <div class="col-xs-9 text-right">
 <?php
-$comments_counts = recordCount ('comments');
+
+if (is_admin ($_SESSION['username'])) {
+  $comments_counts = recordCount ('comments');
+} else {
+  $comments_counts = recordCountOfUser ('comments', 'comment_author', $user);
+}
+
 echo "<div class='huge'>{$comments_counts}</div>";
 ?>
                                       <div>Comments</div>
