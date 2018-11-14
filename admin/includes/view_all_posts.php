@@ -32,24 +32,25 @@ if (isset ($_POST['checkBoxArray'])) {
           $post_author      = $row['post_author'];
           $post_date        = $row['post_date'];
           $post_image       = $row['post_image'];
+          $post_content     = $row['post_content'];
           $post_tags        = $row['post_tags'];
           $post_view_count  = $row['post_view_count'];
           $post_status      = $row['post_status'];
         }
 
-        $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_tags, post_view_count, post_status) ";
-        $query .= "VALUES ( ?, ?, ?, ?, ?, ?, ?, ? ) ";
+        $query  = "INSERT INTO posts (post_category_id, post_title, post_author, post_date, post_image, post_content, post_tags, post_view_count, post_status) ";
+        $query .= "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ? ) ";
         $stmt   = $connection->prepare ($query);
-        $stmt->bind_param ("isssssss", $post_category_id, $post_title, $post_author, $post_date, $post_image, $post_tags, $post_view_count, $post_status);
+        $stmt->bind_param ("issssssss", $post_category_id, $post_title, $post_author, $post_date, $post_image, $post_content, $post_tags, $post_view_count, $post_status);
         break;
 
-      case 'reset' :
+      case 'reset':
         $query = "UPDATE posts SET post_view_count = 0 WHERE post_id = ? ";
         $stmt  = $connection->prepare ($query);
         $stmt->bind_param ("i", $checkboxValue);
         break;
 
-      case 'delete' :
+      case 'delete':
         $query = "DELETE FROM posts WHERE post_id = ? ";
         $stmt  = $connection->prepare ($query);
         $stmt->bind_param ("i", $checkboxValue);
