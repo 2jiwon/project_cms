@@ -3,7 +3,7 @@
                 <!-- Login panel -->
 <?php if (isset ($_SESSION['user_role'])) : ?>
                 <div class="well">
-                   <h4>Logged in as <?php echo $_SESSION['username']; ?></h4>
+                   <h4>Logged in as <a href="/admin"><?php echo $_SESSION['username']; ?></a></h4>
                    <a class="btn btn-warning" href="/includes/logout.php">Log Out</a> 
                 </div>
 <?php else: ?>
