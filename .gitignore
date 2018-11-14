@@ -13,6 +13,8 @@
 
 .env
 
-*classes/config.php
+classes/config.php
 
 info.php
+
+.well-known
