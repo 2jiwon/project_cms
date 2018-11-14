@@ -88,7 +88,6 @@ if (isset ($_POST['checkBoxArray'])) {
         <th>Date</th>
         <th>Approve</th>
         <th>Disapprove</th>
-        <th>Edit</th>
         <th>Delete</th>
       </tr>
       </tr>
@@ -142,7 +141,6 @@ confirm_query ($select_all_comments);
           <td>{$comment_date}</td>
           <td><a href='comments.php?approve={$comment_id}'>Approve</a></td>
           <td><a href='comments.php?disapprove={$comment_id}'>Disapprove</a></td>
-          <td><a href='comments.php?source=edit_comment&p_id={$comment_id}'>Edit</a></td>
           <td><a data-toggle='modal' data-target='#delete{$comment_id}'>Delete</a></td>
           </tr>";
 
